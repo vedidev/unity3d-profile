@@ -116,6 +116,10 @@ public class ExampleWindow : MonoBehaviour {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "SoomlaProfile Initialized !");
 			isInit = true;
 		};
+
+		ProfileEvents.OnUserRatingEvent += () => {
+			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "User opened rating page");
+		};
 		
 		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, string payload) => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "login finished for: " + UserProfile.toJSONObject().print());
@@ -129,6 +133,7 @@ public class ExampleWindow : MonoBehaviour {
 
 
 		SoomlaProfile.Initialize();
+		SoomlaProfile.OpenAppRatingPage();
 
 		#if UNITY_IPHONE
 		Handheld.SetActivityIndicatorStyle(iOSActivityIndicatorStyle.Gray);

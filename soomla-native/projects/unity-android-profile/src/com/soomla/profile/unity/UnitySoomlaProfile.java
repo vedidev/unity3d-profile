@@ -1,5 +1,7 @@
 package com.soomla.profile.unity;
 
+import android.app.Activity;
+
 import com.soomla.profile.SoomlaProfile;
 import com.soomla.profile.data.UserProfileStorage;
 import com.soomla.profile.domain.UserProfile;
@@ -25,6 +27,10 @@ public class UnitySoomlaProfile {
         final UserProfile userProfile = new UserProfile(jsonObject);
 
         UserProfileStorage.setUserProfile(userProfile);
+    }
+
+    public static void openAppRatingPage(Activity activity) {
+        SoomlaProfile.getInstance().openAppRatingPage(activity.getApplicationContext());
     }
 
     private static String TAG = "SOOMLA UnitySoomlaProfile";

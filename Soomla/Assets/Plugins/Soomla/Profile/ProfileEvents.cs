@@ -57,6 +57,8 @@ namespace Soomla.Profile {
 
 		public static Action OnSoomlaProfileInitialized = delegate {};
 
+		public static Action OnUserRatingEvent =delegate {};
+
 		public static Action<Provider, string> OnLoginCancelled = delegate {};
 
 		public static Action<UserProfile> OnUserProfileUpdated = delegate {};

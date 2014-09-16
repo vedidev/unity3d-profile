@@ -274,6 +274,8 @@ namespace Soomla.Profile
 		/// </summary>
 		public static void OpenAppRatingPage() {
 			instance._openAppRatingPage ();
+
+			ProfileEvents.OnUserRatingEvent ();
 		}
 
 
