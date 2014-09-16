@@ -14,6 +14,7 @@ extern "C"{
 	
     void soomlaProfile_Initialize() {
         [SoomlaProfile usingExternalProvider:YES];
+        [[SoomlaProfile getInstance] initialize];
     }
     
 	int soomlaProfile_GetStoredUserProfile(const char* sProvider, char** json) {
