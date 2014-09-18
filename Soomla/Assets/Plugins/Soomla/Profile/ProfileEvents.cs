@@ -20,7 +20,8 @@ using System.Collections.Generic;
 namespace Soomla.Profile {
 
 	/// <summary>
-	/// This class provides functions for event handling.
+	/// This class provides functions for event handling. To handle various events, just add your 
+	/// game-specific behavior to the delegates below.
 	/// </summary>
 	public class ProfileEvents : MonoBehaviour {
 
@@ -32,7 +33,7 @@ namespace Soomla.Profile {
 		#pragma warning restore 414
 
 		/// <summary>
-		/// Initializes game state before the game starts.
+		/// Initializes the game state before the game starts.
 		/// </summary>
 		void Awake(){
 			if(instance == null){ 	// making sure we only initialize one instance.
@@ -103,6 +104,10 @@ namespace Soomla.Profile {
 
 
 		public class ProfileEventPusher {
+
+			/// <summary>
+			/// Registers all events. 
+			/// </summary>
 			public ProfileEventPusher() {
 				ProfileEvents.OnLoginCancelled += _pushEventLoginStarted;
 				ProfileEvents.OnLoginFailed += _pushEventLoginFailed;
@@ -117,7 +122,7 @@ namespace Soomla.Profile {
 				ProfileEvents.OnSocialActionStarted += _pushEventSocialActionStarted;
 			}
 
-			// event pushing back to native (when using FB Unity SDK)
+			// Event pushing back to native (when using FB Unity SDK)
 			protected virtual void _pushEventLoginStarted(Provider provider, string payload) {}
 			protected virtual void _pushEventLoginFinished(UserProfile userProfileJson, string payload){}
 			protected virtual void _pushEventLoginFailed(Provider provider, string message, string payload){}
