@@ -41,9 +41,9 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
 1. Go over the guidelines for downloading and importing the official Facebook SDK: https://developers.facebook.com/docs/unity/getting-started/canvas    - You don't need to initialize FB. SoomlaProfile will initialize it for you.
 2. Create an empty folder named `Facebook` under `Assets/Plugins`
 3. Move the folder `Scripts` from `Assets/Facebook` to `Assets/Plugins/Facebook`  -  SOOMLA works from the Plugins folder so it'll be available to UnityScript devs. So you'll have to move Facebook in there as well.
-> When working under Unity version > 4.5.0 (targeting iOS) please follow these extra steps:
-> 1. Edit the file `Assets/Facebook/Editor/iOS/fixup.projmods`
-> 1. Under `headerpaths` change `Facebook/Scripts` to `Plugins/Facebook/Scripts`
+    > When working under Unity version > 4.5.0 (targeting iOS) please follow these extra steps:
+    > 1. Edit the file `Assets/Facebook/Editor/iOS/fixup.projmods`
+    > 1. Under `headerpaths` change `Facebook/Scripts` to `Plugins/Facebook/Scripts`
 4. Download and import [soomla-unity3d-core.unitypackage](https://github.com/soomla/unity3d-profile/blob/master/soomla-unity3d-core.unitypackage) and [unity3d-profile.unitypackage](http://bit.ly/1sUDdG0). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
 5. Drag the "CoreEvents" and "ProfileEvents" Prefabs from `../Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
 6. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
