@@ -25,8 +25,12 @@ namespace Soomla.Profile {
 
 		private const string TAG = "SOOMLA UserProfile";
 
+		/// <summary>
+		/// The provider that this user profile belongs to, such as Facebook, Twitter, etc.
+		/// </summary>
 		public Provider Provider;
 
+		/** User profile information **/
 		public string ProfileId;
 		public string Email;
 		public string Username;
@@ -42,7 +46,7 @@ namespace Soomla.Profile {
 		/// Constructor.
 		/// </summary>
 		/// <param name="provider">The provider this <c>UserProfile</c> belongs to.</param>
-		/// <param name="profileId">A unique id that identifies the current user with the provider.</param>
+		/// <param name="profileId">A unique ID that identifies the current user with the provider.</param>
 		/// <param name="username">The username of the current user in the provider.</param>
 		protected UserProfile(Provider provider, string profileId, string username)
 		{

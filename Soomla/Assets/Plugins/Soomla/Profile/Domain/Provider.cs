@@ -16,7 +16,8 @@ using System;
 namespace Soomla.Profile
 {
 	/// <summary>
-	/// A string enumeration of social providers.
+	/// A string enumeration of available social providers. Currently, the only Provider available 
+	/// with SOOMLA is Facebook, but in the future more providers will be supported. 
 	/// </summary>
 	public sealed class Provider
 	{
@@ -34,15 +35,28 @@ namespace Soomla.Profile
 		public static readonly Provider RUNKEEPER = new Provider ("runkeeper");
 		public static readonly Provider INSTAGRAM = new Provider ("instagram");
 		public static readonly Provider FLICKR = new Provider ("flickr");
-		
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="name">Name of the social provider.</param>
 		private Provider(string name){
 			this.name = name;
 		}
-		
+
+		//// <summary>
+		/// Converts this provider into a string. 
+		/// </summary>
+		/// <returns>A string representation of the current <c>Provider</c>.</returns>
 		public override string ToString(){
 			return name;
 		}
 
+		/// <summary>
+		/// Converts the given string into a <c>Provider</c>
+		/// </summary>
+		/// <returns>The string.</returns>
+		/// <param name="actionTypeStr">The string to convert into a <c>Provider</c>.</param>
 		public static Provider fromString(string providerStr) {
 			switch(providerStr) {
 			case("facebook"):

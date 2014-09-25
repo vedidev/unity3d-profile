@@ -21,9 +21,9 @@ namespace Soomla.Profile {
 	
 	/// <summary>
 	/// <c>SoomlaProfile</c> for iOS.
-	/// This class holds the basic assets needed to interact with Profile.
-	/// You can use it to integrate users, login/logout, update status etc.
-	/// This is the only class you need to initialize in order to use the SOOMLA SDK.
+	/// This class holds the basic assets needed to operate the Profile module.
+	/// 
+	/// See comments for functions in parent.
 	/// </summary>
 	public class SoomlaProfileIOS : SoomlaProfile {
 		#if UNITY_IOS && !UNITY_EDITOR

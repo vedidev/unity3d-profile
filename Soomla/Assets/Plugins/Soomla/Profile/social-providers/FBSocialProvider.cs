@@ -22,15 +22,91 @@ using System.Linq;
 
 namespace Soomla.Profile
 {
+	/// <summary>
+	/// This class represents the social provider Facebook. The functions implemented below are 
+	/// Facebook-specific. 
+	/// </summary>
 	public class FBSocialProvider : SocialProvider
 	{
 		private static string TAG = "SOOMLA FBSocialProvider";
 
+		/// <summary>
+		/// Constructor. Initializes the Facebook SDK.
+		/// </summary>
 		public FBSocialProvider ()
 		{
 			FB.Init(OnInitComplete, OnHideUnity);
 		}
 
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.Logout"/>
+		/// </summary>
+		/// <param name="success">Callback function that is called if logout was successful.</param>
+		/// <param name="fail">Callback function that is called if logout failed.</param>
+		public override void Logout(LogoutSuccess success, LogoutFailed fail) {
+			FB.Logout();
+			success();
+		}
+		
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.Login"/>
+		/// </summary>
+		/// <param name="success">Callback function that is called if login was successful.</param>
+		/// <param name="fail">Callback function that is called if login failed.</param>
+		/// <param name="cancel">Callback function that is called if login was cancelled.</param>
+		public override void Login(LoginSuccess success, LoginFailed fail, LoginCancelled cancel) {
+			FB.Login("email,publish_actions", (FBResult result) => {
+				if (result.Error != null) {
+					SoomlaUtils.LogDebug (TAG, "LoginCallback[result.Error]: " + result.Error);
+					fail(result.Error);
+				}
+				else if (!FB.IsLoggedIn) {
+					SoomlaUtils.LogDebug (TAG, "LoginCallback[cancelled]");
+					cancel();
+				}
+				else {
+					FB.API("/me/permissions", Facebook.HttpMethod.GET, delegate (FBResult response) {
+						// inspect the response and adapt your UI as appropriate
+						// check response.Text and response.Error
+						SoomlaUtils.LogWarning(TAG, "me/permissions " + response.Text);
+					});
+					
+					FB.API("/me?fields=id,name,email,first_name,last_name,picture",
+					       Facebook.HttpMethod.GET, (FBResult result2) => {
+						if (result2.Error != null) {
+							SoomlaUtils.LogDebug (TAG, "ProfileCallback[result.Error]: " + result2.Error);
+							
+							fail(result2.Error);
+						}
+						else {
+							SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Text]: "+result2.Text);
+							SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Texture]: "+result2.Texture);
+							string fbUserJson = result2.Text;
+							UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson);
+							
+							SoomlaProfile.StoreUserProfile (userProfile, true);
+							
+							success(userProfile);
+						}
+					});
+				}
+			});
+		}
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.IsLoggedIn"/>
+		/// </summary>
+		/// <returns>If the user is logged into Facebook, returns <c>true</c>; otherwise, <c>false</c>.</returns>
+		public override bool IsLoggedIn() {
+			return FB.IsLoggedIn;
+		}
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.UpdateStatus"/>
+		/// </summary>
+		/// <param name="status">Status to post.</param>
+		/// <param name="success">Callback function that is called if the status update was successful.</param>
+		/// <param name="fail">Callback function that is called if the status update failed.</param>
 		public override void UpdateStatus(string status, SocialActionSuccess success, SocialActionFailed fail) {
 			var formData = new Dictionary<string, string>
 			{
@@ -52,7 +128,18 @@ namespace Soomla.Profile
 					}
 					, formData);
 		}
-		
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.UpdateStory"/>
+		/// </summary>
+		/// <param name="message">A message that will be shown along with the story.</param>
+		/// <param name="name">The name (title) of the story.</param>
+		/// <param name="caption">A caption.</param>
+		/// <param name="link">A link to a web page.</param>
+		/// <param name="pictureUrl">A link to an image on the web.</param>
+		/// <param name="success">Callback function that is called if the story update was successful.</param>
+		/// <param name="fail">Callback function that is called if the story update failed.</param>
+		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
 		public override void UpdateStory(string message, string name, string caption,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 			FB.Feed(
@@ -84,6 +171,15 @@ namespace Soomla.Profile
 				);
 		}
 
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.UploadImage"/>
+		/// </summary>
+		/// <param name="tex2D">Texture2D for image.</param>
+		/// <param name="fileName">Name of image file.</param>
+		/// <param name="message">Message to post with the image.</param>
+		/// <param name="success">Callback function that is called if the image upload was successful.</param>
+		/// <param name="fail">Callback function that is called if the image upload failed.</param>
+		/// <param name="cancel">Callback function that is called if the image upload was cancelled.</param>
 		public override void UploadImage(Texture2D tex2D, string fileName, string message, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 			byte[] texBytes = tex2D.EncodeToPNG();
 			
@@ -114,6 +210,11 @@ namespace Soomla.Profile
 					}, wwwForm);
 		}
 
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
+		/// </summary>
+		/// <param name="success">Callback function that is called if the contacts were fetched successfully.</param>
+		/// <param name="fail">Callback function that is called if fetching contacts failed.</param>
 		public override void GetContacts(ContactsSuccess success, ContactsFailed fail) {
 			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name",
 			        Facebook.HttpMethod.GET,
@@ -131,54 +232,15 @@ namespace Soomla.Profile
 					});
 		}
 
-		public override void Logout(LogoutSuccess success, LogoutFailed fail) {
-			FB.Logout();
-			success();
-		}
-
-		public override void Login(LoginSuccess success, LoginFailed fail, LoginCancelled cancel) {
-			FB.Login("email,publish_actions", (FBResult result) => {
-				if (result.Error != null) {
-					SoomlaUtils.LogDebug (TAG, "LoginCallback[result.Error]: " + result.Error);
-					fail(result.Error);
-				}
-				else if (!FB.IsLoggedIn) {
-					SoomlaUtils.LogDebug (TAG, "LoginCallback[cancelled]");
-					cancel();
-				}
-				else {
-					FB.API("/me/permissions", Facebook.HttpMethod.GET, delegate (FBResult response) {
-						// inspect the response and adapt your UI as appropriate
-						// check response.Text and response.Error
-						SoomlaUtils.LogWarning(TAG, "me/permissions " + response.Text);
-					});
-					
-					FB.API("/me?fields=id,name,email,first_name,last_name,picture",
-					       Facebook.HttpMethod.GET, (FBResult result2) => {
-						if (result2.Error != null) {
-							SoomlaUtils.LogDebug (TAG, "ProfileCallback[result.Error]: " + result2.Error);
-
-							fail(result2.Error);
-						}
-						else {
-							SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Text]: "+result2.Text);
-							SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Texture]: "+result2.Texture);
-							string fbUserJson = result2.Text;
-							UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson);
-							
-							SoomlaProfile.StoreUserProfile (userProfile, true);
-
-							success(userProfile);
-						}
-					});
-				}
-			});
-		}
-
-		public override bool IsLoggedIn() {
-			return FB.IsLoggedIn;
-		}
-
+		/// <summary>
+		/// Requests the user to send messages between users.
+		/// </summary>
+		/// <param name="message">Message to send.</param>
+		/// <param name="to">Who to send message to (can be 1 or more users).</param>
+		/// <param name="extraData">Extra data.</param>
+		/// <param name="dialogTitle">Dialog title.</param>
+		/// <param name="success">Callback function that is called if App request succeeded.</param>
+		/// <param name="fail">Callback function that is called if App request failed.</param>
 		public override void AppRequest(string message, string[] to, string extraData, string dialogTitle, AppRequestSuccess success, AppRequestFailed fail) {
 			FB.AppRequest(message,
 			              to,
@@ -204,9 +266,17 @@ namespace Soomla.Profile
 							});
 		}
 
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.Like"/>
+		/// </summary>
+		/// <param name="pageName">The name of the page as written in facebook in the URL. 
+		/// For a FB url http://www.facebook.com/MyPage you need to provide pageName="MyPage".</param>
 		public override void Like(string pageName) {
 			Application.OpenURL("https://www.facebook.com/" + pageName);
 		}
+
+
+		/** PRIVATE FUNCTIONS **/
 
 		/** Initialize Callbacks **/
 
@@ -220,14 +290,10 @@ namespace Soomla.Profile
 			SoomlaUtils.LogDebug(TAG, "Is game showing? " + isGameShown);
 		}
 
-
-
 		/** Login Callbacks **/
 		
 		private void ProfileCallback(FBResult result) {
-
 		}
-
 
 		private static UserProfile UserProfileFromFBJsonString(string fbUserJsonStr) {
 			return UserProfileFromFBJson(new JSONObject (fbUserJsonStr));
