@@ -85,6 +85,8 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Logs the user out of the given provider. 
+		/// 
+		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The provider to log out from.</param>
 		public static void Logout(Provider provider) {
@@ -108,8 +110,7 @@ namespace Soomla.Profile
 		}
 
 		/// <summary>
-		/// Updates the user's status on the given provider. Upon a successful
-		/// update, the user will receive the supplied reward.
+		/// Updates the user's status on the given provider. 
 		///
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
@@ -200,6 +201,8 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Uploads the current screen shot image to the user's social page on the given Provider.
+		/// 
+		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="mb">Mb.</param>
 		/// <param name="provider">The <c>Provider</c> the given screenshot should be uploaded to.</param>
@@ -263,6 +266,8 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Likes the page (with the given name) of the given provider.
+		/// 
+		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The provider that the page belongs to.</param>
 		/// <param name="pageName">The name of the page to like.</param>
@@ -276,8 +281,10 @@ namespace Soomla.Profile
 		}
 	
 		/// <summary>
-		/// Fetches the saved user profile for the given provider.
-		/// UserProfiles are automatically saved in the local storage for a provider after a successful login.
+		/// Fetches the saved user profile for the given provider. UserProfiles are automatically 
+		/// saved in the local storage for a provider after a successful login.
+		/// 
+		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <returns>The stored user profile.</returns>
 		/// <param name="provider">The provider to fetch UserProfile from.</param>
@@ -287,6 +294,8 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Stores the given user profile in the relevant provider (contained internally in the UserProfile).
+		/// 
+		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="userProfile">User profile to store.</param>
 		/// <param name="notify">If set to <c>true</c>, notify.</param>
@@ -296,6 +305,8 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Opens the app rating page.
+		/// 
+		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		public static void OpenAppRatingPage() {
 			instance._openAppRatingPage ();

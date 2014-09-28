@@ -233,7 +233,8 @@ namespace Soomla.Profile
 		}
 
 		/// <summary>
-		/// Requests the user to send messages between users.
+		/// A wrapper function that calls <c>AppRequest</c> from Facebook's API: "Prompts the user to  
+		/// send app requests, short messages between users."
 		/// </summary>
 		/// <param name="message">Message to send.</param>
 		/// <param name="to">Who to send message to (can be 1 or more users).</param>
