@@ -113,6 +113,7 @@ namespace Soomla.Profile {
 		/// <returns>A <c>JSONObject</c> representation of the current <c>UserProfile</c>.</returns>
 		public virtual JSONObject toJSONObject() {
 			JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
+			obj.AddField(JSONConsts.SOOM_CLASSNAME, SoomlaUtils.GetClassName(this));
 			obj.AddField(PJSONConsts.UP_PROVIDER, this.Provider.ToString());
 			obj.AddField(PJSONConsts.UP_USERNAME, this.Username);
 			obj.AddField(PJSONConsts.UP_PROFILEID, this.ProfileId);
