@@ -50,7 +50,7 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
     > 1. Edit the file `Assets/Facebook/Editor/iOS/fixup.projmods`
 
     > 1. Under `headerpaths` change `Facebook/Scripts` to `Plugins/Facebook/Scripts`
-    
+
 4. Download and import [soomla-unity3d-core.unitypackage](https://github.com/soomla/unity3d-profile/blob/master/soomla-unity3d-core.unitypackage) and [unity3d-profile.unitypackage](http://bit.ly/1sUDdG0). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
 5. Drag the "CoreEvents" and "ProfileEvents" Prefabs from `../Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
 6. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
@@ -128,6 +128,11 @@ ProfileEvents.OnLoginFinished += (UserProfile UserProfile) => {
 			SoomlaProfile.GetContacts(Provider.FACEBOOK);
 };
 ```
+
+## Facebook Caveats
+
+1. See [iOS Facebook Caveats](https://github.com/soomla/ios-profile#facebook-caveats)
+1. See [Android Facebook Caveats](https://github.com/soomla/android-profile#facebook-caveats)
 
 Contribution
 ---
