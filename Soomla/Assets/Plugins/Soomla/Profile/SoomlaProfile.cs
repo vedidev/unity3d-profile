@@ -58,7 +58,9 @@ namespace Soomla.Profile
 		/// </summary>
 		public static void Initialize() {
 			instance._initialize();
+#if SOOMLA_FACEBOOK
 			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
+#endif
 			ProfileEvents.OnSoomlaProfileInitialized();
 		}
 
@@ -70,17 +72,20 @@ namespace Soomla.Profile
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful login.</param>
 		public static void Login(Provider provider, string payload="", Reward reward = null) {
 			ProfileEvents.OnLoginStarted(provider, payload);
-			providers[provider].Login(
-				/* success */	(UserProfile userProfile) => { 
-				StoreUserProfile(userProfile);
-				ProfileEvents.OnLoginFinished(userProfile, payload); 
-				if (reward != null) {
-					reward.Give();
-				}
-			},
-			/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, payload); },
-			/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, payload); }
-			);
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				targetProvider.Login(
+					/* success */	(UserProfile userProfile) => { 
+					StoreUserProfile(userProfile);
+					ProfileEvents.OnLoginFinished(userProfile, payload); 
+					if (reward != null) {
+						reward.Give();
+					}
+				},
+				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, payload); },
+				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, payload); }
+				);
+			}
 		}
 
 		/// <summary>
@@ -92,10 +97,13 @@ namespace Soomla.Profile
 		public static void Logout(Provider provider) {
 			
 			ProfileEvents.OnLogoutStarted(provider);
-			providers[provider].Logout(
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				targetProvider.Logout(
 				/* success */	() => { ProfileEvents.OnLogoutFinished(provider); },
-			/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
-			);
+				/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
+				);
+			}
 			
 		}
 
@@ -121,7 +129,9 @@ namespace Soomla.Profile
 		public static void UpdateStatus(Provider provider, string status, string payload="", Reward reward = null) {
 		
 			ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, payload);
-			providers[provider].UpdateStatus(status,
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				targetProvider.UpdateStatus(status,
 	        /* success */	() => {
 						ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, payload); 
 						if (reward != null) {
@@ -130,7 +140,7 @@ namespace Soomla.Profile
 					},
 			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, payload); }
 				);
-
+			}
 		}
 
 		/// <summary>
@@ -152,7 +162,9 @@ namespace Soomla.Profile
 		                               string pictureUrl, string payload="", Reward reward = null) {
 
 			ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, payload);
-			providers[provider].UpdateStory(message, name, caption, link, pictureUrl,
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
 	        /* success */	() => { 
 									ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, payload); 
 									if (reward != null) {
@@ -162,7 +174,7 @@ namespace Soomla.Profile
 			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, payload); },
 			/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, payload); }
 				);
-
+			}
 		}
 
 //		public static void UploadImage(Provider provider, string message, string filename,
@@ -186,7 +198,9 @@ namespace Soomla.Profile
 		                               Reward reward = null) {
 
 			ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
-			providers[provider].UploadImage(tex2D, fileName, message,
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				targetProvider.UploadImage(tex2D, fileName, message,
 			/* success */	() => { 
 									ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
 									if (reward != null) {
@@ -196,7 +210,7 @@ namespace Soomla.Profile
 			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, payload); },
 			/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, payload); }
 				);
-
+			}
 		}
 
 		/// <summary>
@@ -224,12 +238,15 @@ namespace Soomla.Profile
 		public static void GetContacts(Provider provider, string payload="") {
 
 			ProfileEvents.OnGetContactsStarted(provider, payload);
-			providers[provider].GetContacts(
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				targetProvider.GetContacts(
 			/* success */	(List<UserProfile> profiles) => { 
 										ProfileEvents.OnGetContactsFinished(provider, profiles, payload);
 									},
 			/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, payload); }
-			);
+				);
+			}
 		}
 
 		// TODO: this is irrelevant for now. Will be updated soon.
@@ -273,10 +290,13 @@ namespace Soomla.Profile
 		/// <param name="pageName">The name of the page to like.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after he/she likes the page.</param>
 		public static void Like(Provider provider, string pageName, Reward reward=null) {
-			providers[provider].Like(pageName);
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				targetProvider.Like(pageName);
 
-			if (reward != null) {
-				reward.Give();
+				if (reward != null) {
+					reward.Give();
+				}
 			}
 		}
 	
@@ -314,6 +334,17 @@ namespace Soomla.Profile
 			ProfileEvents.OnUserRatingEvent ();
 		}
 
+		private static SocialProvider GetSocialProvider (Provider provider)
+		{
+			SocialProvider result = null;
+			providers.TryGetValue(provider, out result);
+
+			if (result == null) {
+				throw new ProviderNotFoundException();
+			}
+
+			return result;
+		}
 
 		/** PROTECTED & PRIVATE FUNCTIONS **/
 

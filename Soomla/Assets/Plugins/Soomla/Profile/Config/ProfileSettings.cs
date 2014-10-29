@@ -16,6 +16,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -40,15 +41,67 @@ namespace Soomla.Profile
 		{
 			SoomlaEditorScript.addSettings(instance);
 		}
+
+		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iPhone, 
+			BuildTargetGroup.WebPlayer, BuildTargetGroup.Standalone};
 		
 		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
 		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
+
+		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		
 		GUIContent fbAppId = new GUIContent("FB app Id:");
 		GUIContent fbAppNS = new GUIContent("FB app namespace:");
 
 		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version. ");
 		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
+
+		private ProfileSettings()
+		{
+			socialIntegrationState.Add(Provider.FACEBOOK.ToString(), null);
+			socialIntegrationState.Add(Provider.GOOGLE.ToString(), null);
+			socialIntegrationState.Add(Provider.TWITTER.ToString(), null);
+
+			ReadSocialIntegrationState();
+        }
+        
+        private void ReadSocialIntegrationState()
+		{
+			string value = string.Empty;
+			SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("SocialIntegration", out value);
+
+			if (value != null) {
+				string[] savedIntegrations = value.Split(';');
+				foreach (var savedIntegration in savedIntegrations) {
+					string[] platformValue = savedIntegration.Split(',');
+					string platform = platformValue[0];
+					int state = int.Parse(platformValue[1]);
+
+					bool? platformState = null;
+					if (socialIntegrationState.TryGetValue(platform, out platformState)) {
+						socialIntegrationState[platform] = (state > 0);
+					}
+				}
+			}
+		}
+
+		private void WriteSocialIntegrationState()
+		{
+			List<string> savedStates = new List<string>();
+			foreach (var entry in socialIntegrationState) {
+				if (entry.Value != null) {
+					savedStates.Add(entry.Key + "," + (entry.Value.Value ? 1 : 0));
+				}
+			}
+
+			string result = string.Empty;
+			if (savedStates.Count > 0) {
+				result = string.Join(";", savedStates.ToArray());
+			}
+
+			SoomlaEditorScript.Instance.setSettingsValue("SocialIntegration", result);
+			SoomlaEditorScript.DirtyEditor();
+		}
 
 		public void OnEnable() {
 			// Generating AndroidManifest.xml
@@ -59,6 +112,8 @@ namespace Soomla.Profile
 //			AndroidGUI();
 //			EditorGUILayout.Space();
 //			IOSGUI();
+
+			IntegrationGUI();
 		}
 		
 		public void OnInfoGUI() {
@@ -68,7 +123,6 @@ namespace Soomla.Profile
 		}
 		
 		public void OnSoomlaGUI() {
-			
 		}
 		
 		private void IOSGUI()
@@ -109,9 +163,69 @@ namespace Soomla.Profile
 			}
 			EditorGUILayout.Space();
 		}
-		
 
-		/** Social Providers util functions **/
+		void IntegrationGUI()
+		{
+			EditorGUILayout.LabelField("Social Platforms:", EditorStyles.boldLabel);
+
+			ReadSocialIntegrationState();
+
+			EditorGUI.BeginChangeCheck();
+
+			Dictionary<string, bool?>.KeyCollection keys = socialIntegrationState.Keys;
+			for (int i = 0; i < keys.Count; i++) {
+				string socialPlatform = keys.ElementAt(i);
+				bool? socialPlatformState = socialIntegrationState[socialPlatform];
+
+				EditorGUILayout.BeginHorizontal();
+				
+				bool doIntegrate = false;
+				if (socialPlatformState != null) {
+					socialIntegrationState[socialPlatform] = EditorGUILayout.Toggle(socialPlatform, socialPlatformState.Value);
+					doIntegrate = socialPlatformState.Value;
+				}
+				else {
+					doIntegrate = IsSocialPlatformDetected(socialPlatform);
+					bool result = EditorGUILayout.Toggle(socialPlatform, doIntegrate);
+					
+					// User changed automatic value
+					if (doIntegrate != result) {
+						doIntegrate = result;
+						socialIntegrationState[socialPlatform] = doIntegrate;
+					}
+				}
+				
+				if (doIntegrate) {
+					foreach (var buildTarget in supportedPlatforms) {
+						TryAddRemoveSocialPlatformFlag(buildTarget, socialPlatform, false);
+					}
+				}
+				else {
+					foreach (var buildTarget in supportedPlatforms) {
+						TryAddRemoveSocialPlatformFlag(buildTarget, socialPlatform, true);
+					}
+				}
+				EditorGUILayout.EndHorizontal();
+			}
+
+			EditorGUILayout.Space();
+
+			if (EditorGUI.EndChangeCheck()) {
+				WriteSocialIntegrationState();
+			}
+		}		
+
+		bool IsSocialPlatformDetected(string platform)
+		{
+			if (Provider.fromString(platform) == Provider.FACEBOOK) {
+				Type fbType = Type.GetType("FB");
+				return (fbType != null);
+			}
+
+			return false;
+		}
+
+		/** Profile Providers util functions **/
 		
 		private void setCurrentBPUpdate(string bpKey) {
 			spUpdate[bpKey] = true;
@@ -121,6 +235,32 @@ namespace Soomla.Profile
 					spUpdate[key] = false;
 				}
 			}
+		}
+
+		private void TryAddRemoveSocialPlatformFlag(BuildTargetGroup buildTarget, string socialPlatform, bool remove) {
+			string targetFlag = GetSocialPlatformFlag(socialPlatform);
+			string scriptDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTarget);
+			List<string> flags = new List<string>(scriptDefines.Split(';'));
+
+			if (flags.Contains(targetFlag)) {
+				if (remove) {
+					flags.Remove(targetFlag);
+				}
+			}
+			else {
+				if (!remove) {
+					flags.Add(targetFlag);
+				}
+			}
+
+			string result = string.Join(";", flags.ToArray());
+			if (scriptDefines != result) {
+				PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTarget, result);
+			}
+		}
+
+		private string GetSocialPlatformFlag(string socialPlatform) {
+			return "SOOMLA_" + socialPlatform.ToUpper();
 		}
 		
 		private Dictionary<string, bool> spUpdate = new Dictionary<string, bool>();
@@ -161,7 +301,7 @@ namespace Soomla.Profile
 		
 
 		
-		/** Store Specific Variables **/
+		/** Profile Specific Variables **/
 		
 		
 		public static string FB_APP_ID_DEFAULT = "YOUR FB APP ID";

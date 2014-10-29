@@ -12,6 +12,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 
+#if SOOMLA_FACEBOOK
 
 using System;
 using UnityEngine;
@@ -331,3 +332,4 @@ namespace Soomla.Profile
 	}
 }
 
+#endif
