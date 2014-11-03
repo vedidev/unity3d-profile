@@ -1,5 +1,5 @@
 rm -rf build
 
-xcodebuild -configuration Release -sdk iphoneos7.1 -project UnityiOSProfile.xcodeproj -target UnityiOSProfile clean build CREATING_UNIVERSAL_DIR=$PWD/build/release
+xcodebuild -configuration Release -sdk iphoneos -project UnityiOSProfile.xcodeproj -target UnityiOSProfile clean build CREATING_UNIVERSAL_DIR=$PWD/build/release
 
 cp build/release/libUnityiOSProfile.a ../../../Soomla/Assets/Plugins/iOS/
