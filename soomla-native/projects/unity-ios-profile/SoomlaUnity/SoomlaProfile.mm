@@ -9,11 +9,14 @@
 #import "UnityCommons.h"
 #import "Reward.h"
 #import "SoomlaUtils.h"
+#import "UnityProfileEventDispatcher.h"
 
 extern "C"{
 	
     void soomlaProfile_Initialize() {
+        LogDebug(@"SOOMLA Unity UnitySoomlaProfile", @"Initializing ProfileEventHandler and SoomlaProfile");
         [SoomlaProfile usingExternalProvider:YES];
+        [UnityProfileEventDispatcher initialize];
         [[SoomlaProfile getInstance] initialize];
     }
     

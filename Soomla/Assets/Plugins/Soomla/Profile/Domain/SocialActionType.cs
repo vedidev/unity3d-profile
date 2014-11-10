@@ -65,6 +65,28 @@ namespace Soomla.Profile
 				return null;
 			}
 		}
+
+		/// <summary>
+		/// Converts the given string into a <c>SocialActionType</c>
+		/// </summary>
+		/// <returns>The string.</returns>
+		/// <param name="actionTypeInt">The string to convert into a <c>SocialActionType</c>.</param>
+		public static SocialActionType fromInt(int actionTypeInt) {
+			switch(actionTypeInt) {
+			case 0:
+				return UPDATE_STATUS;
+			case 1:
+				return UPDATE_STORY;
+			case 2:
+				return UPLOAD_IMAGE;
+			case 3:
+				return GET_CONTACTS;
+			case 4:
+				return GET_FEED;
+			default:
+				return null;
+			}
+		}
 	}
 }
 

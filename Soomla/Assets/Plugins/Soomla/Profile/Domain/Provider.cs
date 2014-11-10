@@ -56,9 +56,9 @@ namespace Soomla.Profile
 		/// Converts the given string into a <c>Provider</c>
 		/// </summary>
 		/// <returns>The string.</returns>
-		/// <param name="actionTypeStr">The string to convert into a <c>Provider</c>.</param>
-		public static Provider fromString(string providerStr) {
-			switch(providerStr) {
+		/// <param name="providerTypeStr">The string to convert into a <c>Provider</c>.</param>
+		public static Provider fromString(string providerTypeStr) {
+			switch(providerTypeStr) {
 			case("facebook"):
 				return FACEBOOK;
 			case("foursquare"):
@@ -82,6 +82,42 @@ namespace Soomla.Profile
 			case("instagram"):
 				return INSTAGRAM;
 			case("flickr"):
+				return FLICKR;
+			default:
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Converts the given int into a <c>Provider</c>
+		/// </summary>
+		/// <returns>The int.</returns>
+		/// <param name="providerTypeInt">The string to convert into a <c>Provider</c>.</param>
+		public static Provider fromInt(int providerTypeInt) {
+			switch(providerTypeInt) {
+			case 0:
+				return FACEBOOK;
+			case 1:
+				return FOURSQUARE;
+			case 2:
+				return GOOGLE;
+			case 3:
+				return LINKEDIN;
+			case 4:
+				return MYSPACE;
+			case 5:
+				return TWITTER;
+			case 6:
+				return YAHOO;
+			case 7:
+				return SALESFORCE;
+			case 8:
+				return YAMMER;
+			case 9:
+				return RUNKEEPER;
+			case 10:
+				return INSTAGRAM;
+			case 11:
 				return FLICKR;
 			default:
 				return null;

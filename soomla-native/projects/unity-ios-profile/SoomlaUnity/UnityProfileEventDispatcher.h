@@ -5,5 +5,5 @@
     
 }
 - (id)init;
-
+- (void)handleEvent:(NSNotification*)notification;
 @end
