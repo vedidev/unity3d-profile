@@ -92,6 +92,7 @@ namespace Soomla.Profile
 		// TODO: irrelevant for now. Will be updated soon.
 		//		public abstract void GetFeed(FeedSuccess success, FeedFailed fail);
 
+		public abstract bool IsNativelyImplemented();
 
 	}
 }

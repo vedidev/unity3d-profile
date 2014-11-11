@@ -57,11 +57,17 @@ namespace Soomla.Profile
 		/// NOTE: This function must be called before any of the class methods can be used.
 		/// </summary>
 		public static void Initialize() {
-			instance._initialize();
+			instance._initialize(); //add parameters
 #if SOOMLA_FACEBOOK
 			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
+			ProfileEvents.OnSoomlaProfileInitialized();
 #endif
-//			ProfileEvents.OnSoomlaProfileInitialized();
+#if SOOMLA_GOOGLE
+			providers.Add(Provider.GOOGLE, new GPSocialProvider());
+#endif
+#if SOOMLA_TWITTER
+			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
+#endif
 		}
 
 		/// <summary>
@@ -73,7 +79,18 @@ namespace Soomla.Profile
 		public static void Login(Provider provider, string payload="", Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			if (targetProvider != null) {
+			if (targetProvider == null)
+				return;
+
+			if (targetProvider.IsNativelyImplemented())
+			{
+				//fallback to native
+				Payload complexPayload = new Payload(payload, (reward != null) ? reward.ID : "");
+				instance._login(provider, complexPayload.toJSONObject().ToString());
+			}
+
+			else 
+			{
 				ProfileEvents.OnLoginStarted(provider, payload);
 				targetProvider.Login(
 					/* success */	(UserProfile userProfile) => { 
@@ -87,11 +104,6 @@ namespace Soomla.Profile
 				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, payload); }
 				);
 			}
-			else if (provider != null){
-				//fallback to native
-				string payloadJson = CreatePayloadJson(payload, reward);
-				instance._login(provider, payloadJson);
-			}
 		}
 
 		/// <summary>
@@ -103,17 +115,23 @@ namespace Soomla.Profile
 		public static void Logout(Provider provider) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			if (targetProvider != null) {
-				ProfileEvents.OnLogoutStarted(provider);
-				targetProvider.Logout(
-				/* success */	() => { ProfileEvents.OnLogoutFinished(provider); },
-				/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
-				);
-			}
+			if (targetProvider == null)
+				return;
 
-			else if (provider != null){
+			if (targetProvider.IsNativelyImplemented ()) 
+			{
 				//fallback to native
 				instance._logout(provider);
+
+			}
+
+			else
+			{
+				ProfileEvents.OnLogoutStarted(provider);
+				targetProvider.Logout(
+					/* success */	() => { ProfileEvents.OnLogoutFinished(provider); },
+					/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
+				);
 			}
 		}
 
@@ -126,14 +144,16 @@ namespace Soomla.Profile
 		public static bool IsLoggedIn(Provider provider) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			if (targetProvider != null)
-				return targetProvider.IsLoggedIn ();
-			else if (provider != null){
+			if (targetProvider == null)
+				return false;
+
+			if (targetProvider.IsNativelyImplemented ()) 
+			{
 				//fallback to native
 				return instance._isLoggedIn(provider);
 			}
-			else
-				return false;
+
+			return targetProvider.IsLoggedIn ();
 		}
 
 		/// <summary>
@@ -148,22 +168,29 @@ namespace Soomla.Profile
 		public static void UpdateStatus(Provider provider, string status, string payload="", Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			if (targetProvider != null) {
+
+			if (targetProvider == null)
+				return;
+
+			if (targetProvider.IsNativelyImplemented())
+			{
+				//fallback to native
+				Payload complexPayload = new Payload(payload, (reward != null) ? reward.ID : "");
+				instance._updateStatus(provider, status, complexPayload.toJSONObject().ToString());
+			}
+
+			else 
+			{
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, payload);
 				targetProvider.UpdateStatus(status,
-	        /* success */	() => {
-						ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, payload); 
-						if (reward != null) {
-							reward.Give();
-						}
-					},
-			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, payload); }
+				    /* success */	() => {
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, payload); 
+					if (reward != null) {
+						reward.Give();
+					}
+				},
+					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, payload); }
 				);
-			}
-			else if (provider != null){
-				//fallback to native
-				string payloadJson = CreatePayloadJson(payload, reward);
-				instance._updateStatus(provider, status, payloadJson);
 			}
 		}
 
@@ -187,24 +214,29 @@ namespace Soomla.Profile
 		                               string payload="", Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			if (targetProvider != null) {
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, payload);
-				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
-	        /* success */	() => { 
-									ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, payload); 
-									if (reward != null) {
-										reward.Give();
-									}
-								},
-			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, payload); },
-			/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, payload); }
-				);
-			}
-			else if (provider != null)
+			if (targetProvider == null)
+				return;
+
+			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				string payloadJson = CreatePayloadJson(payload, reward);
-				instance._updateStory(provider, message, name, caption, description, link, pictureUrl, payloadJson);
+				Payload complexPayload = new Payload(payload, (reward != null)? reward.ID: "");
+				instance._updateStory(provider, message, name, caption, description, link, pictureUrl, complexPayload.toJSONObject().ToString());
+			}
+
+			else
+			{
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, payload);
+				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
+				    /* success */	() => { 
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, payload); 
+					if (reward != null) {
+						reward.Give();
+					}
+				},
+					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, payload); },
+					/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, payload); }
+				);
 			}
 		}
 
@@ -229,25 +261,30 @@ namespace Soomla.Profile
 		                               Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			if (targetProvider != null) {
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
-				targetProvider.UploadImage(tex2D, fileName, message,
-			/* success */	() => { 
-									ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
-									if (reward != null) {
-										reward.Give();
-									}
-								},
-			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, payload); },
-			/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, payload); }
-				);
-			}
 
-			else if (provider != null)
+			if (targetProvider == null)
+				return;
+
+			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				string payloadJson = CreatePayloadJson(payload, reward);
-				instance._uploadImage(provider, fileName, message, payload);
+				Payload complexPayload = new Payload(payload, (reward != null) ? reward.ID : "");
+				instance._uploadImage(provider, fileName, message, complexPayload.toJSONObject().ToString());
+			}
+
+			else 
+			{
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
+				targetProvider.UploadImage(tex2D, fileName, message,
+				    /* success */	() => { 
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
+					if (reward != null) {
+						reward.Give();
+					}
+				},
+				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, payload); },
+				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, payload); }
+				);
 			}
 		}
 
@@ -276,21 +313,26 @@ namespace Soomla.Profile
 		public static void GetContacts(Provider provider, string payload="") {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			if (targetProvider != null) {
-				ProfileEvents.OnGetContactsStarted(provider, payload);
-				targetProvider.GetContacts(
-			/* success */	(List<UserProfile> profiles) => { 
-										ProfileEvents.OnGetContactsFinished(provider, profiles, payload);
-									},
-			/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, payload); }
-				);
-			}
 
-			else if (provider != null)
+			if (targetProvider == null)
+				return;
+
+			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				string payloadJson = CreatePayloadJson(payload, null);
-				instance._getContacts(provider, payloadJson);
+				Payload complexPayload = new Payload(payload);
+				instance._getContacts(provider, complexPayload.toJSONObject().ToString());
+			}
+
+			else 
+			{
+				ProfileEvents.OnGetContactsStarted(provider, payload);
+				targetProvider.GetContacts(
+					/* success */	(List<UserProfile> profiles) => { 
+					ProfileEvents.OnGetContactsFinished(provider, profiles, payload);
+				},
+				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, payload); }
+				);
 			}
 		}
 
@@ -459,23 +501,6 @@ namespace Soomla.Profile
 			return DB_KEY_PREFIX + "userprofile." + provider.ToString();
 		}
 #endif
-
-		/// <summary>
-		/// Creates the payload json
-		/// </summary>
-		/// <returns>{"userPayload": "payload", "rewardId": "reward.ID"}</returns>
-		/// <param name="payload">User payload</param>
-		/// <param name="reward">Reward</param>
-		private static string CreatePayloadJson(string payload, Reward reward)
-		{
-			Dictionary<string, string> payloadDict = new Dictionary<string, string>()
-			{
-				{"userPayload", payload}, {"rewardId", reward != null ? reward.ID: ""}
-			};
-			JSONObject payloadJson = new JSONObject(payloadDict);
-			return payloadJson.ToString();
-		}
-
 		/** CLASS MEMBERS **/
 
 		protected const string TAG = "SOOMLA SoomlaProfile";

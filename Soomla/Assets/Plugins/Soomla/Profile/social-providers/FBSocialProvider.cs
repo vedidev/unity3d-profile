@@ -277,6 +277,9 @@ namespace Soomla.Profile
 			Application.OpenURL("https://www.facebook.com/" + pageName);
 		}
 
+		public override bool IsNativelyImplemented(){
+			return false;
+		}
 
 		/** PRIVATE FUNCTIONS **/
 
@@ -327,8 +330,6 @@ namespace Soomla.Profile
 			}
 			return profiles;
 		}
-
-
 	}
 }
 

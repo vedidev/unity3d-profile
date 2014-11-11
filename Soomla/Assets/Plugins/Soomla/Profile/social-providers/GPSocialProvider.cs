@@ -55,7 +55,9 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.IsLoggedIn"/>
 		/// </summary>
-		public override bool IsLoggedIn() {return false;}
+		public override bool IsLoggedIn() {
+			return false;
+		}
 		
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.AppRequest"/>
@@ -66,7 +68,12 @@ namespace Soomla.Profile
 		/// See docs in <see cref="SoomlaProfile.Like"/>
 		/// </summary>
 		public override void Like(string pageName) {
+			SoomlaUtils.LogDebug (TAG, "Like");
 			Application.OpenURL("https://plus.google.com/+" + pageName);
+		}
+
+		public override bool IsNativelyImplemented(){
+			return true;
 		}
 	}
 }

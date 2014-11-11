@@ -14,6 +14,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Soomla;
 
 namespace Soomla.Profile
 {
@@ -66,7 +67,12 @@ namespace Soomla.Profile
 		/// See docs in <see cref="SoomlaProfile.Like"/>
 		/// </summary>
 		public override void Like(string pageName) {
+			SoomlaUtils.LogDebug (TAG, "Like");
 			Application.OpenURL("https://www.twitter.com/" + pageName);
+		}
+
+		public override bool IsNativelyImplemented(){
+			return true;
 		}
 	}
 }

@@ -114,9 +114,6 @@ extern "C"{
         //TODO!: filter to GP and TW
         UnitySendMessage("ProfileEvents", "onSoomlaProfileInitialized", "");
     }
-    else if ([notification.name isEqualToString:EVENT_UP_USER_RATING]) {
-        UnitySendMessage("ProfileEvents", "onUserRatingEvent", "");
-    }
     else if ([notification.name isEqualToString:EVENT_UP_USER_PROFILE_UPDATED]) {
         NSDictionary* userInfo = [notification userInfo];
         UserProfile *userProfile = [userInfo valueForKey:DICT_ELEMENT_USER_PROFILE];

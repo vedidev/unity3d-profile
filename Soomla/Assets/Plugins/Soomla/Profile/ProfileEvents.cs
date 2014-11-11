@@ -97,7 +97,6 @@ namespace Soomla.Profile {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onUserProfileUpdated");
 
 			JSONObject eventJson = new JSONObject(message);
-
 			UserProfile userProfile = new UserProfile (new JSONObject(eventJson ["userProfile"].str));
 
 			ProfileEvents.OnUserProfileUpdated (userProfile);
@@ -114,11 +113,12 @@ namespace Soomla.Profile {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLoginStarted");
 
 			JSONObject eventJson = new JSONObject(message);
-
 			Provider provider = Provider.fromInt((int)(eventJson["provider"].n));
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnLoginStarted (provider, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			ProfileEvents.OnLoginStarted (provider, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -132,9 +132,16 @@ namespace Soomla.Profile {
 			JSONObject eventJson = new JSONObject(message);
 
 			UserProfile userProfile = new UserProfile (new JSONObject(eventJson ["userProfile"].str));
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnLoginFinished (userProfile, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			//give a reward
+			Reward reward = Reward.GetReward(complexPayload.RewardId);
+			if (reward !=null)
+				reward.Give();
+
+			ProfileEvents.OnLoginFinished (userProfile, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -150,9 +157,11 @@ namespace Soomla.Profile {
 			JSONObject eventJson = new JSONObject(message);
 
 			Provider provider = Provider.fromInt((int)(eventJson["provider"].n));
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnLoginCancelled (provider, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			ProfileEvents.OnLoginCancelled (provider, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -169,9 +178,11 @@ namespace Soomla.Profile {
 
 			Provider provider = Provider.fromInt((int)(eventJson["provider"].n));
 			String errorMessage = eventJson["message"].str;
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnLoginFailed(provider, errorMessage, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			ProfileEvents.OnLoginFailed(provider, errorMessage, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -238,9 +249,11 @@ namespace Soomla.Profile {
 
 			Provider provider = Provider.fromInt ((int)(eventJson["provider"].n));
 			SocialActionType socialAction = SocialActionType.fromInt ((int)eventJson["socialActionType"].n);
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnSocialActionStarted (provider, socialAction, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			ProfileEvents.OnSocialActionStarted (provider, socialAction, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -257,9 +270,16 @@ namespace Soomla.Profile {
 			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 			SocialActionType socialAction = SocialActionType.fromInt ((int)eventJson["socialActionType"].n);
-			String payload = eventJson ["payload"].str;
-			
-			ProfileEvents.OnSocialActionFinished (provider, socialAction, payload);
+
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			//give a reward
+			Reward reward = Reward.GetReward(complexPayload.RewardId);
+			if (reward != null)
+				reward.Give();
+
+			ProfileEvents.OnSocialActionFinished (provider, socialAction, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -276,9 +296,11 @@ namespace Soomla.Profile {
 			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 			SocialActionType socialAction = SocialActionType.fromInt ((int)eventJson["socialActionType"].n);
-			String payload = eventJson ["payload"].str;
+
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
 			
-			ProfileEvents.OnSocialActionCancelled (provider, socialAction, payload);
+			ProfileEvents.OnSocialActionCancelled (provider, socialAction, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -297,9 +319,11 @@ namespace Soomla.Profile {
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 			SocialActionType socialAction = SocialActionType.fromInt ((int)eventJson["socialActionType"].n);
 			String errorMessage = eventJson["message"].str;
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnSocialActionFailed (provider, socialAction, errorMessage, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			ProfileEvents.OnSocialActionFailed (provider, socialAction, errorMessage, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -315,9 +339,11 @@ namespace Soomla.Profile {
 			JSONObject eventJson = new JSONObject(message);
 
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnGetContactsStarted(provider, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			ProfileEvents.OnGetContactsStarted(provider, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -333,7 +359,9 @@ namespace Soomla.Profile {
 			JSONObject eventJson = new JSONObject(message);
 			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
-			String payload = eventJson ["payload"].str;
+
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
 
 			String userProfilesJsonArray = eventJson ["contacts"].str; 
 			JSONObject userProfilesJson = new JSONObject (userProfilesJsonArray);
@@ -343,7 +371,7 @@ namespace Soomla.Profile {
 				userProfiles.Add(new UserProfile(userProfilesJson[key]));
 			}
 				                
-			ProfileEvents.OnGetContactsFinished (provider, userProfiles, payload);
+			ProfileEvents.OnGetContactsFinished (provider, userProfiles, complexPayload.UserPayload);
 		}
 
 		/// <summary>
@@ -360,9 +388,11 @@ namespace Soomla.Profile {
 			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 			String errorMessage = eventJson["message"].str;
-			String payload = eventJson ["payload"].str;
 
-			ProfileEvents.OnGetContactsFailed (provider, errorMessage, payload);
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			Payload complexPayload = new Payload (payloadJSON);
+
+			ProfileEvents.OnGetContactsFailed (provider, errorMessage, complexPayload.UserPayload);
 		}
 
 		/// <summary>
