@@ -58,7 +58,7 @@ namespace Soomla.Profile {
 			SoomlaUtils.LogDebug (TAG, "Initializing ProfileEvents ...");
 			#if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJNI.PushLocalFrame(100);
-			//init EventHandler
+			//init ProfileEventHandler
 			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.unity.ProfileEventHandler")) {
 				jniEventHandler.CallStatic("initialize");
 			}

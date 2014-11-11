@@ -111,6 +111,7 @@ extern "C"{
 
 - (void)handleEvent:(NSNotification*)notification{
     if ([notification.name isEqualToString:EVENT_UP_PROFILE_INITIALIZED]) {
+        //TODO!: filter to GP and TW
         UnitySendMessage("ProfileEvents", "onSoomlaProfileInitialized", "");
     }
     else if ([notification.name isEqualToString:EVENT_UP_USER_RATING]) {
@@ -279,6 +280,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
+        //Create contacts json array as following: {"contacts": {"userProfile":{...}, ...}
         NSArray* contacts = [userInfo valueForKey:DICT_ELEMENT_CONTACTS];
         NSMutableArray* contactsJsonArray = [NSMutableArray array];
         for (int i = 0; i < [contacts count]; i++) {
