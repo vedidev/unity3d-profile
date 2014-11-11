@@ -15,6 +15,44 @@ import static com.soomla.profile.domain.IProvider.Provider;
 
 public class UnitySoomlaProfile {
 
+    public static void login(Activity activity, String providerStr, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().login(activity, provider, payload, null);
+    }
+
+    public static void logout(String providerStr) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().logout(provider);
+    }
+
+    public static void isLoggedIn(Activity activity, String providerStr) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().isLoggedIn(activity, provider);
+    }
+
+    public static void updateStatus(String providerStr, String status, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().updateStatus(provider, status, payload, null);
+    }
+
+    public static void updateStory(String providerStr, String message, String name,
+                                   String caption, String description, String link,
+                                   String pictureUrl, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().updateStory(provider, message, name, caption, description,
+                link, pictureUrl, payload, null);
+    }
+
+    public static void uploadImage(String providerStr, String message, String filePath, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().uploadImage(provider, message, filePath, null);
+    }
+
+    public static void getContacts(String providerStr, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().getContacts(provider, payload, null);
+    }
+
     public static String getStoredUserProfile(String providerStr) throws ProviderNotFoundException, UserProfileNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
         UserProfile userProfile = SoomlaProfile.getInstance().getStoredUserProfile(provider);
