@@ -71,9 +71,10 @@ namespace Soomla.Profile
 		/// <param name="payload">A string to receive when the function returns.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful login.</param>
 		public static void Login(Provider provider, string payload="", Reward reward = null) {
-			ProfileEvents.OnLoginStarted(provider, payload);
+
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider != null) {
+				ProfileEvents.OnLoginStarted(provider, payload);
 				targetProvider.Login(
 					/* success */	(UserProfile userProfile) => { 
 					StoreUserProfile(userProfile);
@@ -100,16 +101,20 @@ namespace Soomla.Profile
 		/// </summary>
 		/// <param name="provider">The provider to log out from.</param>
 		public static void Logout(Provider provider) {
-			
-			ProfileEvents.OnLogoutStarted(provider);
+
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider != null) {
+				ProfileEvents.OnLogoutStarted(provider);
 				targetProvider.Logout(
 				/* success */	() => { ProfileEvents.OnLogoutFinished(provider); },
 				/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
 				);
 			}
-			
+
+			else if (provider != null){
+				//fallback to native
+				instance._logout(provider);
+			}
 		}
 
 		/// <summary>
@@ -119,7 +124,16 @@ namespace Soomla.Profile
 		/// otherwise, <c>false</c>.</returns>
 		/// <param name="provider">The provider to check if the user is logged into.</param>
 		public static bool IsLoggedIn(Provider provider) {
-			return providers.ContainsKey(provider) && providers[provider].IsLoggedIn();
+
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null)
+				return targetProvider.IsLoggedIn ();
+			else if (provider != null){
+				//fallback to native
+				return instance._isLoggedIn(provider);
+			}
+			else
+				return false;
 		}
 
 		/// <summary>
@@ -132,10 +146,10 @@ namespace Soomla.Profile
 		/// <param name="payload">A string to receive when the function returns.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful post.</param>
 		public static void UpdateStatus(Provider provider, string status, string payload="", Reward reward = null) {
-		
-			ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, payload);
+
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider != null) {
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, payload);
 				targetProvider.UpdateStatus(status,
 	        /* success */	() => {
 						ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, payload); 
@@ -145,6 +159,11 @@ namespace Soomla.Profile
 					},
 			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, payload); }
 				);
+			}
+			else if (provider != null){
+				//fallback to native
+				string payloadJson = CreatePayloadJson(payload, reward);
+				instance._updateStatus(provider, status, payloadJson);
 			}
 		}
 
@@ -158,17 +177,18 @@ namespace Soomla.Profile
 		/// <param name="message">A message that will be shown along with the story.</param>
 		/// <param name="name">The name (title) of the story.</param>
 		/// <param name="caption">A caption.</param>
+		/// <param name="description">A description.</param>
 		/// <param name="link">A link to a web page.</param>
 		/// <param name="pictureUrl">A link to an image on the web.</param>
 		/// <param name="payload">A string to receive when the function returns.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful post.</param>
 		public static void UpdateStory(Provider provider, string message, string name,
-		                               string caption, string link,
-		                               string pictureUrl, string payload="", Reward reward = null) {
+		                               string caption, string description, string link, string pictureUrl, 
+		                               string payload="", Reward reward = null) {
 
-			ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, payload);
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider != null) {
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, payload);
 				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
 	        /* success */	() => { 
 									ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, payload); 
@@ -179,6 +199,12 @@ namespace Soomla.Profile
 			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, payload); },
 			/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, payload); }
 				);
+			}
+			else if (provider != null)
+			{
+				//fallback to native
+				string payloadJson = CreatePayloadJson(payload, reward);
+				instance._updateStory(provider, message, name, caption, description, link, pictureUrl, payloadJson);
 			}
 		}
 
@@ -202,9 +228,9 @@ namespace Soomla.Profile
 		public static void UploadImage(Provider provider, Texture2D tex2D, string fileName, string message, string payload="",
 		                               Reward reward = null) {
 
-			ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider != null) {
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
 				targetProvider.UploadImage(tex2D, fileName, message,
 			/* success */	() => { 
 									ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
@@ -215,6 +241,13 @@ namespace Soomla.Profile
 			/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, payload); },
 			/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, payload); }
 				);
+			}
+
+			else if (provider != null)
+			{
+				//fallback to native
+				string payloadJson = CreatePayloadJson(payload, reward);
+				instance._uploadImage(provider, fileName, message, payload);
 			}
 		}
 
@@ -242,15 +275,22 @@ namespace Soomla.Profile
 		/// <param name="payload">A string to receive when the function returns.</param>
 		public static void GetContacts(Provider provider, string payload="") {
 
-			ProfileEvents.OnGetContactsStarted(provider, payload);
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider != null) {
+				ProfileEvents.OnGetContactsStarted(provider, payload);
 				targetProvider.GetContacts(
 			/* success */	(List<UserProfile> profiles) => { 
 										ProfileEvents.OnGetContactsFinished(provider, profiles, payload);
 									},
 			/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, payload); }
 				);
+			}
+
+			else if (provider != null)
+			{
+				//fallback to native
+				string payloadJson = CreatePayloadJson(payload, null);
+				instance._getContacts(provider, payloadJson);
 			}
 		}
 
@@ -354,6 +394,22 @@ namespace Soomla.Profile
 		/** PROTECTED & PRIVATE FUNCTIONS **/
 
 		protected virtual void _initialize() { }
+
+		protected virtual void _login(Provider provider, string payload) { }
+
+		protected virtual void _logout (Provider provider) { }
+
+		protected virtual bool _isLoggedIn(Provider provider) { return false; }
+
+		protected virtual void _updateStatus(Provider provider, string status, string payload) { }
+
+		protected virtual void _updateStory (Provider provider, string message, string name,
+		                                     string caption, string description, string link,
+		                                     string pictureUrl, string payload) { }
+
+		protected virtual void _uploadImage(Provider provider, string message, string filePath, string payload) { }
+
+		protected virtual void _getContacts(Provider provider, string payload) { }
 
 		protected virtual void _openAppRatingPage() { }
 

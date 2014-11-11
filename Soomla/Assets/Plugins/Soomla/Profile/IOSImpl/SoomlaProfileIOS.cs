@@ -32,6 +32,23 @@ namespace Soomla.Profile {
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_Initialize();
 		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_Login(string provider, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_Logout(string provider);
+		[DllImport ("__Internal")]
+		private static extern bool soomlaProfile_IsLoggedIn(string provider);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_UpdateStatus(string provider, string status, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_UpdateStory(string provider, string message,
+		                                                     string name, string caption, string description,
+		                                                     string link, string pictureUrl, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_UploadImage(string provider, string message,
+		                                                     string filePath, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_GetContacts(string provider, string payload);
+		[DllImport ("__Internal")]
 		private static extern int soomlaProfile_GetStoredUserProfile(string provider, out IntPtr json);
 		[DllImport ("__Internal")]
 		private static extern int soomlaProfile_SetStoredUserProfile(string userProfileJson, bool notify);
@@ -43,8 +60,34 @@ namespace Soomla.Profile {
 			soomlaProfile_Initialize();
 		}
 
-		protected void _login(Provider provider, String payload){
+		protected override void _login(Provider provider, string payload){
+			soomlaProfile_Login(provider.ToString(), payload);
+		}
 
+		protected override void _logout(Provider provider){
+			soomlaProfile_Logout(provider.ToString());
+		}
+
+		protected override void _isLoggedIn(Provider provider){
+			return soomlaProfile_IsLoggedIn(provider.ToString());
+		}
+
+		protected override void _updateStatus(Provider provider, string status, string payload){
+			return soomlaProfile_UpdateStatus(provider.ToString(), status, payload); 
+		}
+
+		protected override void _updateStory(Provider provider, string message, string name, 
+		                                     string caption, string description, string link,
+		                                     string pictureUrl, string payload){
+			return soomlaProfile_UpdateStory(provider.ToString(), message, name, caption, description, link, pictureUrl, payload);
+		}
+
+		protected override void _uploadImage(Provider provider, string message, string filePath, string payload){
+			return soomlaProfile_UploadImage(provider, message, filePath, payload);
+		}
+
+		protected override void _getContacts(Provider provider, string payload){
+			return soomlaProfile_GetContacts(provider, payload);
 		}
 
 		protected override UserProfile _getStoredUserProfile(Provider provider) { 

@@ -20,6 +20,70 @@ extern "C"{
         [[SoomlaProfile getInstance] initialize];
     }
     
+    void soomlaProfile_Login(const char* sProvider, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] loginWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                            andPayload:payloadS andReward:nil];
+    }
+    
+    void soomlaProfile_Logout(const char* sProvider){
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        
+        [[SoomlaProfile getInstance] loginWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]];
+    }
+    
+    bool soomlaProfile_IsLoggedIn(const char* sProvider){
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        
+        return [[SoomlaProfile getInstance] isLoggedInWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]];
+    }
+    
+    void soomlaProfile_UpdateStatus(const char* sProvider, const char* status, const char* payload){
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* statusS = [NSString stringWithUTF8String:status];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] updateStatusWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                                    andStatus:statusS andPayload:payloadS andReward:nil];
+    }
+    
+    void soomlaProfile_UpdateStory(const char* sProvider, const char* message, const char* name,
+                                   const char* caption, const char* description,
+                                   const char* link, const char* pictureUrl, const char* payload){
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* messageS = [NSString stringWithUTF8String:message];
+        NSString* nameS = [NSString stringWithUTF8String:name];
+        NSString* captionS = [NSString stringWithUTF8String:caption];
+        NSString* descriptionS = [NSString stringWithUTF8String:description];
+        NSString* linkS = [NSString stringWithUTF8String:link];
+        NSString* pictureUrlS = [NSString stringWithUTF8String:pictureUrl];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] updateStoryWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                                  andMessage:messageS andName:nameS andCaption:captionS
+                                              andDescription:descriptionS andLink:linkS andPicture:pictureUrlS
+                                                  andPayload:payloadS andReward:nil];
+    }
+    
+    void soomlaProfile_UploadImage(const char* sProvider, const char* message, const char* filePath, const char* payload){
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* messageS = [NSString stringWithUTF8String:message];
+        NSString* filePathS = [NSString stringWithUTF8String:filePath];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andFilePath:filePathS andPayload:payloadS andReward:nil];
+    }
+    
+    void soomlaProfile_GetContacts(const char* sProvider, const char* payload){
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] getContactsWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                                  andPayload:payloadS andReward:nil];
+    }
+    
 	int soomlaProfile_GetStoredUserProfile(const char* sProvider, char** json) {
         NSLog(@"SOOMLA/UNITY soomlaProfile_GetStoredUserProfile");
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];

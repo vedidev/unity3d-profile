@@ -236,6 +236,7 @@ public class ExampleWindow : MonoBehaviour {
 				                          "This is the story of a very strong and brave SOOMBOT on his jurney from SOOMBOTIA to a far away galaxy. That galaxy contains a blue planet where all human game developers love to eat food spiced with marshmallow.",
 				                          "The story of SOOMBOT (Profile Test App)",
 				                          "SOOMBOT Story",
+				                          "DESCRIPTION",
 				                          "http://about.soom.la/soombots",
 				                          "http://about.soom.la/wp-content/uploads/2014/05/330x268-spockbot.png",
 				                          null);
