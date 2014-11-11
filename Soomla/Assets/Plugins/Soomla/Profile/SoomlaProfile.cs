@@ -61,7 +61,7 @@ namespace Soomla.Profile
 #if SOOMLA_FACEBOOK
 			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
 #endif
-			ProfileEvents.OnSoomlaProfileInitialized();
+//			ProfileEvents.OnSoomlaProfileInitialized();
 		}
 
 		/// <summary>
@@ -85,6 +85,11 @@ namespace Soomla.Profile
 				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, payload); },
 				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, payload); }
 				);
+			}
+			else if (provider != null){
+				//fallback to native
+				string payloadJson = CreatePayloadJson(payload, reward);
+				instance._login(provider, payloadJson);
 			}
 		}
 
@@ -398,6 +403,22 @@ namespace Soomla.Profile
 			return DB_KEY_PREFIX + "userprofile." + provider.ToString();
 		}
 #endif
+
+		/// <summary>
+		/// Creates the payload json
+		/// </summary>
+		/// <returns>{"userPayload": "payload", "rewardId": "reward.ID"}</returns>
+		/// <param name="payload">User payload</param>
+		/// <param name="reward">Reward</param>
+		private static string CreatePayloadJson(string payload, Reward reward)
+		{
+			Dictionary<string, string> payloadDict = new Dictionary<string, string>()
+			{
+				{"userPayload", payload}, {"rewardId", reward != null ? reward.ID: ""}
+			};
+			JSONObject payloadJson = new JSONObject(payloadDict);
+			return payloadJson.ToString();
+		}
 
 		/** CLASS MEMBERS **/
 

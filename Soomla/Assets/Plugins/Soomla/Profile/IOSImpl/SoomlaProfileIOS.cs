@@ -43,6 +43,10 @@ namespace Soomla.Profile {
 			soomlaProfile_Initialize();
 		}
 
+		protected void _login(Provider provider, String payload){
+
+		}
+
 		protected override UserProfile _getStoredUserProfile(Provider provider) { 
 			IntPtr p = IntPtr.Zero;
 			int err = soomlaProfile_GetStoredUserProfile(provider.ToString(), out p);
