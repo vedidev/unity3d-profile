@@ -68,26 +68,26 @@ namespace Soomla.Profile {
 			soomlaProfile_Logout(provider.ToString());
 		}
 
-		protected override void _isLoggedIn(Provider provider){
+		protected override bool _isLoggedIn(Provider provider){
 			return soomlaProfile_IsLoggedIn(provider.ToString());
 		}
 
 		protected override void _updateStatus(Provider provider, string status, string payload){
-			return soomlaProfile_UpdateStatus(provider.ToString(), status, payload); 
+			soomlaProfile_UpdateStatus(provider.ToString(), status, payload); 
 		}
 
 		protected override void _updateStory(Provider provider, string message, string name, 
 		                                     string caption, string description, string link,
 		                                     string pictureUrl, string payload){
-			return soomlaProfile_UpdateStory(provider.ToString(), message, name, caption, description, link, pictureUrl, payload);
+			soomlaProfile_UpdateStory(provider.ToString(), message, name, caption, description, link, pictureUrl, payload);
 		}
 
 		protected override void _uploadImage(Provider provider, string message, string filePath, string payload){
-			return soomlaProfile_UploadImage(provider, message, filePath, payload);
+			soomlaProfile_UploadImage(provider.ToString(), message, filePath, payload);
 		}
 
 		protected override void _getContacts(Provider provider, string payload){
-			return soomlaProfile_GetContacts(provider, payload);
+			soomlaProfile_GetContacts(provider.ToString(), payload);
 		}
 
 		protected override UserProfile _getStoredUserProfile(Provider provider) { 

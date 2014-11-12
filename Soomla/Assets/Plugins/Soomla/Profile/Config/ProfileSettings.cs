@@ -45,18 +45,19 @@ namespace Soomla.Profile
 		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iPhone, 
 			BuildTargetGroup.WebPlayer, BuildTargetGroup.Standalone};
 		
-		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
-		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
+//		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
+//		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
 
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
+		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
 		
-		GUIContent fbAppId = new GUIContent("FB app Id:");
-		GUIContent fbAppNS = new GUIContent("FB app namespace:");
+//		GUIContent fbAppId = new GUIContent("FB app Id:");
+//		GUIContent fbAppNS = new GUIContent("FB app namespace:");
 
 		GUIContent gpClientId = new GUIContent ("Client ID [?]", "Client id of your google+ app (iOS only)");
 
-		GUIContent twCustKey = new GUIContent ("Customer Key [?]", "Customer key of your twitter app");
-		GUIContent twCustSecret = new GUIContent ("Customer Secret [?]", "Customer secret of your twitter app");
+		GUIContent twCustKey = new GUIContent ("Consumer Key [?]", "Consumer key of your twitter app");
+		GUIContent twCustSecret = new GUIContent ("Consumer Secret [?]", "Consumer secret of your twitter app");
 
 		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version. ");
 		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
@@ -66,6 +67,19 @@ namespace Soomla.Profile
 			socialIntegrationState.Add(Provider.FACEBOOK.ToString(), null);
 			socialIntegrationState.Add(Provider.GOOGLE.ToString(), null);
 			socialIntegrationState.Add(Provider.TWITTER.ToString(), null);
+
+			Dictionary<string, string> twitterPaths = new Dictionary<string, string>();
+			twitterPaths.Add("/ios/ios-profile-twitter/libSTTwitter.a", "/iOS/libSTTwitter.a");
+			twitterPaths.Add("/ios/ios-profile-twitter/libSoomlaiOSProfileTwitter.a", "/iOS/libSoomlaiOSProfileTwitter.a");
+			twitterPaths.Add("/android/android-profile-twitter/AndroidProfileTwitter.jar", "/Android/AndroidProfileTwitter.jar");
+			twitterPaths.Add("/android/android-profile-twitter/twitter4j-asyc-4.0.2.jar", "/Android/twitter4j-asyc-4.0.2.jar");
+			twitterPaths.Add("/android/android-profile-twitter/twitter4j-core-4.0.2.jar", "/Android/twitter4j-core-4.0.2.jar");
+			socialLibPaths.Add(Provider.TWITTER.ToString(), twitterPaths);
+
+			Dictionary<string, string> googlePaths = new Dictionary<string, string>();
+			googlePaths.Add("/ios/ios-profile-google/libSoomlaiOSProfileGoogle.a", "/iOS/libSoomlaiOSProfileGoogle.a");
+			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/AndroidProfileGoogle.jar");
+			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
 
 			ReadSocialIntegrationState();
         }
@@ -114,10 +128,6 @@ namespace Soomla.Profile
 		}
 		
 		public void OnModuleGUI() {
-//			AndroidGUI();
-//			EditorGUILayout.Space();
-//			IOSGUI();
-
 			IntegrationGUI();
 		}
 		
@@ -128,45 +138,6 @@ namespace Soomla.Profile
 		}
 		
 		public void OnSoomlaGUI() {
-		}
-		
-		private void IOSGUI()
-		{
-			showIOSSettings = EditorGUILayout.Foldout(showIOSSettings, "iOS Build Settings");
-			if (showIOSSettings)
-			{
-				EditorGUILayout.BeginHorizontal();
-				SoomlaEditorScript.SelectableLabelField(fbAppId, FB_APP_ID_DEFAULT);
-				EditorGUILayout.EndHorizontal();
-				
-				EditorGUILayout.Space();
-				
-				EditorGUILayout.BeginHorizontal();
-				SoomlaEditorScript.SelectableLabelField(fbAppNS, PlayerSettings.productName);
-				EditorGUILayout.EndHorizontal();
-			}
-			EditorGUILayout.Space();
-		}
-		
-		private void AndroidGUI()
-		{
-			showAndroidSettings = EditorGUILayout.Foldout(showAndroidSettings, "Android Settings");
-			if (showAndroidSettings)
-			{
-				EditorGUILayout.BeginHorizontal();
-				SoomlaEditorScript.SelectableLabelField(fbAppId, FB_APP_ID_DEFAULT);
-				EditorGUILayout.EndHorizontal();
-
-				EditorGUILayout.Space();
-
-				EditorGUILayout.BeginHorizontal();
-				SoomlaEditorScript.SelectableLabelField(fbAppNS, PlayerSettings.productName);
-				EditorGUILayout.EndHorizontal();
-
-//				EditorGUILayout.Space();
-//				EditorGUILayout.HelpBox("Social Provider Selection", MessageType.None);
-			}
-			EditorGUILayout.Space();
 		}
 
 		void IntegrationGUI()
@@ -183,11 +154,16 @@ namespace Soomla.Profile
 				bool? socialPlatformState = socialIntegrationState[socialPlatform];
 
 				EditorGUILayout.BeginHorizontal();
-				
+
+				bool update = false;
 				bool doIntegrate = false;
 				if (socialPlatformState != null) {
-					socialIntegrationState[socialPlatform] = EditorGUILayout.Toggle(socialPlatform, socialPlatformState.Value);
-					doIntegrate = socialPlatformState.Value;
+					bool result = EditorGUILayout.Toggle(socialPlatform, socialPlatformState.Value);
+					if (result != socialPlatformState.Value) {
+						socialIntegrationState[socialPlatform] = result;
+						doIntegrate = result;
+						update = true;
+					}
 
 					EditorGUILayout.EndHorizontal();
 					DrawPlatformParams(socialPlatform);
@@ -201,19 +177,14 @@ namespace Soomla.Profile
 					if (doIntegrate != result) {
 						doIntegrate = result;
 						socialIntegrationState[socialPlatform] = doIntegrate;
+						update = true;
 					}
 				}
-				
-				if (doIntegrate) {
-					foreach (var buildTarget in supportedPlatforms) {
-						TryAddRemoveSocialPlatformFlag(buildTarget, socialPlatform, false);
-					}
+
+				if (update) {
+					ApplyIntegrationState(socialPlatform, doIntegrate);
 				}
-				else {
-					foreach (var buildTarget in supportedPlatforms) {
-						TryAddRemoveSocialPlatformFlag(buildTarget, socialPlatform, true);
-					}
-				}
+
 				EditorGUILayout.EndHorizontal();
 			}
 
@@ -236,17 +207,40 @@ namespace Soomla.Profile
 			return false;
 		}
 
-		/** Profile Providers util functions **/
-		
-		private void setCurrentBPUpdate(string bpKey) {
-			spUpdate[bpKey] = true;
-			var buffer = new List<string>(spUpdate.Keys);
-			foreach(string key in buffer) {
-				if (key != bpKey) {
-					spUpdate[key] = false;
-				}
+		void ApplyIntegrationState (string socialPlatform, bool doIntegrate)
+		{
+			foreach (var buildTarget in supportedPlatforms) {
+				TryAddRemoveSocialPlatformFlag(buildTarget, socialPlatform, !doIntegrate);
 			}
+
+			ApplyIntegretionLibraries(socialPlatform, !doIntegrate);
 		}
+
+		private static string compilationsRootPath = Application.dataPath + "/Soomla/compilations";
+		private static string pluginsRootPath = Application.dataPath + "/Plugins";
+
+		void ApplyIntegretionLibraries (string socialPlatform, bool remove)
+		{
+			try {
+				Dictionary<string, string> paths = null;
+				socialLibPaths.TryGetValue(socialPlatform, out paths);
+				if (paths != null) {
+					if (remove) {
+						foreach (var pathEntry in paths) {
+							FileUtil.DeleteFileOrDirectory(pluginsRootPath + pathEntry.Value);
+							FileUtil.DeleteFileOrDirectory(pluginsRootPath + pathEntry.Value + ".meta");
+						}
+					} else {
+						foreach (var pathEntry in paths) {
+							FileUtil.CopyFileOrDirectory(compilationsRootPath + pathEntry.Key,
+							                             pluginsRootPath + pathEntry.Value);
+						}
+					}
+				}
+			}catch {}
+		}
+
+		/** Profile Providers util functions **/
 
 		private void TryAddRemoveSocialPlatformFlag(BuildTargetGroup buildTarget, string socialPlatform, bool remove) {
 			string targetFlag = GetSocialPlatformFlag(socialPlatform);
@@ -274,37 +268,6 @@ namespace Soomla.Profile
 			return "SOOMLA_" + socialPlatform.ToUpper();
 		}
 		
-		private Dictionary<string, bool> spUpdate = new Dictionary<string, bool>();
-		private static string spRootPath = Application.dataPath + "/Soomla/compilations/android-social-services/";
-		
-		public static void handleFBJars(bool remove) {
-			try {
-				if (remove) {
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreGooglePlay.jar");
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreGooglePlay.jar.meta");
-				} else {
-					FileUtil.CopyFileOrDirectory(spRootPath + "google-play/AndroidStoreGooglePlay.jar",
-					                             Application.dataPath + "/Plugins/Android/AndroidStoreGooglePlay.jar");
-				}
-			}catch {}
-		}
-		
-		public static void handleSocialAuthJars(bool remove) {
-			try {
-				if (remove) {
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreAmazon.jar");
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreAmazon.jar.meta");
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/in-app-purchasing-1.0.3.jar");
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/in-app-purchasing-1.0.3.jar.meta");
-				} else {
-					FileUtil.CopyFileOrDirectory(spRootPath + "amazon/AndroidStoreAmazon.jar",
-					                             Application.dataPath + "/Plugins/Android/AndroidStoreAmazon.jar");
-					FileUtil.CopyFileOrDirectory(spRootPath + "amazon/in-app-purchasing-1.0.3.jar",
-					                             Application.dataPath + "/Plugins/Android/in-app-purchasing-1.0.3.jar");
-				}
-			}catch {}
-		}
-		
 		void DrawPlatformParams(string socialPlatform){
 			switch(socialPlatform)
 			{
@@ -319,13 +282,13 @@ namespace Soomla.Profile
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(twCustKey, GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
-				TwitterCustKey = EditorGUILayout.TextField(TwitterCustKey, SoomlaEditorScript.FieldHeight);
+				TwitterConsumerKey = EditorGUILayout.TextField(TwitterConsumerKey, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
 				
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(twCustSecret,  GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
-				TwitterCustSecret = EditorGUILayout.TextField(TwitterCustSecret, SoomlaEditorScript.FieldHeight);
+				TwitterConsumerSecret = EditorGUILayout.TextField(TwitterConsumerSecret, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
 				EditorGUILayout.Space();
 				break;
@@ -404,40 +367,40 @@ namespace Soomla.Profile
 
 		/** TWITTER **/
 
-		public static string TWITTER_CUST_KEY_DEFAULT = "YOUR TWITTER CUSTOMER KEY";
-		public static string TWITTER_CUST_SECRET_DEFFAULT = "YOUR TWITTER CUSTOMER SECRET";
+		public static string TWITTER_CONSUMER_KEY_DEFAULT = "YOUR TWITTER CONSUMER KEY";
+		public static string TWITTER_CONSUMER_SECRET_DEFFAULT = "YOUR TWITTER CONSUMER SECRET";
 		
-		public static string TwitterCustKey
+		public static string TwitterConsumerKey
 		{
 			get {
 				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustKey", out value) ? value : TWITTER_CUST_KEY_DEFAULT;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerKey", out value) ? value : TWITTER_CONSUMER_KEY_DEFAULT;
 			}
 			set 
 			{
 				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustKey", out v);
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerKey", out v);
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("TwitterCustKey",value);
+					SoomlaEditorScript.Instance.setSettingsValue("TwitterConsumerKey",value);
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
 		}
 
-		public static string TwitterCustSecret
+		public static string TwitterConsumerSecret
 		{
 			get {
 				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustSecret", out value) ? value : TWITTER_CUST_SECRET_DEFFAULT;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerSecret", out value) ? value : TWITTER_CONSUMER_SECRET_DEFFAULT;
 			}
 			set 
 			{
 				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustSecret", out v);
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerSecret", out v);
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("TwitterCustSecret",value);
+					SoomlaEditorScript.Instance.setSettingsValue("TwitterConsumerSecret",value);
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}

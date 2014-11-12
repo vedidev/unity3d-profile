@@ -32,7 +32,7 @@ namespace Soomla.Profile {
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventLoginCancelled(string provider, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventLogoutStarted(string provider, string payload);
+		private static extern void soomlaProfile_PushEventLogoutStarted(string provider);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventLogoutFinished(string provider);
 		[DllImport ("__Internal")]
@@ -62,7 +62,7 @@ namespace Soomla.Profile {
 			soomlaProfile_PushEventLoginCancelled(provider.ToString(), payload);
 		}
 		protected override void _pushEventLogoutStarted(Provider provider) { 
-			soomlaProfile_PushEventLogoutStarted(provider.ToString(), payload);
+			soomlaProfile_PushEventLogoutStarted(provider.ToString());
 		}
 		protected override void _pushEventLogoutFinished(Provider provider) { 
 			soomlaProfile_PushEventLogoutFinished(provider.ToString());

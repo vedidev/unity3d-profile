@@ -34,6 +34,8 @@ public class ExampleWindow : MonoBehaviour {
 	private static bool isVisible = false;
 	private bool isInit = false;
 
+	private Provider targetProvider = Provider.TWITTER;
+
 
 	/// <summary>
 	/// Initializes the game state before the game starts. 
@@ -123,7 +125,7 @@ public class ExampleWindow : MonoBehaviour {
 		
 		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, string payload) => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "login finished for: " + UserProfile.toJSONObject().print());
-			SoomlaProfile.GetContacts(Provider.FACEBOOK);
+			SoomlaProfile.GetContacts(targetProvider);
 		};
 		
 		ProfileEvents.OnGetContactsFinished += (Provider provider, List<UserProfile> profiles, string payload) => {
@@ -202,12 +204,12 @@ public class ExampleWindow : MonoBehaviour {
 
 		GUI.DrawTexture(new Rect(timesW(65.0f),timesH(rowsTop+10f),timesW(516.0f),timesH(102.0f)), tBGBar, ScaleMode.StretchToFill, true);
 
-		if (SoomlaProfile.IsLoggedIn(Provider.FACEBOOK)) {
+		if (SoomlaProfile.IsLoggedIn(targetProvider)) {
 			GUI.skin.button.normal.background = tShare;
 			GUI.skin.button.hover.background = tShare;
 			GUI.skin.button.active.background = tSharePress;
 			if(GUI.Button(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), "")){
-				SoomlaProfile.UpdateStatus(Provider.FACEBOOK, "I LOVE SOOMLA !  http://www.soom.la", null);
+				SoomlaProfile.UpdateStatus(targetProvider, "I LOVE SOOMLA !  http://www.soom.la", null);
 			}
 		} else {
 			GUI.DrawTexture(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), tShareDisable, 
@@ -227,12 +229,12 @@ public class ExampleWindow : MonoBehaviour {
 
 		GUI.DrawTexture(new Rect(timesW(65.0f),timesH(rowsTop+10f),timesW(516.0f),timesH(102.0f)), tBGBar, ScaleMode.StretchToFill, true);
 
-		if (SoomlaProfile.IsLoggedIn(Provider.FACEBOOK)) {
+		if (SoomlaProfile.IsLoggedIn(targetProvider)) {
 			GUI.skin.button.normal.background = tShareStory;
 			GUI.skin.button.hover.background = tShareStory;
 			GUI.skin.button.active.background = tShareStoryPress;
 			if(GUI.Button(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), "")){
-				SoomlaProfile.UpdateStory(Provider.FACEBOOK,
+				SoomlaProfile.UpdateStory(targetProvider,
 				                          "This is the story of a very strong and brave SOOMBOT on his jurney from SOOMBOTIA to a far away galaxy. That galaxy contains a blue planet where all human game developers love to eat food spiced with marshmallow.",
 				                          "The story of SOOMBOT (Profile Test App)",
 				                          "SOOMBOT Story",
@@ -260,12 +262,12 @@ public class ExampleWindow : MonoBehaviour {
 		
 		GUI.DrawTexture(new Rect(timesW(65.0f),timesH(rowsTop+10f),timesW(516.0f),timesH(102.0f)), tBGBar, ScaleMode.StretchToFill, true);
 		
-		if (SoomlaProfile.IsLoggedIn(Provider.FACEBOOK)) {
+		if (SoomlaProfile.IsLoggedIn(targetProvider)) {
 			GUI.skin.button.normal.background = tUpload;
 			GUI.skin.button.hover.background = tUpload;
 			GUI.skin.button.active.background = tUploadPress;
 			if(GUI.Button(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), "")){
-				SoomlaProfile.UploadCurrentScreenShot(this, Provider.FACEBOOK, "Awesome Test App of SOOMLA Profile!", "This a screenshot of the current state of SOOMLA's test app on my computer.", null);
+				SoomlaProfile.UploadCurrentScreenShot(this, targetProvider, "Awesome Test App of SOOMLA Profile!", "This a screenshot of the current state of SOOMLA's test app on my computer.", null);
 			}
 		} else {
 			GUI.DrawTexture(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), tUploadDisable, 
@@ -281,13 +283,13 @@ public class ExampleWindow : MonoBehaviour {
 
 
 
-		if (SoomlaProfile.IsLoggedIn(Provider.FACEBOOK)) {
+		if (SoomlaProfile.IsLoggedIn(targetProvider)) {
 
 			GUI.skin.button.normal.background = tLogout;
 			GUI.skin.button.hover.background = tLogout;
 			GUI.skin.button.active.background = tLogoutPress;
 			if(GUI.Button(new Rect(timesW(20.0f),timesH(950f),timesW(598.0f),timesH(141.0f)), "")){
-				SoomlaProfile.Logout(Provider.FACEBOOK);
+				SoomlaProfile.Logout(targetProvider);
 			}
 
 		} else if (isInit) {
@@ -295,7 +297,7 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tConnect;
 			GUI.skin.button.active.background = tConnectPress;
 			if(GUI.Button(new Rect(timesW(20.0f),timesH(950f),timesW(598.0f),timesH(141.0f)), "")){
-				SoomlaProfile.Login(Provider.FACEBOOK, null);
+				SoomlaProfile.Login(targetProvider, null);
 			}
 		}
 

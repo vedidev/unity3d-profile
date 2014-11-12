@@ -480,8 +480,8 @@ namespace Soomla.Profile
 
 			Dictionary<string, string> twParams = new Dictionary<string, string> ()
 			{
-				{"consumerKey", ProfileSettings.TwitterCustKey},
-				{"consumerSecret", ProfileSettings.TwitterCustSecret}
+				{"consumerKey", ProfileSettings.TwitterConsumerKey},
+				{"consumerSecret", ProfileSettings.TwitterConsumerSecret}
 			};
 
 			Dictionary<Provider, Dictionary<string, string>> customParams =  new Dictionary<Provider, Dictionary<string, string>> ()
