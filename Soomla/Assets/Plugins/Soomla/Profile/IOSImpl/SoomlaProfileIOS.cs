@@ -30,7 +30,7 @@ namespace Soomla.Profile {
 		
 		/// Functions that call iOS-store functions.
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_Initialize();
+		private static extern void soomlaProfile_Initialize(string customParamsJson);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_Login(string provider, string payload);
 		[DllImport ("__Internal")]
@@ -56,8 +56,8 @@ namespace Soomla.Profile {
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_OpenAppRatingPage();
 
-		protected override void _initialize () {
-			soomlaProfile_Initialize();
+		protected override void _initialize (string customParamsJson) {
+			soomlaProfile_Initialize(customParamsJson);
 		}
 
 		protected override void _login(Provider provider, string payload){

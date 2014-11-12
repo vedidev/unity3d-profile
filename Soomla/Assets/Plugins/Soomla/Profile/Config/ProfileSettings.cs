@@ -53,6 +53,11 @@ namespace Soomla.Profile
 		GUIContent fbAppId = new GUIContent("FB app Id:");
 		GUIContent fbAppNS = new GUIContent("FB app namespace:");
 
+		GUIContent gpClientId = new GUIContent ("Client ID [?]", "Client id of your google+ app (iOS only)");
+
+		GUIContent twCustKey = new GUIContent ("Customer Key [?]", "Customer key of your twitter app");
+		GUIContent twCustSecret = new GUIContent ("Customer Secret [?]", "Customer secret of your twitter app");
+
 		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version. ");
 		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
 
@@ -183,6 +188,10 @@ namespace Soomla.Profile
 				if (socialPlatformState != null) {
 					socialIntegrationState[socialPlatform] = EditorGUILayout.Toggle(socialPlatform, socialPlatformState.Value);
 					doIntegrate = socialPlatformState.Value;
+
+					EditorGUILayout.EndHorizontal();
+					DrawPlatformParams(socialPlatform);
+					EditorGUILayout.BeginHorizontal();
 				}
 				else {
 					doIntegrate = IsSocialPlatformDetected(socialPlatform);
@@ -214,6 +223,8 @@ namespace Soomla.Profile
 				WriteSocialIntegrationState();
 			}
 		}		
+
+
 
 		bool IsSocialPlatformDetected(string platform)
 		{
@@ -294,16 +305,41 @@ namespace Soomla.Profile
 			}catch {}
 		}
 		
-		
+		void DrawPlatformParams(string socialPlatform){
+			switch(socialPlatform)
+			{
+			case "google":
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.Space();
+				EditorGUILayout.LabelField(gpClientId,  GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
+				GPClientId = EditorGUILayout.TextField(GPClientId, SoomlaEditorScript.FieldHeight);
+				EditorGUILayout.EndHorizontal();
+				break;
+			case "twitter":
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.Space();
+				EditorGUILayout.LabelField(twCustKey, GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
+				TwitterCustKey = EditorGUILayout.TextField(TwitterCustKey, SoomlaEditorScript.FieldHeight);
+				EditorGUILayout.EndHorizontal();
+				
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.Space();
+				EditorGUILayout.LabelField(twCustSecret,  GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
+				TwitterCustSecret = EditorGUILayout.TextField(TwitterCustSecret, SoomlaEditorScript.FieldHeight);
+				EditorGUILayout.EndHorizontal();
+				EditorGUILayout.Space();
+				break;
+			default:
+				break;
+			}
+		}
 		
 		#endif
 		
-		
-
-		
 		/** Profile Specific Variables **/
 		
-		
+		/** FACEBOOK **/
+
 		public static string FB_APP_ID_DEFAULT = "YOUR FB APP ID";
 		
 		public static string FBAppId
@@ -343,5 +379,69 @@ namespace Soomla.Profile
 				}
 			}
 		}
+
+		/** GOOGLE+ **/
+
+		public static string GP_CLIENT_ID_DEFAULT = "YOUR GOOGLE+ CLIENT ID";
+
+		public static string GPClientId
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GPClientId", out value) ? value : GP_CLIENT_ID_DEFAULT;
+			}
+			set 
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GPClientId", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("GPClientId",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
+		/** TWITTER **/
+
+		public static string TWITTER_CUST_KEY_DEFAULT = "YOUR TWITTER CUSTOMER KEY";
+		public static string TWITTER_CUST_SECRET_DEFFAULT = "YOUR TWITTER CUSTOMER SECRET";
+		
+		public static string TwitterCustKey
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustKey", out value) ? value : TWITTER_CUST_KEY_DEFAULT;
+			}
+			set 
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustKey", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("TwitterCustKey",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
+		public static string TwitterCustSecret
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustSecret", out value) ? value : TWITTER_CUST_SECRET_DEFFAULT;
+			}
+			set 
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterCustSecret", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("TwitterCustSecret",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
 	}
 }

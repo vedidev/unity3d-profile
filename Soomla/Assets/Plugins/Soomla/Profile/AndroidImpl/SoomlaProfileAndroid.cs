@@ -28,12 +28,10 @@ namespace Soomla.Profile {
 
 #if UNITY_ANDROID
 
-		protected override void _initialize() {
-
+		protected override void _initialize(string customParamsJson) {
 			AndroidJNI.PushLocalFrame(100);
-			using(AndroidJavaClass jniSoomlaProfileClass = new AndroidJavaClass("com.soomla.profile.UnitySoomlaProfile")) {
-				AndroidJavaObject jniSoomlaProfile = jniSoomlaProfileClass.CallStatic<AndroidJavaObject>("getInstance");
-				jniSoomlaProfile.Call("initialize", true);
+			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "initialize", customParamsJson);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}

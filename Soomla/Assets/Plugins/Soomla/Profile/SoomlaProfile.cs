@@ -58,7 +58,7 @@ namespace Soomla.Profile
 		/// NOTE: This function must be called before any of the class methods can be used.
 		/// </summary>
 		public static void Initialize() {
-			instance._initialize(); //add parameters
+			instance._initialize(GetCustomParamsJson()); //add parameters
 #if SOOMLA_FACEBOOK
 			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
 			ProfileEvents.OnSoomlaProfileInitialized();
@@ -319,20 +319,11 @@ namespace Soomla.Profile
 			
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
 				Texture2D tex2D = new Texture2D(4, 4);
 				tex2D.LoadImage(File.ReadAllBytes(filePath));
 				string fileName = Path.GetFileName(filePath);
-				targetProvider.UploadImage(tex2D.EncodeToPNG(), fileName, message,
-				                           /* success */	() => { 
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
-					if (reward != null) {
-						reward.Give();
-					}
-				},
-				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, payload); },
-				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, payload); }
-				);
+
+				UploadImage(provider, tex2D, fileName, message, payload, reward);
 			}
 		}
 
@@ -480,9 +471,39 @@ namespace Soomla.Profile
 			return result;
 		}
 
+		private static string GetCustomParamsJson()
+		{
+			Dictionary<string, string> gpParams = new Dictionary<string, string>()
+			{
+				{"clientId", ProfileSettings.GPClientId}
+			};
+
+			Dictionary<string, string> twParams = new Dictionary<string, string> ()
+			{
+				{"consumerKey", ProfileSettings.TwitterCustKey},
+				{"consumerSecret", ProfileSettings.TwitterCustSecret}
+			};
+
+			Dictionary<Provider, Dictionary<string, string>> customParams =  new Dictionary<Provider, Dictionary<string, string>> ()
+			{
+				{Provider.GOOGLE, gpParams},
+				{Provider.TWITTER, twParams}
+			};
+
+			JSONObject customParamsJson = JSONObject.Create();
+			foreach(KeyValuePair<Provider, Dictionary<string, string>> parameter in customParams)
+			{
+				string currentProvider = parameter.Key.ToString();
+				JSONObject currentProviderParams = new JSONObject(parameter.Value);
+				customParamsJson.AddField(currentProvider, currentProviderParams);
+			}
+
+			return customParamsJson.ToString ();
+		}
+
 		/** PROTECTED & PRIVATE FUNCTIONS **/
 
-		protected virtual void _initialize() { }
+		protected virtual void _initialize(string customParamsJson) { }
 
 		protected virtual void _login(Provider provider, string payload) { }
 

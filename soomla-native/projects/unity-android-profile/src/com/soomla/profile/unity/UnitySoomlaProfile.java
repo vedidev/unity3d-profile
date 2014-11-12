@@ -2,8 +2,10 @@ package com.soomla.profile.unity;
 
 import android.app.Activity;
 
+import com.soomla.SoomlaUtils;
 import com.soomla.profile.SoomlaProfile;
 import com.soomla.profile.data.UserProfileStorage;
+import com.soomla.profile.domain.IProvider;
 import com.soomla.profile.domain.UserProfile;
 import com.soomla.profile.exceptions.ProviderNotFoundException;
 import com.soomla.profile.exceptions.UserProfileNotFoundException;
@@ -11,9 +13,19 @@ import com.soomla.profile.exceptions.UserProfileNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import static com.soomla.profile.domain.IProvider.Provider;
 
 public class UnitySoomlaProfile {
+
+    public static void initalize(String customParamsJson) throws JSONException {
+        JSONObject customParamsJsonObj = new JSONObject(customParamsJson);
+        SoomlaProfile.getInstance().initialize(parseProviderParams(customParamsJsonObj));
+    }
 
     public static void login(Activity activity, String providerStr, String payload) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
@@ -69,6 +81,39 @@ public class UnitySoomlaProfile {
 
     public static void openAppRatingPage(Activity activity) {
         SoomlaProfile.getInstance().openAppRatingPage(activity.getApplicationContext());
+    }
+
+    /*
+    * Helper function to retrieve custom params for SoomlaProfile initialization from Json string.
+    * @param customParamsJson has the following structure:
+    * {"provider1":{"param1":"value1", ... "paramn":"valuen", "provider2": {...}}
+    */
+    private static HashMap<IProvider.Provider, HashMap<String, String>> parseProviderParams(JSONObject sentParams) {
+        if (sentParams == null) {
+            SoomlaUtils.LogDebug("SOOMLA", "no provider params were sent");
+            return null;
+        }
+
+        HashMap<IProvider.Provider, HashMap<String, String>> result = new HashMap<IProvider.Provider, HashMap<String, String>>();
+        Iterator keysIterator = sentParams.keys();
+        while (keysIterator.hasNext()) {
+            String providerStr = (String)keysIterator.next();
+            JSONObject paramsEntry = sentParams.optJSONObject(providerStr);
+
+            if (paramsEntry != null) {
+                HashMap<String, String> currentProviderParams = new HashMap<String, String>();
+                Iterator innerKeysIterator = paramsEntry.keys();
+                while (innerKeysIterator.hasNext()) {
+                    String innerKey = (String)innerKeysIterator.next();
+                    String innerValue = paramsEntry.optString(innerKey);
+                    currentProviderParams.put(innerKey, innerValue);
+                }
+
+                result.put(IProvider.Provider.getEnum(providerStr), currentProviderParams);
+            }
+        }
+
+        return result;
     }
 
     private static String TAG = "SOOMLA UnitySoomlaProfile";

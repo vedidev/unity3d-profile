@@ -13,11 +13,21 @@
 
 extern "C"{
 	
-    void soomlaProfile_Initialize() {
+    void soomlaProfile_Initialize(const char* customParamsJson) {
         LogDebug(@"SOOMLA Unity UnitySoomlaProfile", @"Initializing ProfileEventHandler and SoomlaProfile");
-        [SoomlaProfile usingExternalProvider:YES];
+        
+        NSString* customParamsJsonS = [NSString stringWithUTF8String:customParamsJson];
+        NSDictionary* customParamsDict = [SoomlaUtils jsonStringToDict:customParamsJsonS];
+        
+        NSMutableDictionary *parsedCustomParams = [NSMutableDictionary dictionary];
+        for (NSString* key in customParamsDict) {
+            id value = customParamsDict[key];
+            [parsedCustomParams setObject:value forKey:@([UserProfileUtils providerStringToEnum:key])];
+        }
+        
+//        [SoomlaProfile usingExternalProvider:YES];
         [UnityProfileEventDispatcher initialize];
-        [[SoomlaProfile getInstance] initialize];
+        [[SoomlaProfile getInstance] initialize:parsedCustomParams];
     }
     
     void soomlaProfile_Login(const char* sProvider, const char* payload) {
