@@ -35,7 +35,7 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UploadImage"/>
 		/// </summary>
-		public override void UploadImage(Texture2D tex2D, string fileName, string message, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {}
+		public override void UploadImage(byte[] texBytes, string fileName, string message, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {}
 		
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>

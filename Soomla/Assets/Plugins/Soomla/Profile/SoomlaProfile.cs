@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System.IO;
 
 namespace Soomla.Profile
 {
@@ -85,8 +86,8 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				Payload complexPayload = new Payload(payload, (reward != null) ? reward.ID : "");
-				instance._login(provider, complexPayload.toJSONObject().ToString());
+				string rewardId = reward != null ? reward.ID : "";
+				instance._login(provider, ProfilePayload.ToJSONObj(payload, rewardId).ToString());
 			}
 
 			else 
@@ -175,8 +176,8 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				Payload complexPayload = new Payload(payload, (reward != null) ? reward.ID : "");
-				instance._updateStatus(provider, status, complexPayload.toJSONObject().ToString());
+				string rewardId = reward != null ? reward.ID : "";
+				instance._updateStatus(provider, status, ProfilePayload.ToJSONObj(payload, rewardId).ToString());
 			}
 
 			else 
@@ -220,8 +221,9 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				Payload complexPayload = new Payload(payload, (reward != null)? reward.ID: "");
-				instance._updateStory(provider, message, name, caption, description, link, pictureUrl, complexPayload.toJSONObject().ToString());
+				string rewardId = reward != null ? reward.ID: "";
+				instance._updateStory(provider, message, name, caption, description, link, pictureUrl, 
+				                      ProfilePayload.ToJSONObj(payload, rewardId).ToString());
 			}
 
 			else
@@ -268,15 +270,61 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				Payload complexPayload = new Payload(payload, (reward != null) ? reward.ID : "");
-				instance._uploadImage(provider, fileName, message, complexPayload.toJSONObject().ToString());
+				ProfileEvents.OnSocialActionFailed(provider, 
+				                                   SocialActionType.UPLOAD_IMAGE, 
+				                                   "Image uploading is not supported with Texture for natively implemented social providers",
+				                                   payload);
 			}
 
 			else 
 			{
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
-				targetProvider.UploadImage(tex2D, fileName, message,
+				targetProvider.UploadImage(tex2D.EncodeToPNG(), fileName, message,
 				    /* success */	() => { 
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
+					if (reward != null) {
+						reward.Give();
+					}
+				},
+				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, payload); },
+				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, payload); }
+				);
+			}
+		}
+
+		// <summary>
+		// Uploads an image to the user's social page on the given Provider.
+		// 
+		// NOTE: This operation requires a successful login.
+		// </summary>
+		// <param name="provider">The <c>Provider</c> the given image should be uploaded to.</param>
+		// <param name="message">Message to post with the image.</param>
+		// <param name="filePath">Path of image file.</param>
+		// <param name="payload">A string to receive when the function returns.</param>
+		// <param name="reward">A <c>Reward</c> to give the user after a successful upload.</param>
+		public static void UploadImage(Provider provider, string message, string filePath, string payload="",
+		                               Reward reward = null) {
+			
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			
+			if (targetProvider == null)
+				return;
+			
+			if (targetProvider.IsNativelyImplemented())
+			{
+				//fallback to native
+				string rewardId = reward != null ? reward.ID : "";
+				instance._uploadImage(provider, message, filePath, ProfilePayload.ToJSONObj(payload, rewardId).ToString());
+			}
+			
+			else 
+			{
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
+				Texture2D tex2D = new Texture2D(4, 4);
+				tex2D.LoadImage(File.ReadAllBytes(filePath));
+				string fileName = Path.GetFileName(filePath);
+				targetProvider.UploadImage(tex2D.EncodeToPNG(), fileName, message,
+				                           /* success */	() => { 
 					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
 					if (reward != null) {
 						reward.Give();
@@ -320,8 +368,7 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				Payload complexPayload = new Payload(payload);
-				instance._getContacts(provider, complexPayload.toJSONObject().ToString());
+				instance._getContacts(provider, ProfilePayload.ToJSONObj(payload).ToString());
 			}
 
 			else 

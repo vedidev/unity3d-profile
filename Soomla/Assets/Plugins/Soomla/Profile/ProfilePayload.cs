@@ -16,59 +16,29 @@ using UnityEngine;
 namespace Soomla.Profile
 {
 	/// <summary>
-	/// This class represents a complex payload.
-	/// Based on user payload, any additional information passed to native 
-	/// can be stored here (for example reward IDs)
+	/// This class represents the profile payload which is based on
+	/// the user payload and additional information.
 	/// </summary>
-	public class Payload
+	internal static class ProfilePayload
 	{
-		public Payload (string userPayload, string rewardId = "")
-		{
-			this._userPayload = userPayload;
-			this._rewardId = rewardId;
-		}
-
-		public Payload(JSONObject jsonPayload)
-		{
-			this._userPayload = jsonPayload [USER_PAYLOAD].str;
-			this._rewardId = jsonPayload [REWARD_ID].str;
-		}
-
-		public JSONObject toJSONObject()
+		public static JSONObject ToJSONObj(string userPayload, string rewardId = "")
 		{
 			JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
-			obj.AddField(USER_PAYLOAD, this._userPayload);
-			obj.AddField(REWARD_ID, this._rewardId);
+			obj.AddField(USER_PAYLOAD, userPayload);
+			obj.AddField(REWARD_ID, rewardId);
 			return obj;
 		}
 
-		public string UserPayload
+		public static string GetUserPayload(JSONObject profilePayloadJson)
 		{
-			get 
-			{ 
-				return _userPayload; 
-			}
-			set 
-			{
-				_userPayload = value; 
-			}
+			return profilePayloadJson [USER_PAYLOAD].str;
 		}
 
-		public string RewardId
+		public static string GetRewardId(JSONObject profilePayloadJson)
 		{
-			get 
-			{ 
-				return _rewardId; 
-			}
-			set 
-			{
-				_rewardId = value; 
-			}
+			return profilePayloadJson [REWARD_ID].str;
 		}
-
-		private string _userPayload;
-		private string _rewardId;
-
+	
 		private const string USER_PAYLOAD = "userPayload";
 		private const string REWARD_ID = "rewardId";
 	}

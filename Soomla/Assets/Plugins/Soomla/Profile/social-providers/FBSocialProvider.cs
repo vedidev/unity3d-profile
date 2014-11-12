@@ -181,8 +181,7 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the image upload was successful.</param>
 		/// <param name="fail">Callback function that is called if the image upload failed.</param>
 		/// <param name="cancel">Callback function that is called if the image upload was cancelled.</param>
-		public override void UploadImage(Texture2D tex2D, string fileName, string message, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
-			byte[] texBytes = tex2D.EncodeToPNG();
+		public override void UploadImage(byte[] texBytes, string fileName, string message, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 			
 			var wwwForm = new WWWForm();
 			wwwForm.AddBinaryData("image", texBytes, fileName);
