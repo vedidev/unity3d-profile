@@ -52,26 +52,26 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
     > 1. Under `headerpaths` change `Facebook/Scripts` to `Plugins/Facebook/Scripts`
 
 4. Download and import [soomla-unity3d-core.unitypackage](https://github.com/soomla/unity3d-profile/blob/master/soomla-unity3d-core.unitypackage) and [unity3d-profile.unitypackage](http://bit.ly/1sUDdG0). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
-5. Drag the "CoreEvents" and "ProfileEvents" Prefabs from `../Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
+5. Drag the `CoreEvents` and `ProfileEvents` Prefabs from `Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
 6. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
     - _Soomla Secret_ - is an encryption secret you provide that will be used to secure your data. (If you used versions before v1.5.2 this secret MUST be the same as Custom Secret)  
     **Choose the secret wisely. You can't change them after you launch your game!**
     - _Social Platforms_ - select the social platform which you want to integrate with
-7. Initialize _SoomlaProfile_:
+7. Initialize `SoomlaProfile`:
 
     ```cs
     SoomlaProfile.Initialize();
     ```
 
-    > Initialize _SoomlaProfile_ ONLY ONCE when your application loads.
+    > Initialize `SoomlaProfile` ONLY ONCE when your application loads.
 
-    > Initialize _SoomlaProfile_ in the "Start()" function of a 'MonoBehaviour' and **NOT** in the "Awake()" function. SOOMLA has its own 'MonoBehaviour' and it needs to be "Awakened" before you initialize.
+    > Initialize `SoomlaProfile` in the `Start()` function of a "MonoBehaviour" and **NOT** in the `Awake()` function. SOOMLA has its own "MonoBehaviour" and it needs to be "Awakened" before you initialize.
 
-    > _SoomlaProfile_ will initialize the social providers. Don't initialize them on your own (for example, **don't** call `FB.Init()` !).
+    > `SoomlaProfile` will initialize the social providers. Don't initialize them on your own (for example, **don't** call `FB.Init()` !).
 
-8. Call all the social functions you can from _SoomlaProfile_ class. Otherwise, you won't be able to work with SOOMLA correctly. You can still call functions from the `FB` class but only those that are not provided by _SoomlaProfile_.
+8. Call all the social functions you can from `SoomlaProfile` class. Otherwise, you won't be able to work with SOOMLA correctly. You can still call functions from the `FB` class but only those that are not provided by `SoomlaProfile`.
 
-9. You'll need event handlers in order to be notified about in-app purchasing related events. refer to the [Event Handling](https://github.com/soomla/unity3d-profile#event-handling) section for more information.
+9. Register event handlers in order to be notified about in-app purchasing related events. refer to the [Event Handling](https://github.com/soomla/unity3d-profile#event-handling) section for more information.
 
 And that's it ! You have social capabilities for your game.
 
@@ -89,6 +89,7 @@ After you initialized SoomlaProfile and logged the user in:
                   Provider.FACEBOOK,
                   "Check out this great story by SOOMLA !",  
                   "SOOMLA is 2 years young!",
+                  "SOOMLA is GROWing",
                   "soomla_2_years",
                   "http://blog.soom.la/2014/08/congratulations-soomla-is-2-years-young.html",
                   "http://blog.soom.la/wp-content/uploads/2014/07/Birthday-bot-300x300.png",
