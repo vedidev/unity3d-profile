@@ -41,8 +41,10 @@ namespace Soomla.Profile
 		public void HandleGoogleManifest()
 		{
 			bool? enabled = false;
+			bool value = ProfileSettings.IntegrationState.TryGetValue ("google", out enabled);
+
 			//check if google+ is enabled in settings
-			if (ProfileSettings.IntegrationState.TryGetValue("google", out enabled))
+			if (value && enabled.Value)
 			{
 				//google+ permissions
 				SoomlaManifestTools.SetPermission("android.permission.INTERNET");
@@ -58,19 +60,33 @@ namespace Soomla.Profile
 				//google play services version
 				SoomlaManifestTools.AddMetaDataTag("com.google.android.gms.version", "@integer/google_play_services_version");
 			}
+			else 
+			{
+				SoomlaManifestTools.RemovePermission("android.permission.INTERNET");
+				SoomlaManifestTools.RemovePermission("android.permission.GET_ACCOUNTS");
+				SoomlaManifestTools.RemovePermission("android.permission.USE_CREDENTIALS");
+				SoomlaManifestTools.RemoveActivity("com.soomla.profile.social.google.SoomlaGooglePlus$SoomlaGooglePlusActivity");
+				SoomlaManifestTools.RemoveApplicationElement("meta-data", "com.google.android.gms.version");
+			}
 		}
 		
 		public void HandleTwitterManifest()
 		{
 			bool? enabled = false;
+			bool value = ProfileSettings.IntegrationState.TryGetValue ("twitter", out enabled);
+
 			//check if twitter is enabled in settings
-			if (ProfileSettings.IntegrationState.TryGetValue("twitter", out enabled))
+			if (value && enabled.Value)
 			{
 				//twitter activity
 				SoomlaManifestTools.AddActivity("com.soomla.profile.social.twitter.SoomlaTwitter$SoomlaTwitterActivity",
 				                                new Dictionary<string, string>() {
 					{"theme", "@android:style/Theme.Translucent.NoTitleBar.Fullscreen"}
 				});
+			}
+			else 
+			{
+				SoomlaManifestTools.RemoveActivity("com.soomla.profile.social.twitter.SoomlaTwitter$SoomlaTwitterActivity");
 			}
 		}
 		#endif
