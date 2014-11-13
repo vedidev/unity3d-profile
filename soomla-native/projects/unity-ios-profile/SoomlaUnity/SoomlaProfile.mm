@@ -41,7 +41,7 @@ extern "C"{
     void soomlaProfile_Logout(const char* sProvider){
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         
-        [[SoomlaProfile getInstance] loginWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]];
+        [[SoomlaProfile getInstance] logoutWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]];
     }
     
     bool soomlaProfile_IsLoggedIn(const char* sProvider){

@@ -101,8 +101,16 @@ extern "C"{
 
 @implementation UnityProfileEventDispatcher
 
++ (void)initialize {
+    static UnityProfileEventDispatcher* instance = nil;
+    if (!instance) {
+        instance = [[UnityProfileEventDispatcher alloc] init];
+    }
+}
+
 - (id) init {
     if (self = [super init]) {
+        LogDebug(@"UnityProfileEventDispatcher", @"INIT");
         [UserProfileEventHandling observeAllEventsWithObserver:self withSelector:@selector(handleEvent:)];
     }
     
@@ -116,6 +124,7 @@ extern "C"{
     }
     else if ([notification.name isEqualToString:EVENT_UP_USER_PROFILE_UPDATED]) {
         NSDictionary* userInfo = [notification userInfo];
+        NSLog(@"EVENT_UP_USER_PROFILE_UPDATED %@", userInfo);
         UserProfile *userProfile = [userInfo valueForKey:DICT_ELEMENT_USER_PROFILE];
         NSString *userProfileJson = [SoomlaUtils dictToJsonString:[userProfile toDictionary]];
         
@@ -128,6 +137,7 @@ extern "C"{
     }
     else if ([notification.name isEqualToString:EVENT_UP_LOGIN_STARTED]) {
         NSDictionary* userInfo = [notification userInfo];
+        NSLog(@"EVENT_UP_LOGIN_STARTED %@", userInfo);
         NSNumber *provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
@@ -139,6 +149,7 @@ extern "C"{
     }
     else if ([notification.name isEqualToString:EVENT_UP_LOGIN_FINISHED]) {
         NSDictionary* userInfo = [notification userInfo];
+        NSLog(@"EVENT_UP_LOGIN_FINISHED %@", userInfo);
         UserProfile* userProfile = [userInfo valueForKey:DICT_ELEMENT_USER_PROFILE];
         NSString *userProfileJson = [SoomlaUtils dictToJsonString:[userProfile toDictionary]];
         
@@ -151,6 +162,7 @@ extern "C"{
     }
     else if ([notification.name isEqualToString:EVENT_UP_LOGIN_CANCELLED]) {
         NSDictionary* userInfo = [notification userInfo];
+        NSLog(@"EVENT_UP_LOGIN_CANCELLED %@", userInfo);
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
@@ -359,7 +371,7 @@ extern "C"{
 //send only to providers with native implementation
 + (void) sendMessage:(NSString*) message toRecepient:(NSString*) callbackName withFilter:(NSNumber *) provider{
     //don't send for facebook
-    if (provider == 0)
+    if ([provider intValue] == 0)
         return;
     UnitySendMessage("ProfileEvents", [callbackName UTF8String], [message UTF8String]);
 }

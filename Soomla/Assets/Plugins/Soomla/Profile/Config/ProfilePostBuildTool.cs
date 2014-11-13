@@ -34,23 +34,17 @@ namespace Soomla.Profile
 
 		private string GetProfileMetaIOS ()
 		{
-			JSONObject result = new JSONObject();
+			string result = "";
 			Dictionary<string, bool?> state = ProfileSettings.IntegrationState;
 
 			foreach (var entry in state) {
 				Provider targetProvider = Provider.fromString(entry.Key);
 				if (entry.Value.HasValue && entry.Value.Value) {
 					if (targetProvider == Provider.GOOGLE) {
-						JSONObject googleJson = new JSONObject();
-						googleJson.SetField("clientId", ProfileSettings.GPClientId);
-
-						result.SetField(entry.Key, googleJson);
+						result += entry.Key + "^" + PlayerSettings.bundleIdentifier + ";";
 					}
 					else if (targetProvider == Provider.TWITTER) {
-						JSONObject twitterJson = new JSONObject();
-						twitterJson.SetField("consumerKey", ProfileSettings.TwitterConsumerKey);
-						
-						result.SetField(entry.Key, twitterJson);
+						result += entry.Key + "^" + ProfileSettings.TwitterConsumerKey + ";";
 					}
 				}
 			}
