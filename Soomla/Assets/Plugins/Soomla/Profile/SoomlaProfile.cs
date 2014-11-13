@@ -64,9 +64,11 @@ namespace Soomla.Profile
 			ProfileEvents.OnSoomlaProfileInitialized();
 #endif
 #if SOOMLA_GOOGLE
+			SoomlaUtils.LogDebug (TAG, "Adding GOOGLE provider!!!!!");
 			providers.Add(Provider.GOOGLE, new GPSocialProvider());
 #endif
 #if SOOMLA_TWITTER
+			SoomlaUtils.LogDebug (TAG, "Adding TWITTER provider!!!!!");
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
 		}
@@ -78,7 +80,7 @@ namespace Soomla.Profile
 		/// <param name="payload">A string to receive when the function returns.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful login.</param>
 		public static void Login(Provider provider, string payload="", Reward reward = null) {
-
+			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider == null)
 				return;
@@ -464,9 +466,9 @@ namespace Soomla.Profile
 			SocialProvider result = null;
 			providers.TryGetValue(provider, out result);
 
-			if (result == null) {
-				throw new ProviderNotFoundException();
-			}
+//			if (result == null) {
+//				throw new ProviderNotFoundException();
+//			}
 
 			return result;
 		}
@@ -497,6 +499,8 @@ namespace Soomla.Profile
 				JSONObject currentProviderParams = new JSONObject(parameter.Value);
 				customParamsJson.AddField(currentProvider, currentProviderParams);
 			}
+
+			SoomlaUtils.LogDebug (TAG, "----------------------------- Custom Params: -----------------------------" + customParamsJson.ToString ());
 
 			return customParamsJson.ToString ();
 		}

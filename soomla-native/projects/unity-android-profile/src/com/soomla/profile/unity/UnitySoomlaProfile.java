@@ -22,7 +22,8 @@ import static com.soomla.profile.domain.IProvider.Provider;
 
 public class UnitySoomlaProfile {
 
-    public static void initalize(String customParamsJson) throws JSONException {
+    public static void initialize(String customParamsJson) throws JSONException {
+        SoomlaUtils.LogDebug(TAG, "Initializing SoomlaProfile from bridge");
         JSONObject customParamsJsonObj = new JSONObject(customParamsJson);
         SoomlaProfile.getInstance().initialize(parseProviderParams(customParamsJsonObj));
     }
@@ -37,9 +38,9 @@ public class UnitySoomlaProfile {
         SoomlaProfile.getInstance().logout(provider);
     }
 
-    public static void isLoggedIn(Activity activity, String providerStr) throws ProviderNotFoundException {
+    public static boolean isLoggedIn(Activity activity, String providerStr) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
-        SoomlaProfile.getInstance().isLoggedIn(activity, provider);
+        return SoomlaProfile.getInstance().isLoggedIn(activity, provider);
     }
 
     public static void updateStatus(String providerStr, String status, String payload) throws ProviderNotFoundException {
