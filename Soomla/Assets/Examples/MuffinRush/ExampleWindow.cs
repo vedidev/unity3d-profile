@@ -135,7 +135,7 @@ public class ExampleWindow : MonoBehaviour {
 
 
 		SoomlaProfile.Initialize();
-		SoomlaProfile.OpenAppRatingPage();
+//		SoomlaProfile.OpenAppRatingPage();
 
 		#if UNITY_IPHONE
 		Handheld.SetActivityIndicatorStyle(iOSActivityIndicatorStyle.Gray);
@@ -235,7 +235,7 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.active.background = tShareStoryPress;
 			if(GUI.Button(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), "")){
 				SoomlaProfile.UpdateStory(targetProvider,
-				                          "This is the story of a very strong and brave SOOMBOT on his jurney from SOOMBOTIA to a far away galaxy. That galaxy contains a blue planet where all human game developers love to eat food spiced with marshmallow.",
+				                          "The story of SOOMBOT (Profile Test App)",
 				                          "The story of SOOMBOT (Profile Test App)",
 				                          "SOOMBOT Story",
 				                          "DESCRIPTION",
@@ -267,7 +267,14 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tUpload;
 			GUI.skin.button.active.background = tUploadPress;
 			if(GUI.Button(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), "")){
-				SoomlaProfile.UploadCurrentScreenShot(this, targetProvider, "Awesome Test App of SOOMLA Profile!", "This a screenshot of the current state of SOOMLA's test app on my computer.", null);
+				string path = "";
+#if UNITY_IOS
+				path = Application.dataPath + "/Raw" + "BTN-Upload-Normal.png";
+#elif UNITY_ANDROID
+				path = "jar:file://" + Application.dataPath + "!/assets/" + "BTN-Upload-Normal.png";
+#endif
+				SoomlaProfile.UploadImage(targetProvider, "Awesome Test App of SOOMLA Profile!", path);
+//				SoomlaProfile.UploadCurrentScreenShot(this, targetProvider, "Awesome Test App of SOOMLA Profile!", "This a screenshot of the current state of SOOMLA's test app on my computer.", null);
 			}
 		} else {
 			GUI.DrawTexture(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), tUploadDisable, 

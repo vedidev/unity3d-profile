@@ -81,7 +81,7 @@ namespace Soomla.Profile {
 		/// <summary>
 		/// Handles an <c>onUserRatingEvent</c> event
 		/// </summary>
-		public static void onUserRatingEvent()
+		public void onUserRatingEvent()
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onUserRatingEvent");
 
@@ -92,7 +92,7 @@ namespace Soomla.Profile {
 		/// Handles an <c>onUserProfileUpdated</c> event
 		/// </summary>
 		/// <param name="message">Will contain a JSON representation of a <c>UserProfile</c></param>
-		public static void onUserProfileUpdated(String message)
+		public void onUserProfileUpdated(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onUserProfileUpdated");
 
@@ -108,7 +108,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// as well as payload </param>
-		public static void onLoginStarted(String message)
+		public void onLoginStarted(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLoginStarted");
 
@@ -123,7 +123,7 @@ namespace Soomla.Profile {
 		/// Handles an <c>onLoginFinished</c> event
 		/// </summary>
 		/// <param name="message">Will contain a JSON representation of a <c>UserProfile</c> and payload</param>
-		public static void onLoginFinished(String message)
+		public void onLoginFinished(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLoginFinished");
 
@@ -147,7 +147,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// as well as payload </param>
-		public static void onLoginCancelled(String message)
+		public void onLoginCancelled(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLoginCancelled");
 
@@ -166,7 +166,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// ,error message and payload </param>
-		public static void onLoginFailed(String message)
+		public void onLoginFailed(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLoginFailed");
 
@@ -185,7 +185,7 @@ namespace Soomla.Profile {
 		/// </summary>
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c></param>
-		public static void onLogoutStarted(String message)
+		public void onLogoutStarted(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLogoutStarted");
 
@@ -201,7 +201,7 @@ namespace Soomla.Profile {
 		/// </summary>
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c></param>
-		public static void onLogoutFinished(String message)
+		public void onLogoutFinished(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLogoutFinished");
 
@@ -218,7 +218,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// and payload</param>
-		public static void onLogoutFailed(String message)
+		public void onLogoutFailed(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onLogoutFailed");
 
@@ -236,7 +236,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// numeric representation of <c>SocialActionType</c> and payload</param>
-		public static void onSocialActionStarted(String message)
+		public void onSocialActionStarted(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onSocialActionStarted");
 
@@ -256,7 +256,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// numeric representation of <c>SocialActionType</c> and payload</param>
-		public static void onSocialActionFinished(String message)
+		public void onSocialActionFinished(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onSocialActionFinished");
 
@@ -281,7 +281,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// numeric representation of <c>SocialActionType</c> and payload</param>
-		public static void onSocialActionCancelled(String message)
+		public void onSocialActionCancelled(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onSocialActionCancelled");
 			
@@ -302,7 +302,7 @@ namespace Soomla.Profile {
 		/// Will contain a numeric representation of <c>Provider</c> 
 		/// numeric representation of <c>SocialActionType</c>, 
 		/// error message and payload</param>
-		public static void onSocialActionFailed(String message)
+		public void onSocialActionFailed(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onSocialActionFailed");
 
@@ -323,7 +323,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c>, 
 		/// and payload</param>
-		public static void onGetContactsStarted(String message)
+		public void onGetContactsStarted(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetContactsStarted");
 
@@ -342,7 +342,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c>, 
 		/// JSON array of <c>UserProfile</c>s and payload</param>
-		public static void onGetContactsFinished(String message)
+		public void onGetContactsFinished(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetContactsFinished");
 
@@ -369,7 +369,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c>,
 		/// error message payload</param>
-		public static void onGetContactsFailed(String message)
+		public void onGetContactsFailed(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetContactsFailed");
 
@@ -389,7 +389,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c>,
 		/// and payload</param>
-		public static void onGetFeedStarted(String message)
+		public void onGetFeedStarted(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetFeedStarted");
 
@@ -406,7 +406,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c>,
 		/// json array of feeds</param>
-		public static void onGetFeedFinished(String message)
+		public void onGetFeedFinished(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetFeedFinished");
 			
@@ -431,7 +431,7 @@ namespace Soomla.Profile {
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c>,
 		/// and an error message</param>
-		public static void onGetFeedFailed(String message)
+		public void onGetFeedFailed(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetFeedFailed");
 
