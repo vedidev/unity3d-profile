@@ -59,7 +59,7 @@ namespace Soomla.Profile {
 			#if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJNI.PushLocalFrame(100);
 			//init ProfileEventHandler
-			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.unity.ProfileEventHandler")) {
+			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
 				jniEventHandler.CallStatic("initialize");
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);

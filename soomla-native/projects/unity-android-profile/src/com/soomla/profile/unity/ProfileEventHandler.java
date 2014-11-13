@@ -255,6 +255,7 @@ public class ProfileEventHandler {
             JSONObject eventJSON = new JSONObject();
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("contacts", contactsJSONArray.toString());
+            eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onGetContactsFinished", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
@@ -333,7 +334,10 @@ public class ProfileEventHandler {
     private static void UnitySendFilteredMessage(String message, String recipient, int provider) {
         //don't send to facebook!
         if (provider == 0)
+        {
+            SoomlaUtils.LogDebug(TAG, "Not sending event to provider: " + provider);
             return;
+        }
         UnityPlayer.UnitySendMessage("ProfileEvents", recipient, message);
     }
 

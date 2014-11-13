@@ -64,7 +64,6 @@ namespace Soomla.Profile
 			ProfileEvents.OnSoomlaProfileInitialized();
 #endif
 #if SOOMLA_GOOGLE
-			SoomlaUtils.LogDebug (TAG, "Adding GOOGLE provider!!!!!");
 			providers.Add(Provider.GOOGLE, new GPSocialProvider());
 #endif
 #if SOOMLA_TWITTER
@@ -83,7 +82,10 @@ namespace Soomla.Profile
 			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider == null)
+			{
+				SoomlaUtils.LogError (TAG, "provider " + provider.ToString () + " was either not set as active or is not supported!");
 				return;
+			}
 
 			if (targetProvider.IsNativelyImplemented())
 			{
@@ -499,8 +501,6 @@ namespace Soomla.Profile
 				JSONObject currentProviderParams = new JSONObject(parameter.Value);
 				customParamsJson.AddField(currentProvider, currentProviderParams);
 			}
-
-			SoomlaUtils.LogDebug (TAG, "----------------------------- Custom Params: -----------------------------" + customParamsJson.ToString ());
 
 			return customParamsJson.ToString ();
 		}
