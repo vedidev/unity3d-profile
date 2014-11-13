@@ -41,7 +41,7 @@ public class ProfileEventHandler {
     private static String TAG = "SOOMLA Unity StoreEventHandler";
 
     public static void initialize() {
-        SoomlaUtils.LogDebug("SOOMLA Unity StoreEventHandler", "Initializing StoreEventHandler ...");
+        SoomlaUtils.LogDebug("SOOMLA Unity ProfileEventHandler", "Initializing ProfileEventHandler ...");
         getInstance();
     }
 
