@@ -64,9 +64,7 @@ namespace Soomla.Profile
 
 		private ProfileSettings()
 		{
-			socialIntegrationState.Add(Provider.FACEBOOK.ToString(), null);
-			socialIntegrationState.Add(Provider.GOOGLE.ToString(), null);
-			socialIntegrationState.Add(Provider.TWITTER.ToString(), null);
+			ApplyCurrentSupportedProviders(socialIntegrationState);
 
 			Dictionary<string, string> twitterPaths = new Dictionary<string, string>();
 			twitterPaths.Add("/ios/ios-profile-twitter/libSTTwitter.a", "/iOS/libSTTwitter.a");
@@ -81,28 +79,8 @@ namespace Soomla.Profile
 			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/AndroidProfileGoogle.jar");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
 
-			ReadSocialIntegrationState();
+			ReadSocialIntegrationState(socialIntegrationState);
         }
-        
-        private void ReadSocialIntegrationState()
-		{
-			string value = string.Empty;
-			SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("SocialIntegration", out value);
-
-			if (value != null) {
-				string[] savedIntegrations = value.Split(';');
-				foreach (var savedIntegration in savedIntegrations) {
-					string[] platformValue = savedIntegration.Split(',');
-					string platform = platformValue[0];
-					int state = int.Parse(platformValue[1]);
-
-					bool? platformState = null;
-					if (socialIntegrationState.TryGetValue(platform, out platformState)) {
-						socialIntegrationState[platform] = (state > 0);
-					}
-				}
-			}
-		}
 
 		private void WriteSocialIntegrationState()
 		{
@@ -144,7 +122,7 @@ namespace Soomla.Profile
 		{
 			EditorGUILayout.LabelField("Social Platforms:", EditorStyles.boldLabel);
 
-			ReadSocialIntegrationState();
+			ReadSocialIntegrationState(socialIntegrationState);
 
 			EditorGUI.BeginChangeCheck();
 
@@ -193,18 +171,6 @@ namespace Soomla.Profile
 			if (EditorGUI.EndChangeCheck()) {
 				WriteSocialIntegrationState();
 			}
-		}		
-
-
-
-		bool IsSocialPlatformDetected(string platform)
-		{
-			if (Provider.fromString(platform) == Provider.FACEBOOK) {
-				Type fbType = Type.GetType("FB");
-				return (fbType != null);
-			}
-
-			return false;
 		}
 
 		void ApplyIntegrationState (string socialPlatform, bool doIntegrate)
@@ -300,6 +266,59 @@ namespace Soomla.Profile
 		#endif
 		
 		/** Profile Specific Variables **/
+
+		public static Dictionary<string, bool?> IntegrationState
+		{
+			get {
+				Dictionary<string, bool?> result = new Dictionary<string, bool?>();
+				ApplyCurrentSupportedProviders(result);
+
+				Dictionary<string, bool?>.KeyCollection keys = result.Keys;
+				for (int i = 0; i < keys.Count; i++) {
+					string key = keys.ElementAt(i);
+					result[key] = IsSocialPlatformDetected(key);
+				}
+
+				ReadSocialIntegrationState(result);
+				return result;
+			}
+		}
+
+		private static void ApplyCurrentSupportedProviders(Dictionary<string, bool?> target) {
+			target.Add(Provider.FACEBOOK.ToString(), null);
+			target.Add(Provider.TWITTER.ToString(), null);
+			target.Add(Provider.GOOGLE.ToString(), null);
+		}
+
+		private static bool IsSocialPlatformDetected(string platform)
+		{
+			if (Provider.fromString(platform) == Provider.FACEBOOK) {
+				Type fbType = Type.GetType("FB");
+				return (fbType != null);
+			}
+			
+			return false;
+		}
+
+		private static void ReadSocialIntegrationState(Dictionary<string, bool?> toTarget)
+		{
+			string value = string.Empty;
+			SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("SocialIntegration", out value);
+			
+			if (value != null) {
+				string[] savedIntegrations = value.Split(';');
+				foreach (var savedIntegration in savedIntegrations) {
+					string[] platformValue = savedIntegration.Split(',');
+					string platform = platformValue[0];
+					int state = int.Parse(platformValue[1]);
+					
+					bool? platformState = null;
+					if (toTarget.TryGetValue(platform, out platformState)) {
+						toTarget[platform] = (state > 0);
+					}
+				}
+			}
+		}
 		
 		/** FACEBOOK **/
 

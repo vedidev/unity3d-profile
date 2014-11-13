@@ -24,17 +24,8 @@ namespace Soomla.Profile
 		private readonly string name;
 
 		public static readonly Provider FACEBOOK = new Provider ("facebook");
-		public static readonly Provider FOURSQUARE = new Provider ("foursquare");
 		public static readonly Provider GOOGLE = new Provider ("google");
-		public static readonly Provider LINKEDIN = new Provider ("linkedin");
-		public static readonly Provider MYSPACE = new Provider ("myspace");
 		public static readonly Provider TWITTER = new Provider ("twitter");
-		public static readonly Provider YAHOO = new Provider ("yahoo");
-		public static readonly Provider SALESFORCE = new Provider ("salesforce");
-		public static readonly Provider YAMMER = new Provider ("yammer");
-		public static readonly Provider RUNKEEPER = new Provider ("runkeeper");
-		public static readonly Provider INSTAGRAM = new Provider ("instagram");
-		public static readonly Provider FLICKR = new Provider ("flickr");
 
 		/// <summary>
 		/// Constructor.
@@ -61,28 +52,10 @@ namespace Soomla.Profile
 			switch(providerTypeStr) {
 			case("facebook"):
 				return FACEBOOK;
-			case("foursquare"):
-				return FOURSQUARE;
 			case("google"):
 				return GOOGLE;
-			case("linkedin"):
-				return LINKEDIN;
-			case("myspace"):
-				return MYSPACE;
 			case("twitter"):
 				return TWITTER;
-			case("yahoo"):
-				return YAHOO;
-			case("salesforce"):
-				return SALESFORCE;
-			case("yammer"):
-				return YAMMER;
-			case("runkeeper"):
-				return RUNKEEPER;
-			case("instagram"):
-				return INSTAGRAM;
-			case("flickr"):
-				return FLICKR;
 			default:
 				return null;
 			}
@@ -97,28 +70,10 @@ namespace Soomla.Profile
 			switch(providerTypeInt) {
 			case 0:
 				return FACEBOOK;
-			case 1:
-				return FOURSQUARE;
 			case 2:
 				return GOOGLE;
-			case 3:
-				return LINKEDIN;
-			case 4:
-				return MYSPACE;
 			case 5:
 				return TWITTER;
-			case 6:
-				return YAHOO;
-			case 7:
-				return SALESFORCE;
-			case 8:
-				return YAMMER;
-			case 9:
-				return RUNKEEPER;
-			case 10:
-				return INSTAGRAM;
-			case 11:
-				return FLICKR;
 			default:
 				return null;
 			}
