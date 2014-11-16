@@ -61,14 +61,18 @@ namespace Soomla.Profile
 			instance._initialize(GetCustomParamsJson()); //add parameters
 #if SOOMLA_FACEBOOK
 			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
-			ProfileEvents.OnSoomlaProfileInitialized();
 #endif
 #if SOOMLA_GOOGLE
+			SoomlaUtils.LogDebug (TAG, "Adding GOOGLE provider!!!!!");
 			providers.Add(Provider.GOOGLE, new GPSocialProvider());
 #endif
 #if SOOMLA_TWITTER
 			SoomlaUtils.LogDebug (TAG, "Adding TWITTER provider!!!!!");
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
+#endif
+
+#if UNITY_EDITOR
+			ProfileEvents.OnSoomlaProfileInitialized();
 #endif
 		}
 
@@ -82,10 +86,7 @@ namespace Soomla.Profile
 			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider == null)
-			{
-				SoomlaUtils.LogError (TAG, "provider " + provider.ToString () + " was either not set as active or is not supported!");
 				return;
-			}
 
 			if (targetProvider.IsNativelyImplemented())
 			{
@@ -463,6 +464,15 @@ namespace Soomla.Profile
 			ProfileEvents.OnUserRatingEvent ();
 		}
 
+		public static bool IsProviderNativelyImplemented(Provider provider) {
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			if (targetProvider != null) {
+				return targetProvider.IsNativelyImplemented();
+			}
+
+			return false;
+		}
+
 		private static SocialProvider GetSocialProvider (Provider provider)
 		{
 			SocialProvider result = null;
@@ -501,6 +511,8 @@ namespace Soomla.Profile
 				JSONObject currentProviderParams = new JSONObject(parameter.Value);
 				customParamsJson.AddField(currentProvider, currentProviderParams);
 			}
+
+			SoomlaUtils.LogDebug (TAG, "----------------------------- Custom Params: -----------------------------" + customParamsJson.ToString ());
 
 			return customParamsJson.ToString ();
 		}

@@ -60,20 +60,8 @@ for social_platform in social_platform_data:
 
 print ("echo {0} {1} {2} {3}".format(using_google_sdk, google_bundle_id, using_twitter_sdk, twitter_consumer_key))
 
-
-# hopefully build_tools/../../../[Soomla]/Assets/Plugins/iOS
-#fb_framework_dir = path.join(script_dir,'..','..','..','Plugins','iOS')
-#fb_framework = path.join(fb_framework_dir, 'FacebookSDK.framework')
-
-#print ("fb_framework:{0}".format(fb_framework))
-
 pbx_file_path = build_path + '/Unity-iPhone.xcodeproj/project.pbxproj'
 pbx_object = XcodeProject.Load(pbx_file_path)
-
-#if not using_unity_fb_sdk:c
-#    pbx_object.add_framework_search_paths([path.abspath(fb_framework_dir)])
-#    pbx_object.add_header_search_paths([path.abspath(fb_framework)])
-#    pbx_object.add_file_if_doesnt_exist(path.abspath(fb_framework), tree='SOURCE_ROOT', weak=True)
 
 for framework in frameworks:
     pbx_object.add_file_if_doesnt_exist(framework, tree='SDKROOT')
@@ -81,6 +69,18 @@ for framework in frameworks:
 if using_google_sdk:
     for framework in google_frameworks:
         pbx_object.add_file_if_doesnt_exist(framework, tree='SDKROOT')
+    # hopefully build_tools/../../../[Soomla]/Assets/Plugins/iOS
+    google_framework_dir = path.join(script_dir,'..','..','..','.SoomlaResourcesSdk','ios', 'ios-profile-google')
+    target_google_framework_dir = path.join(build_path, 'Libraries', 'ios-profile-google')
+    copytree(google_framework_dir, target_google_framework_dir)
+    pbx_object.add_framework_search_paths([path.abspath(target_google_framework_dir)])
+    pbx_object.add_header_search_paths([path.abspath(target_google_framework_dir)])
+    google_framework = path.join(target_google_framework_dir, 'GooglePlus.framework')
+    pbx_object.add_file_if_doesnt_exist(path.abspath(google_framework), tree='SDKROOT')
+    google_framework_open = path.join(target_google_framework_dir, 'GoogleOpenSource.framework')
+    pbx_object.add_file_if_doesnt_exist(path.abspath(google_framework_open), tree='SDKROOT')
+    google_resource_bundle = path.join(target_google_framework_dir, 'GooglePlus.bundle')
+    pbx_object.add_file_if_doesnt_exist(path.abspath(google_resource_bundle))
 
 if using_twitter_sdk:
     for framework in twitter_frameworks:

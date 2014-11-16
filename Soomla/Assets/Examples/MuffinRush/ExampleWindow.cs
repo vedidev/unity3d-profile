@@ -130,9 +130,10 @@ public class ExampleWindow : MonoBehaviour {
 		
 		ProfileEvents.OnGetContactsFinished += (Provider provider, List<UserProfile> profiles, string payload) => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "get contacts for: " + profiles.Count);
+			foreach (var profile in profiles) {
+				Soomla.SoomlaUtils.LogDebug("ExampleWindow", "Contact: " + profile.toJSONObject().print());
+			}
 		};
-
-
 
 		SoomlaProfile.Initialize();
 //		SoomlaProfile.OpenAppRatingPage();

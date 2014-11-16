@@ -126,9 +126,8 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSLog(@"EVENT_UP_USER_PROFILE_UPDATED %@", userInfo);
         UserProfile *userProfile = [userInfo valueForKey:DICT_ELEMENT_USER_PROFILE];
-        NSString *userProfileJson = [SoomlaUtils dictToJsonString:[userProfile toDictionary]];
         
-        NSString* jsonStr = [SoomlaUtils dictToJsonString:@{@"userProfile":userProfileJson
+        NSString* jsonStr = [SoomlaUtils dictToJsonString:@{@"userProfile":[userProfile toDictionary]
                                                             }];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
@@ -140,7 +139,7 @@ extern "C"{
         NSLog(@"EVENT_UP_LOGIN_STARTED %@", userInfo);
         NSNumber *provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         [UnityProfileEventDispatcher sendMessage:jsonStr
@@ -151,9 +150,8 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSLog(@"EVENT_UP_LOGIN_FINISHED %@", userInfo);
         UserProfile* userProfile = [userInfo valueForKey:DICT_ELEMENT_USER_PROFILE];
-        NSString *userProfileJson = [SoomlaUtils dictToJsonString:[userProfile toDictionary]];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"userProfile":userProfileJson,
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"userProfile":[userProfile toDictionary],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         [UnityProfileEventDispatcher sendMessage:jsonStr
@@ -165,7 +163,7 @@ extern "C"{
         NSLog(@"EVENT_UP_LOGIN_CANCELLED %@", userInfo);
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -177,7 +175,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
@@ -190,7 +188,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue]
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider
                                                             }];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
@@ -201,7 +199,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue]}];
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider}];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onLogoutFinished"
@@ -211,7 +209,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE]
                                                             }];
         
@@ -224,8 +222,8 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
-                                                            @"socialActionType": [[userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE] stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
                                                             @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -237,8 +235,8 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
-                                                            @"socialActionType": [[userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE] stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
                                                             @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -250,8 +248,8 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
-                                                            @"socialActionType": [[userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE] stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
                                                             @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -263,8 +261,8 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
-                                                            @"socialActionType": [[userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE] stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
                                                             @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
@@ -277,7 +275,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -289,18 +287,14 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        //Create contacts json array as following: {"contacts": {"userProfile":{...}, ...}
         NSArray* contacts = [userInfo valueForKey:DICT_ELEMENT_CONTACTS];
         NSMutableArray* contactsJsonArray = [NSMutableArray array];
         for (int i = 0; i < [contacts count]; i++) {
-            NSString *currentContactJson = [SoomlaUtils dictToJsonString:@{@"userProfile":
-                                                                               [[contacts objectAtIndex:i] toDictionary]
-                                                                           }];
-            [contactsJsonArray addObject:currentContactJson];
+            [contactsJsonArray addObject:[[contacts objectAtIndex:i] toDictionary]];
         }
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
-                                                            @"contacts":[SoomlaUtils arrayToJsonString:contactsJsonArray],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"contacts":contactsJsonArray,
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -312,7 +306,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
@@ -325,7 +319,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -340,14 +334,11 @@ extern "C"{
         
         NSMutableArray* feedsJsonArray = [NSMutableArray array];
         for (int i = 0; i < [feeds count]; i++) {
-            NSString *currentFeedJson = [SoomlaUtils dictToJsonString:@{@"feed":
-                                                                               [[feeds objectAtIndex:i] toDictionary]
-                                                                           }];
-            [feedsJsonArray addObject:currentFeedJson];
+            [feedsJsonArray addObject:[feeds objectAtIndex:i]];
         }
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
-                                                            @"feeds":[SoomlaUtils arrayToJsonString:feedsJsonArray]
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"feeds":feedsJsonArray
                                                             }];
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetFeedFinished"
@@ -357,7 +348,7 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":[provider stringValue],
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
                                                             }];
         
