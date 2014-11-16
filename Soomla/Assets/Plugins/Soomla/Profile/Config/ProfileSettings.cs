@@ -81,7 +81,7 @@ namespace Soomla.Profile
 			googlePaths.Add("/ios/ios-profile-google/GooglePlus.framework", "/iOS/GooglePlus.framework");
 			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/AndroidProfileGoogle.jar");
 			googlePaths.Add("/android/android-profile-google/google-play-services.jar", "/Android/google-play-services.jar");
-			googlePaths.Add("/android/android-profile-google/res/values/version.xml", "/Android/res/values/version.xml");
+			googlePaths.Add("/android/android-profile-google/res", "/Android/res");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
 
 			ReadSocialIntegrationState(socialIntegrationState);
