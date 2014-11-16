@@ -77,8 +77,7 @@ namespace Soomla.Profile
 			Dictionary<string, string> googlePaths = new Dictionary<string, string>();
 			googlePaths.Add("/ios/ios-profile-google/libSoomlaiOSProfileGoogle.a", "/iOS/libSoomlaiOSProfileGoogle.a");
 			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/AndroidProfileGoogle.jar");
-			googlePaths.Add("/android/android-profile-google/google-play-services.jar", "/Android/google-play-services.jar");
-			googlePaths.Add("/android/android-profile-google/res", "/Android/res");
+			googlePaths.Add("/android/android-profile-google/google-play-services_lib", "/Android/google-play-services_lib");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
 
 			ReadSocialIntegrationState(socialIntegrationState);
