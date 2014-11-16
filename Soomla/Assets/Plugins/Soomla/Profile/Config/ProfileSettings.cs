@@ -80,8 +80,6 @@ namespace Soomla.Profile
 			googlePaths.Add("/android/android-profile-google/google-play-services.jar", "/Android/google-play-services.jar");
 			googlePaths.Add("/android/android-profile-google/res/values/version.xml", "/Android/res/values/version.xml");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
-
-			ReadSocialIntegrationState(socialIntegrationState);
         }
 
 		private void WriteSocialIntegrationState()
@@ -105,6 +103,13 @@ namespace Soomla.Profile
 		public void OnEnable() {
 			// Generating AndroidManifest.xml
 			//			ManifestTools.GenerateManifest();
+
+			// This is here to make sure automatically detected platforms are
+			// copied over at least when the settings pane is opened.
+			// This is NOT in the IntegrationGUI method, since we don't want to
+			// keep copying every GUI frame
+			ReadSocialIntegrationState(socialIntegrationState);
+			AutomaticallyIntegratedDetected(socialIntegrationState);
 		}
 		
 		public void OnModuleGUI() {
@@ -137,25 +142,22 @@ namespace Soomla.Profile
 
 				bool update = false;
 				bool doIntegrate = false;
+				bool toggleResult = false;
 				if (socialPlatformState != null) {
-					bool result = EditorGUILayout.Toggle(socialPlatform, socialPlatformState.Value);
-					if (result != socialPlatformState.Value) {
-						socialIntegrationState[socialPlatform] = result;
-						doIntegrate = result;
+					toggleResult = EditorGUILayout.Toggle(socialPlatform, socialPlatformState.Value);
+					if (toggleResult != socialPlatformState.Value) {
+						socialIntegrationState[socialPlatform] = toggleResult;
+						doIntegrate = toggleResult;
 						update = true;
 					}
-
-					EditorGUILayout.EndHorizontal();
-					DrawPlatformParams(socialPlatform);
-					EditorGUILayout.BeginHorizontal();
 				}
 				else {
 					doIntegrate = IsSocialPlatformDetected(socialPlatform);
-					bool result = EditorGUILayout.Toggle(socialPlatform, doIntegrate);
+					toggleResult = EditorGUILayout.Toggle(socialPlatform, doIntegrate);
 					
 					// User changed automatic value
-					if (doIntegrate != result) {
-						doIntegrate = result;
+					if (doIntegrate != toggleResult) {
+						doIntegrate = toggleResult;
 						socialIntegrationState[socialPlatform] = doIntegrate;
 						update = true;
 					}
@@ -164,6 +166,10 @@ namespace Soomla.Profile
 				if (update) {
 					ApplyIntegrationState(socialPlatform, doIntegrate);
 				}
+
+				EditorGUILayout.EndHorizontal();
+				DrawPlatformParams(socialPlatform, !toggleResult);
+				EditorGUILayout.BeginHorizontal();
 
 				EditorGUILayout.EndHorizontal();
 			}
@@ -184,8 +190,21 @@ namespace Soomla.Profile
 			ApplyIntegretionLibraries(socialPlatform, !doIntegrate);
 		}
 
-		private static string compilationsRootPath = Application.dataPath + "/Soomla/compilations";
-		private static string pluginsRootPath = Application.dataPath + "/Plugins";
+		void AutomaticallyIntegratedDetected (Dictionary<string, bool?> state)
+		{
+			Dictionary<string, bool?>.KeyCollection keys = state.Keys;
+			for (int i = 0; i < keys.Count; i++) {
+				string socialPlatform = keys.ElementAt(i);
+				bool? socialPlatformState = state[socialPlatform];
+				if (socialPlatformState == null) {
+					bool doIntegrate = IsSocialPlatformDetected(socialPlatform);
+					ApplyIntegrationState(socialPlatform, doIntegrate);
+				}
+			}
+		}
+
+		private string compilationsRootPath = Application.dataPath + "/Soomla/compilations";
+		private string pluginsRootPath = Application.dataPath + "/Plugins";
 
 		void ApplyIntegretionLibraries (string socialPlatform, bool remove)
 		{
@@ -205,7 +224,7 @@ namespace Soomla.Profile
 						}
 					}
 				}
-			}catch {}
+			}catch { }
 		}
 
 		/** Profile Providers util functions **/
@@ -236,17 +255,20 @@ namespace Soomla.Profile
 			return "SOOMLA_" + socialPlatform.ToUpper();
 		}
 		
-		void DrawPlatformParams(string socialPlatform){
+		void DrawPlatformParams(string socialPlatform, bool isDisabled){
 			switch(socialPlatform)
 			{
 			case "google":
+				EditorGUI.BeginDisabledGroup(isDisabled);
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(gpClientId,  GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
 				GPClientId = EditorGUILayout.TextField(GPClientId, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
+				EditorGUI.EndDisabledGroup();
 				break;
 			case "twitter":
+				EditorGUI.BeginDisabledGroup(isDisabled);
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(twCustKey, GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
@@ -259,6 +281,7 @@ namespace Soomla.Profile
 				TwitterConsumerSecret = EditorGUILayout.TextField(TwitterConsumerSecret, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
 				EditorGUILayout.Space();
+				EditorGUI.EndDisabledGroup();
 				break;
 			default:
 				break;
