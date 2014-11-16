@@ -58,7 +58,7 @@ public class UnitySoomlaProfile {
 
     public static void uploadImage(String providerStr, String message, String filePath, String payload) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
-        SoomlaProfile.getInstance().uploadImage(provider, message, filePath, null);
+        SoomlaProfile.getInstance().uploadImage(provider, message, filePath, payload, null);
     }
 
     public static void getContacts(String providerStr, String payload) throws ProviderNotFoundException {

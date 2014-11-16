@@ -75,7 +75,6 @@ proguard/
 # google+
 Soomla/Assets/Plugins/Android/*[gG]oogle*
 Soomla/Assets/Plugins/iOS/*[gG]oogle*.a*
-Soomla/Assets/Plugins/Android/res/
 
 # twitter
 Soomla/Assets/Plugins/Android/*[tT]witter*.jar*

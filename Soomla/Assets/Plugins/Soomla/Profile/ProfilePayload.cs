@@ -24,7 +24,7 @@ namespace Soomla.Profile
 		public static JSONObject ToJSONObj(string userPayload, string rewardId = "")
 		{
 			JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
-			obj.AddField(USER_PAYLOAD, userPayload);
+			obj.AddField(USER_PAYLOAD, (userPayload != null)? userPayload : "");
 			obj.AddField(REWARD_ID, rewardId);
 			return obj;
 		}

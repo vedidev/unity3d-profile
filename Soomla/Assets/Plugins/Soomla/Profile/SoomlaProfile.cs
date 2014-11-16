@@ -63,7 +63,6 @@ namespace Soomla.Profile
 			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
 #endif
 #if SOOMLA_GOOGLE
-			SoomlaUtils.LogDebug (TAG, "Adding GOOGLE provider!!!!!");
 			providers.Add(Provider.GOOGLE, new GPSocialProvider());
 #endif
 #if SOOMLA_TWITTER
