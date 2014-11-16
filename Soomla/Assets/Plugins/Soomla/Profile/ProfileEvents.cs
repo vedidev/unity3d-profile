@@ -97,7 +97,7 @@ namespace Soomla.Profile {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onUserProfileUpdated");
 
 			JSONObject eventJson = new JSONObject(message);
-			UserProfile userProfile = new UserProfile (new JSONObject(eventJson ["userProfile"].str));
+			UserProfile userProfile = new UserProfile (eventJson ["userProfile"]);
 
 			ProfileEvents.OnUserProfileUpdated (userProfile);
 		}
@@ -129,7 +129,7 @@ namespace Soomla.Profile {
 
 			JSONObject eventJson = new JSONObject(message);
 
-			UserProfile userProfile = new UserProfile (new JSONObject(eventJson ["userProfile"].str));
+			UserProfile userProfile = new UserProfile (eventJson ["userProfile"]);
 
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
@@ -352,12 +352,10 @@ namespace Soomla.Profile {
 
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
-			String userProfilesJsonArray = eventJson ["contacts"].str; 
-			JSONObject userProfilesJson = new JSONObject (userProfilesJsonArray);
+			JSONObject userProfilesArray = eventJson ["contacts"];
 			List<UserProfile> userProfiles = new List<UserProfile>();
-			foreach (String key in userProfilesJson.keys) {
-				//iterate "userProfile" keys
-				userProfiles.Add(new UserProfile(userProfilesJson[key]));
+			foreach (JSONObject userProfileJson in userProfilesArray.list) {
+				userProfiles.Add(new UserProfile(userProfileJson));
 			}
 				                
 			ProfileEvents.OnGetContactsFinished (provider, userProfiles, ProfilePayload.GetUserPayload(payloadJSON));
@@ -414,8 +412,7 @@ namespace Soomla.Profile {
 			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 
-			String feedsJsonArray = eventJson ["feeds"].str; 
-			JSONObject feedsJson = new JSONObject (feedsJsonArray);
+			JSONObject feedsJson = eventJson ["feeds"];
 			List<String> feeds = new List<String>();
 			foreach (String key in feedsJson.keys) {
 				//iterate "feed" keys

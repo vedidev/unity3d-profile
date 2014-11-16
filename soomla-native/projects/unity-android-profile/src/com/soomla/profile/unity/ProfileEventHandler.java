@@ -72,7 +72,7 @@ public class ProfileEventHandler {
         IProvider.Provider provider = userProfile.getProvider();
         JSONObject eventJSON = new JSONObject();
         try {
-            eventJSON.put("userProfile", userProfile.toJSONObject().toString());
+            eventJSON.put("userProfile", userProfile.toJSONObject());
             UnitySendFilteredMessage(eventJSON.toString(), "onUserProfileUpdated", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
@@ -100,7 +100,7 @@ public class ProfileEventHandler {
         IProvider.Provider provider = userProfile.getProvider();
         JSONObject eventJSON = new JSONObject();
         try {
-            eventJSON.put("userProfile", userProfile.toJSONObject().toString());
+            eventJSON.put("userProfile", userProfile.toJSONObject());
             eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onLoginFinished", provider.getValue());
         } catch (JSONException e) {
@@ -243,18 +243,14 @@ public class ProfileEventHandler {
 
         List<UserProfile> contacts = getContactsFinishedEvent.Contacts;
         try{
-            //Create contacts json array as following: {"contacts": {"userProfile":{...}, ...}
-            List<JSONObject> jsonObjectList = new ArrayList<JSONObject>(contacts.size());
+            JSONArray contactsJSONArray = new JSONArray();
             for (UserProfile contact : contacts) {
-                JSONObject contactJSON = new JSONObject();
-                contactJSON.put("userProfile", contact.toJSONObject().toString());
-                jsonObjectList.add(contactJSON);
+                contactsJSONArray.put(contact.toJSONObject());
             }
-            JSONArray contactsJSONArray = new JSONArray(jsonObjectList);
 
             JSONObject eventJSON = new JSONObject();
             eventJSON.put("provider", provider.getValue());
-            eventJSON.put("contacts", contactsJSONArray.toString());
+            eventJSON.put("contacts", contactsJSONArray);
             eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onGetContactsFinished", provider.getValue());
         } catch (JSONException e) {
@@ -298,18 +294,14 @@ public class ProfileEventHandler {
 
         List<String> feeds = getFeedFinishedEvent.Posts;
         try{
-            //Create feeds json array as following: {"feeds": {"feed":{...}, ...}
-            List<JSONObject> jsonObjectList = new ArrayList<JSONObject>(feeds.size());
+            JSONArray feedsJSONArray = new JSONArray();
             for (String feed: feeds) {
-                JSONObject feedJSON = new JSONObject();
-                feedJSON.put("feed", feed);
-                jsonObjectList.add(feedJSON);
+                feedsJSONArray.put(feed);
             }
-            JSONArray feedsJSONArray = new JSONArray(jsonObjectList);
 
             JSONObject eventJSON = new JSONObject();
             eventJSON.put("provider", provider.getValue());
-            eventJSON.put("feeds", feedsJSONArray.toString());
+            eventJSON.put("feeds", feedsJSONArray);
 
             UnitySendFilteredMessage(eventJSON.toString(), "onGetFeedFinished", provider.getValue());
         } catch (JSONException e) {

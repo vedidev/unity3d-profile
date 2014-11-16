@@ -49,37 +49,48 @@ namespace Soomla.Profile {
 
 		// event pushing back to native (when using FB Unity SDK)
 		protected override void _pushEventLoginStarted(Provider provider, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventLoginStarted(provider.ToString(), payload);
 		}
 
 		protected override void _pushEventLoginFinished(UserProfile userProfile, string payload) { 
+			if (SoomlaProfile.IsProviderNativelyImplemented(userProfile.Provider)) return;
 			soomlaProfile_PushEventLoginFinished(userProfile.toJSONObject().print(), payload);
 		}
 		protected override void _pushEventLoginFailed(Provider provider, string message, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventLoginFailed(provider.ToString(), message, payload);
 		}
 		protected override void _pushEventLoginCancelled(Provider provider, string payload) { 
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventLoginCancelled(provider.ToString(), payload);
 		}
 		protected override void _pushEventLogoutStarted(Provider provider) { 
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventLogoutStarted(provider.ToString());
 		}
 		protected override void _pushEventLogoutFinished(Provider provider) { 
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventLogoutFinished(provider.ToString());
 		}
 		protected override void _pushEventLogoutFailed(Provider provider, string message) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventLogoutFailed(provider.ToString(), message);
 		}
 		protected override void _pushEventSocialActionStarted(Provider provider, SocialActionType actionType, string payload) { 
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventSocialActionStarted(provider.ToString(), actionType.ToString(), payload);
 		}
 		protected override void _pushEventSocialActionFinished(Provider provider, SocialActionType actionType, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventSocialActionFinished(provider.ToString(), actionType.ToString(), payload);
 		}
 		protected override void _pushEventSocialActionCancelled(Provider provider, SocialActionType actionType, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventSocialActionCancelled(provider.ToString(), actionType.ToString(), payload);
 		}
 		protected override void _pushEventSocialActionFailed(Provider provider, SocialActionType actionType, string message, string payload) { 
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventSocialActionFailed(provider.ToString(), actionType.ToString(), message, payload);
 		}
 
