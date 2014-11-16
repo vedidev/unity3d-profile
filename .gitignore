@@ -71,9 +71,9 @@ proguard/
 **/.idea/libraries
 **/.idea/artifacts
 
-# Social Providers Integration:
+# Social Providers Integration
 # google+
-Soomla/Assets/Plugins/Android/*[gG]oogle*.jar*
+Soomla/Assets/Plugins/Android/*[gG]oogle*
 Soomla/Assets/Plugins/iOS/*[gG]oogle*.a*
 Soomla/Assets/Plugins/Android/res/
 
