@@ -84,6 +84,7 @@ namespace Soomla.Profile
 		public static void Login(Provider provider, string payload="", Reward reward = null) {
 			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
 			SocialProvider targetProvider = GetSocialProvider(provider);
+			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 			{
 				SoomlaUtils.LogError(TAG, "Provider not supported or not set as active: " + provider.ToString());
@@ -94,22 +95,22 @@ namespace Soomla.Profile
 			{
 				//fallback to native
 				string rewardId = reward != null ? reward.ID : "";
-				instance._login(provider, ProfilePayload.ToJSONObj(payload, rewardId).ToString());
+				instance._login(provider, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 
 			else 
 			{
-				ProfileEvents.OnLoginStarted(provider, payload);
+				ProfileEvents.OnLoginStarted(provider, userPayload);
 				targetProvider.Login(
 					/* success */	(UserProfile userProfile) => { 
 					StoreUserProfile(userProfile);
-					ProfileEvents.OnLoginFinished(userProfile, payload); 
+					ProfileEvents.OnLoginFinished(userProfile, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, payload); },
-				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, payload); }
+				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, userPayload); },
+				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, userPayload); }
 				);
 			}
 		}
@@ -176,6 +177,7 @@ namespace Soomla.Profile
 		public static void UpdateStatus(Provider provider, string status, string payload="", Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
+			string userPayload = (payload == null) ? "" : payload;
 
 			if (targetProvider == null)
 				return;
@@ -183,22 +185,21 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				SoomlaUtils.LogDebug(TAG, "DIMA: Update status with payload = " + payload);
 				string rewardId = reward != null ? reward.ID : "";
-				instance._updateStatus(provider, status, ProfilePayload.ToJSONObj(payload, rewardId).ToString());
+				instance._updateStatus(provider, status, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, payload);
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
 				targetProvider.UpdateStatus(status,
 				    /* success */	() => {
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, payload); 
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
 				},
-					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, payload); }
+					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, userPayload); }
 				);
 			}
 		}
@@ -223,6 +224,7 @@ namespace Soomla.Profile
 		                               string payload="", Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
+			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 				return;
 
@@ -231,21 +233,21 @@ namespace Soomla.Profile
 				//fallback to native
 				string rewardId = reward != null ? reward.ID: "";
 				instance._updateStory(provider, message, name, caption, description, link, pictureUrl, 
-				                      ProfilePayload.ToJSONObj(payload, rewardId).ToString());
+				                      ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 
 			else
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, payload);
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
 				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
 				    /* success */	() => { 
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, payload); 
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
 				},
-					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, payload); },
-					/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, payload); }
+					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, userPayload); },
+					/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, userPayload); }
 				);
 			}
 		}
@@ -271,7 +273,7 @@ namespace Soomla.Profile
 		                               Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-
+			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 				return;
 
@@ -281,21 +283,21 @@ namespace Soomla.Profile
 				ProfileEvents.OnSocialActionFailed(provider, 
 				                                   SocialActionType.UPLOAD_IMAGE, 
 				                                   "Image uploading is not supported with Texture for natively implemented social providers",
-				                                   payload);
+				                                   userPayload);
 			}
 
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, payload);
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
 				targetProvider.UploadImage(tex2D.EncodeToPNG(), fileName, message,
 				    /* success */	() => { 
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, payload); 
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
 				},
-				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, payload); },
-				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, payload); }
+				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload); },
+				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, userPayload); }
 				);
 			}
 		}
@@ -314,7 +316,7 @@ namespace Soomla.Profile
 		                               Reward reward = null) {
 			
 			SocialProvider targetProvider = GetSocialProvider(provider);
-			
+			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 				return;
 			
@@ -322,7 +324,7 @@ namespace Soomla.Profile
 			{
 				//fallback to native
 				string rewardId = reward != null ? reward.ID : "";
-				instance._uploadImage(provider, message, filePath, ProfilePayload.ToJSONObj(payload, rewardId).ToString());
+				instance._uploadImage(provider, message, filePath, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 			
 			else 
@@ -331,7 +333,7 @@ namespace Soomla.Profile
 				tex2D.LoadImage(File.ReadAllBytes(filePath));
 				string fileName = Path.GetFileName(filePath);
 
-				UploadImage(provider, tex2D, fileName, message, payload, reward);
+				UploadImage(provider, tex2D, fileName, message, userPayload, reward);
 			}
 		}
 
@@ -360,24 +362,24 @@ namespace Soomla.Profile
 		public static void GetContacts(Provider provider, string payload="") {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
-
+			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 				return;
 
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				instance._getContacts(provider, ProfilePayload.ToJSONObj(payload).ToString());
+				instance._getContacts(provider, ProfilePayload.ToJSONObj(userPayload).ToString());
 			}
 
 			else 
 			{
-				ProfileEvents.OnGetContactsStarted(provider, payload);
+				ProfileEvents.OnGetContactsStarted(provider, userPayload);
 				targetProvider.GetContacts(
 					/* success */	(List<UserProfile> profiles) => { 
-					ProfileEvents.OnGetContactsFinished(provider, profiles, payload);
+					ProfileEvents.OnGetContactsFinished(provider, profiles, userPayload);
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, payload); }
+				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, userPayload); }
 				);
 			}
 		}
