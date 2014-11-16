@@ -86,7 +86,10 @@ namespace Soomla.Profile
 			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider == null)
+			{
+				SoomlaUtils.LogError(TAG, "Provider not supported or not set as active: " + provider.ToString());
 				return;
+			}
 
 			if (targetProvider.IsNativelyImplemented())
 			{
@@ -181,6 +184,7 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
+				SoomlaUtils.LogDebug(TAG, "DIMA: Update status with payload = " + payload);
 				string rewardId = reward != null ? reward.ID : "";
 				instance._updateStatus(provider, status, ProfilePayload.ToJSONObj(payload, rewardId).ToString());
 			}
@@ -511,8 +515,6 @@ namespace Soomla.Profile
 				JSONObject currentProviderParams = new JSONObject(parameter.Value);
 				customParamsJson.AddField(currentProvider, currentProviderParams);
 			}
-
-			SoomlaUtils.LogDebug (TAG, "----------------------------- Custom Params: -----------------------------" + customParamsJson.ToString ());
 
 			return customParamsJson.ToString ();
 		}

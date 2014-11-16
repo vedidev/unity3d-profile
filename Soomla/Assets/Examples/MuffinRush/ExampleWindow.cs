@@ -35,6 +35,7 @@ public class ExampleWindow : MonoBehaviour {
 	private bool isInit = false;
 
 	private Provider targetProvider = Provider.TWITTER;
+	private Reward exampleReward = new BadgeReward("example_reward", "Example Social Reward");
 
 
 	/// <summary>
@@ -210,7 +211,7 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tShare;
 			GUI.skin.button.active.background = tSharePress;
 			if(GUI.Button(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), "")){
-				SoomlaProfile.UpdateStatus(targetProvider, "I LOVE SOOMLA !  http://www.soom.la", null);
+				SoomlaProfile.UpdateStatus(targetProvider, "I LOVE SOOMLA !  http://www.soom.la", null, exampleReward);
 			}
 		} else {
 			GUI.DrawTexture(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), tShareDisable, 
@@ -242,7 +243,8 @@ public class ExampleWindow : MonoBehaviour {
 				                          "DESCRIPTION",
 				                          "http://about.soom.la/soombots",
 				                          "http://about.soom.la/wp-content/uploads/2014/05/330x268-spockbot.png",
-				                          null);
+				                          null,
+				                          exampleReward);
 			}
 		} else {
 			GUI.DrawTexture(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), tShareStoryDisable, 
@@ -274,7 +276,7 @@ public class ExampleWindow : MonoBehaviour {
 #elif UNITY_ANDROID
 				path = "jar:file://" + Application.dataPath + "!/assets/" + "BTN-Upload-Normal.png";
 #endif
-				SoomlaProfile.UploadImage(targetProvider, "Awesome Test App of SOOMLA Profile!", path);
+				SoomlaProfile.UploadImage(targetProvider, "Awesome Test App of SOOMLA Profile!", path, null, exampleReward);
 //				SoomlaProfile.UploadCurrentScreenShot(this, targetProvider, "Awesome Test App of SOOMLA Profile!", "This a screenshot of the current state of SOOMLA's test app on my computer.", null);
 			}
 		} else {
@@ -305,7 +307,7 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tConnect;
 			GUI.skin.button.active.background = tConnectPress;
 			if(GUI.Button(new Rect(timesW(20.0f),timesH(950f),timesW(598.0f),timesH(141.0f)), "")){
-				SoomlaProfile.Login(targetProvider, null);
+				SoomlaProfile.Login(targetProvider, null, exampleReward);
 			}
 		}
 

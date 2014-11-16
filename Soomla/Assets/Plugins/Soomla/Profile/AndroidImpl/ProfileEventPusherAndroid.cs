@@ -63,7 +63,7 @@ namespace Soomla.Profile {
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
-		protected override void _pushEventLogoutFinished(Provider provider) { \
+		protected override void _pushEventLogoutFinished(Provider provider) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
