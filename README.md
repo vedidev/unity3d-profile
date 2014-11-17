@@ -9,6 +9,8 @@ SoomlaProfile.UpdateStatus(Provider.FACEBOOK, "I love this game !", new VirtualI
 unity3d-profile
 ---
 
+**November 17th**: v2.0 **unity3d-profile** supports Facebook, Google+ and Twitter
+
 *SOOMLA's Profile Module for Unity3d*
 
 * More documentation and information in SOOMLA's [Knowledge Base](http://know.soom.la/docs/platforms/unity)  
