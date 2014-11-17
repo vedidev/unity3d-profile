@@ -88,7 +88,7 @@ Twitter is supported out-of-the-box, authentication is done either through the s
 1. Create your Twitter app at https://apps.twitter.com/
 2. On the menu bar click "Window -> Soomla -> Edit Settings" and toggle the "twitter" check box and fill in "Consumer Key" and "Consumer Secret".
 
-    > Consumer Key and Customer Secret are located under "Keys and Access Tokens" of your twitter app.
+    > Consumer Key and Consumer Secret are located under "Keys and Access Tokens" of your twitter app.
 
 ### Google Plus
 
@@ -105,11 +105,12 @@ To create a custom keystore file with unity3d, navigate to "Player Settings" -> 
 
   2. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
   3. Make the following changes in Player Settings:
+
     1. Navigate to "Other Settings" and set "Bundle Identifier" to "PACKAGE NAME" value of your google+ app.
 
       > PACKAGE NAME is located under "API & Auth " -> "Credentials" -> "Client ID for Android application" of your google+ app.
 
-    2. Navigate to "Publishing Settings" and browse for your keystore file (debug.keystore/custom keystore).
+    1. Navigate to "Publishing Settings" and browse for your keystore file (debug.keystore/custom keystore).
 
 ## What's next? Social Actions.
 
@@ -180,6 +181,7 @@ ProfileEvents.OnLoginFinished += (UserProfile UserProfile) => {
 
 1. See [iOS Google Plus Caveats](https://github.com/soomla/ios-profile##google-plus-caveats)
 1. See [Android Google Plus Caveats](https://github.com/soomla/android-profile#google-plus-caveats)
+
     > Note: When targeting Android, don't forget to browse for a keystore file which has the identical SHA1 to "CERTIFICATE FINGERPRINT (SHA1)" of your google+ app.
 
 Contribution
