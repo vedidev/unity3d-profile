@@ -94,23 +94,22 @@ Twitter is supported out-of-the-box, authentication is done either through the s
 
 ##### Targeting iOS:
   1. Follow [Step 1. Creating the Google Developers Console project](https://developers.google.com/+/mobile/ios/getting-started#step_1_creating_the_console_name_project) and create a google+ app for iOS.
+
+    > Set the BUNDLE ID of your google+ app to the Bundle Identifier of your unity3d app.
+
   2. On the menu bar click "Window -> Soomla -> Edit Settings", toggle "google" check box and fill the "Client Id" text box with "CLIENT ID" value of your google+ app.
 
-    > CLIENT ID is located under "API & Auth " -> "Credentials" -> "Client ID for iOS application" of your google+ app page.
 
 ##### Targeting Android:
   1. Follow [Step 1: Enable the Google+ API](https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api) and create a google+ app for Android.
-    > **NOTE:**
-To create a custom keystore file with unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA1 of your new keystore file.
 
-  2. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
-  3. Make the following changes in Player Settings:
+  > Set the PACKAGE NAME of your google+ app to the value of "Bundle Identifier" of your unity3d app.
 
-    1. Navigate to "Other Settings" and set "Bundle Identifier" to "PACKAGE NAME" value of your google+ app.
+  > To create a custom keystore file with unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA-1 of your new keystore file.
 
-      > PACKAGE NAME is located under "API & Auth " -> "Credentials" -> "Client ID for Android application" of your google+ app.
+  1. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
 
-    1. Navigate to "Publishing Settings" and browse for your keystore file (debug.keystore/custom keystore).
+  1. Navigate to "Publishing Settings" and browse for your keystore file (debug.keystore/custom keystore).
 
 ## What's next? Social Actions.
 
@@ -174,15 +173,13 @@ ProfileEvents.OnLoginFinished += (UserProfile UserProfile) => {
 
 ## Twitter Caveats
 
-1. See [iOS Twitter Caveats](https://github.com/soomla/ios-profile#twitter-caveats)
-1. See [Android Twitter Caveats](https://github.com/soomla/android-profile#twitter-caveats)
+1. Have you enabled twitter in "Widow -> Soomla -> Edit Settings" and supplied the correct Consumer Key and Secret?
 
 ## Google Plus Caveats
 
-1. See [iOS Google Plus Caveats](https://github.com/soomla/ios-profile##google-plus-caveats)
-1. See [Android Google Plus Caveats](https://github.com/soomla/android-profile#google-plus-caveats)
-
-    > Note: When targeting Android, don't forget to browse for a keystore file which has the identical SHA1 to "CERTIFICATE FINGERPRINT (SHA1)" of your google+ app.
+1. Have you enabled google in "Widow -> Soomla -> Edit Settings"?
+1. Have you supplied the correct Client Id (when targeting iOS)?
+1. Did you sign your unity3d app with keystore file with SHA-1 identical to "CERTIFICATE FINGERPRINT (SHA1)" of your google+ app?
 
 Contribution
 ---
