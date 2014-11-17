@@ -38,26 +38,13 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
 
 ## Getting Started
 
-1. Go over the guidelines for downloading and importing the official Facebook SDK: https://developers.facebook.com/docs/unity/getting-started/canvas    - You don't need to initialize FB. SoomlaProfile will initialize it for you.
-
-    > **NOTE:** unity3d-profile currently supports FB Unity SDK v5.1.  Make sure to use that one, support for v6.0 is in the works.
-
-2. Create an empty folder named `Facebook` under `Assets/Plugins`
-3. Move the folder `Scripts` from `Assets/Facebook` to `Assets/Plugins/Facebook`  -  SOOMLA works from the Plugins folder so it'll be available to UnityScript devs. So you'll have to move Facebook in there as well.
-
-    > When working under Unity version > 4.5.0 (targeting iOS) please follow these extra steps:
-
-    > 1. Edit the file `Assets/Facebook/Editor/iOS/fixup.projmods`
-
-    > 1. Under `headerpaths` change `Facebook/Scripts` to `Plugins/Facebook/Scripts`
-
-4. Download and import [soomla-unity3d-core.unitypackage](https://github.com/soomla/unity3d-profile/blob/master/soomla-unity3d-core.unitypackage) and [unity3d-profile.unitypackage](http://bit.ly/1sUDdG0). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
-5. Drag the `CoreEvents` and `ProfileEvents` Prefabs from `Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
-6. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
+1. Download and import [soomla-unity3d-core.unitypackage](https://github.com/soomla/unity3d-profile/blob/master/soomla-unity3d-core.unitypackage) and [unity3d-profile.unitypackage](http://bit.ly/1sUDdG0). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
+2. Drag the `CoreEvents` and `ProfileEvents` Prefabs from `Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
+3. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
     - _Soomla Secret_ - is an encryption secret you provide that will be used to secure your data. (If you used versions before v1.5.2 this secret MUST be the same as Custom Secret)  
     **Choose the secret wisely. You can't change them after you launch your game!**
     - _Social Platforms_ - select the social platform which you want to integrate with
-7. Initialize `SoomlaProfile`:
+4. Initialize `SoomlaProfile`:
 
     ```cs
     SoomlaProfile.Initialize();
@@ -75,6 +62,48 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
 
 And that's it ! You have social capabilities for your game.
 
+## What's next? Selecting Social Providers
+
+**unity3d-profile** is structured to support multiple social networks (Facebook, Twitter, Google+, etc.), at the time of writing this the framework only supports Facebook, Twitter and Google+ integration.
+Note that currently only Facebook is supported for work in Editor.
+
+### Facebook
+
+1. Go over the guidelines for downloading and importing the official Facebook SDK: https://developers.facebook.com/docs/unity/getting-started/canvas    - You don't need to initialize FB. SoomlaProfile will initialize it for you.
+
+    > **NOTE:** unity3d-profile currently supports FB Unity SDK v5.1.  Make sure to use that one, support for v6.0 is in the works.
+
+2. Create an empty folder named `Facebook` under `Assets/Plugins`
+3. Move the folder `Scripts` from `Assets/Facebook` to `Assets/Plugins/Facebook`  -  SOOMLA works from the Plugins folder so it'll be available to UnityScript devs. So you'll have to move Facebook in there as well.
+
+    > When working under Unity version > 4.5.0 (targeting iOS) please follow these extra steps:
+
+    > 1. Edit the file `Assets/Facebook/Editor/iOS/fixup.projmods`
+
+    > 1. Under `headerpaths` change `Facebook/Scripts` to `Plugins/Facebook/Scripts`
+
+### Twitter
+Twitter is supported out-of-the-box, authentication is done either through the signed in Twitter account (iOS 5+) or through web browser (fallback). Follow the next steps to make it work:
+1. Create your Twitter app at https://apps.twitter.com/
+2. On the menu bar click "Window -> Soomla -> Edit Settings" and toggle the "twitter" check box and fill in "Consumer Key" and "Consumer Secret".
+    > These values are located under "Keys and Access Tokens" of your twitter app.
+
+### Google Plus
+
+##### Targeting iOS:
+  1. Follow [**Step 1. Creating the Google Developers Console project**](https://developers.google.com/+/mobile/ios/getting-started#step_1_creating_the_console_name_project) and create a google+ app for iOS.
+  2. On the menu bar click "Window -> Soomla -> Edit Settings", toggle "google" check box and fill the "Client Id" text box.
+    > This value is located under "API & Auth " -> "Credentials" of your google+ app.
+
+##### Targeting Android:
+  1. Follow [Step 1: Enable the Google+ API](https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api) to create a google+ app for Android.
+    > **NOTE**
+To create a custom keystore file using unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA1 of your new keystore file.
+
+  2. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
+  3. Make the following changes in Player Settings:
+    1. Navigate to "Other Settings" and set "Bundle Identifier" to "PACKAGE NAME" of your google+ app.
+    2. Navigate to "Publishing Settings" and browse for your keystore file debug.keystore/custom keystore.
 
 ## What's next? Social Actions.
 
@@ -135,6 +164,17 @@ ProfileEvents.OnLoginFinished += (UserProfile UserProfile) => {
 
 1. See [iOS Facebook Caveats](https://github.com/soomla/ios-profile#facebook-caveats)
 1. See [Android Facebook Caveats](https://github.com/soomla/android-profile#facebook-caveats)
+
+## Twitter Caveats
+
+1. See [iOS Twitter Caveats](https://github.com/soomla/ios-profile#twitter-caveats)
+1. See [Android Twitter Caveats](https://github.com/soomla/android-profile#twitter-caveats)
+
+## Google Plus Caveats
+
+1. See [iOS Google Plus Caveats](https://github.com/soomla/ios-profile##google-plus-caveats)
+1. See [Android Google Plus Caveats](https://github.com/soomla/android-profile#google-plus-caveats)
+    > Note: When targeting Android, don't forget to browse for a keystore file which has the identical SHA1 to "CERTIFICATE FINGERPRINT (SHA1)" of your google+ app.
 
 Contribution
 ---
