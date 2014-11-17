@@ -84,26 +84,31 @@ Note that currently only Facebook is supported for work in Editor.
 
 ### Twitter
 Twitter is supported out-of-the-box, authentication is done either through the signed in Twitter account (iOS 5+) or through web browser (fallback). Follow the next steps to make it work:
+
 1. Create your Twitter app at https://apps.twitter.com/
 2. On the menu bar click "Window -> Soomla -> Edit Settings" and toggle the "twitter" check box and fill in "Consumer Key" and "Consumer Secret".
-    > These values are located under "Keys and Access Tokens" of your twitter app.
+    > Consumer Key and Customer Secret are located under "Keys and Access Tokens" of your twitter app.
 
 ### Google Plus
 
 ##### Targeting iOS:
-  1. Follow [**Step 1. Creating the Google Developers Console project**](https://developers.google.com/+/mobile/ios/getting-started#step_1_creating_the_console_name_project) and create a google+ app for iOS.
-  2. On the menu bar click "Window -> Soomla -> Edit Settings", toggle "google" check box and fill the "Client Id" text box.
-    > This value is located under "API & Auth " -> "Credentials" of your google+ app.
+  1. Follow [Step 1. Creating the Google Developers Console project](https://developers.google.com/+/mobile/ios/getting-started#step_1_creating_the_console_name_project) and create a google+ app for iOS.
+  2. On the menu bar click "Window -> Soomla -> Edit Settings", toggle "google" check box and fill the "Client Id" text box with "CLIENT ID" value of your google+ app.
+
+    > CLIENT ID is located under "API & Auth " -> "Credentials" -> "Client ID for iOS application" of your google+ app page.
 
 ##### Targeting Android:
-  1. Follow [Step 1: Enable the Google+ API](https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api) to create a google+ app for Android.
+  1. Follow [Step 1: Enable the Google+ API](https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api) and create a google+ app for Android.
     > **NOTE**
-To create a custom keystore file using unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA1 of your new keystore file.
+To create a custom keystore file with unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA1 of your new keystore file.
 
   2. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
   3. Make the following changes in Player Settings:
-    1. Navigate to "Other Settings" and set "Bundle Identifier" to "PACKAGE NAME" of your google+ app.
-    2. Navigate to "Publishing Settings" and browse for your keystore file debug.keystore/custom keystore.
+    1. Navigate to "Other Settings" and set "Bundle Identifier" to "PACKAGE NAME" value of your google+ app.
+
+      > PACKAGE NAME is located under "API & Auth " -> "Credentials" -> "Client ID for Android application" of your google+ app.
+
+    2. Navigate to "Publishing Settings" and browse for your keystore file (debug.keystore/custom keystore).
 
 ## What's next? Social Actions.
 
