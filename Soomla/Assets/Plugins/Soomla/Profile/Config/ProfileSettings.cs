@@ -116,7 +116,7 @@ namespace Soomla.Profile
 		}
 		
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "1.0");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.0");
 			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
 			EditorGUILayout.Space();
 		}

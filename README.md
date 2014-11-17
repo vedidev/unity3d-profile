@@ -106,9 +106,7 @@ Twitter is supported out-of-the-box, authentication is done either through the s
   > Set the PACKAGE NAME of your google+ app to the value of "Bundle Identifier" of your unity3d app.
 
   > To create a custom keystore file with unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA-1 of your new keystore file.
-
-  > To run the MuffinRush example app, browse for the existing [debug.keystore file](https://github.com/soomla/unity3d-profile/blob/master/Soomla/Assets/Examples/MuffinRush/debug.keystore).
-
+  
   1. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
 
   1. Navigate to "Publishing Settings" and browse for your keystore file (debug.keystore/custom keystore).
