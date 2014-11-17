@@ -1,4 +1,4 @@
-### v2.0.0 (16.11.14)
+### v2.0.0 (17.11.14)
 * New Features
   * The module is integrated with Facebook, Google Plus and Twitter
   * Ability to preform following actions on multiple social networks (parallel):
