@@ -16,7 +16,9 @@ unity3d-profile
 * More documentation and information in SOOMLA's [Knowledge Base](http://know.soom.la/docs/platforms/unity)  
 * For issues you can use the [issues](https://github.com/soomla/unity3d-profile/issues) section or SOOMLA's [Answers Website](http://answers.soom.la)
 
-unity3d-profile is the Unity3d flavor of SOOMLA's Profile Module.
+unity3d-profile is the Unity3D flavour of SOOMLA's Profile Module. This project uses android-profile and ios-profile in order to provide game developers with social network connectivity for their Unity3D projects.
+
+unity3d-profile easily connects to SOOMLA's virtual economy model (unity3d-store), thus you can reward players for performing social interactions with virtual rewards (`VirtualItemReward`, etc). That said this integration is completely optional. 
 
 ![SOOMLA's Profile Module](http://know.soom.la/img/tutorial_img/soomla_diagrams/Profile.png)
 
@@ -27,7 +29,7 @@ unity3d-profile is the Unity3d flavor of SOOMLA's Profile Module.
 
 ## Debugging
 
-If you want to see full debug messages from android-store and ios-store you just need to check the box that says "Debug Messages" in the SOOMLA Settings.
+If you want to see full debug messages from android-profile and ios-profile you just need to check the box that says "Debug Messages" in the SOOMLA Settings.
 Unity debug messages will only be printed out if you build the project with _Development Build_ checked.
 
 ## Cloning
@@ -60,13 +62,13 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
 
 8. Call all the social functions you can from `SoomlaProfile` class. Otherwise, you won't be able to work with SOOMLA correctly. You can still call functions from the `FB` class but only those that are not provided by `SoomlaProfile`.
 
-9. Register event handlers in order to be notified about in-app purchasing related events. refer to the [Event Handling](https://github.com/soomla/unity3d-profile#event-handling) section for more information.
+9. Register event handlers in order to be notified about in-app purchasing related events. refer to the [Event Handling](#event-handling) section for more information.
 
 And that's it ! You have social capabilities for your game.
 
 ## What's next? Selecting Social Providers
 
-**unity3d-profile** is structured to support multiple social networks (Facebook, Twitter, Google+, etc.), at the time of writing this the framework only supports Facebook, Twitter and Google+ integration.
+**unity3d-profile** is structured to support multiple social networks, and currently supports Facebook, Twitter and Google+.
 Note that currently only Facebook is supported for work in Editor.
 
 ### Facebook
@@ -88,26 +90,26 @@ Note that currently only Facebook is supported for work in Editor.
 Twitter is supported out-of-the-box, authentication is done either through the signed in Twitter account (iOS 5+) or through web browser (fallback). Follow the next steps to make it work:
 
 1. Create your Twitter app at https://apps.twitter.com/
-2. On the menu bar click "Window -> Soomla -> Edit Settings" and toggle the "twitter" check box and fill in "Consumer Key" and "Consumer Secret".
+2. On the menu bar click "Window -> Soomla -> Edit Settings" and toggle the "twitter" check box. Then fill in "Consumer Key" and "Consumer Secret".
 
     > Consumer Key and Consumer Secret are located under "Keys and Access Tokens" of your twitter app.
 
 ### Google Plus
 
 ##### Targeting iOS:
-  1. Follow [Step 1. Creating the Google Developers Console project](https://developers.google.com/+/mobile/ios/getting-started#step_1_creating_the_console_name_project) and create a google+ app for iOS.
+  1. Follow [Step 1. Creating the Google Developers Console project](https://developers.google.com/+/mobile/ios/getting-started#step_1_creating_the_console_name_project) and create a Google+ app for iOS.
 
-    > Set the BUNDLE ID of your google+ app to the Bundle Identifier of your unity3d app.
+    > Set the BUNDLE ID of your Google+ app to the Bundle Identifier of your Unity3d app.
 
-  2. On the menu bar click "Window -> Soomla -> Edit Settings", toggle "google" check box and fill the "Client Id" text box with "CLIENT ID" value of your google+ app.
+  2. On the menu bar click "Window -> Soomla -> Edit Settings", toggle "google" check box and fill the "Client Id" text box with "CLIENT ID" value of your Google+ app.
 
 
 ##### Targeting Android:
-  1. Follow [Step 1: Enable the Google+ API](https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api) and create a google+ app for Android.
+  1. Follow [Step 1: Enable the Google+ API](https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api) and create a Google+ app for Android.
 
-  > Set the PACKAGE NAME of your google+ app to the value of "Bundle Identifier" of your unity3d app.
+  > Set the PACKAGE NAME of your Google+ app to the value of "Bundle Identifier" of your Unity3d app.
 
-  > To create a custom keystore file with unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA-1 of your new keystore file.
+  > To create a custom keystore file with Unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your Google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA-1 of your new keystore file.
   
   1. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
 
@@ -155,13 +157,11 @@ SOOMLA lets you subscribe to profile events, get notified and implement your own
 
 > Your behavior is an addition to the default behavior implemented by SOOMLA. You don't replace SOOMLA's behavior.
 
-The 'ProfileEvents' class is where all event go through. To handle various events, just add your specific behavior to the delegates in the Events class.
+The `ProfileEvents` class is where all event go through. To handle various events, just add your specific behavior to the delegates in the Events class.
 
-For example, if you want to 'listen' to a MarketPurchase event:
+For example, if you want to 'listen' to a `LoginFinished` event:
 
 ```cs
-StoreEvents.OnMarketPurchase += onMarketPurchase;
-
 ProfileEvents.OnLoginFinished += (UserProfile UserProfile) => {
 			Soomla.SoomlaUtils.LogDebug("My Perfect Game", "login finished with profile: " + UserProfile.toJSONObject().print());
 			SoomlaProfile.GetContacts(Provider.FACEBOOK);
@@ -179,9 +179,9 @@ ProfileEvents.OnLoginFinished += (UserProfile UserProfile) => {
 
 ## Google Plus Caveats
 
-1. Have you enabled google in "Widow -> Soomla -> Edit Settings"?
+1. Have you enabled google in "Window -> Soomla -> Edit Settings"?
 1. Have you supplied the correct Client Id (when targeting iOS)?
-1. Did you sign your unity3d app with keystore file with SHA-1 identical to "CERTIFICATE FINGERPRINT (SHA1)" of your google+ app?
+1. Did you sign your Unity3d app with keystore file with SHA-1 identical to "CERTIFICATE FINGERPRINT (SHA1)" of your Google+ app?
 
 Contribution
 ---
