@@ -1,7 +1,7 @@
 
 #import "UnityProfileEventDispatcher.h"
 #import "SoomlaEventHandling.h"
-#import "UserProfileEventHandling.h"
+#import "ProfileEventHandling.h"
 #import "UserProfile.h"
 #import "SocialActionUtils.h"
 #import "Reward.h"
@@ -16,42 +16,42 @@ extern "C"{
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postLoginStarted:provider withPayload:payloadS];
+        [ProfileEventHandling postLoginStarted:provider withPayload:payloadS];
     }
     void soomlaProfile_PushEventLoginFinished(const char* sUserProfileJson, const char* payload) {
         NSString *userProfileJson = [NSString stringWithUTF8String:sUserProfileJson];
         UserProfile* userProfile = [[UserProfile alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:userProfileJson]];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postLoginFinished:userProfile withPayload:payloadS];
+        [ProfileEventHandling postLoginFinished:userProfile withPayload:payloadS];
     }
     void soomlaProfile_PushEventLoginFailed(const char* sProvider, const char* sMessage, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString *message = [NSString stringWithUTF8String:sMessage];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postLoginFailed:provider withMessage:message withPayload:payloadS];
+        [ProfileEventHandling postLoginFailed:provider withMessage:message withPayload:payloadS];
     }
     void soomlaProfile_PushEventLoginCancelled(const char* sProvider, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postLoginCancelled:provider withPayload:payloadS];
+        [ProfileEventHandling postLoginCancelled:provider withPayload:payloadS];
     }
     void soomlaProfile_PushEventLogoutStarted(const char* sProvider) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
-        [UserProfileEventHandling postLogoutStarted:provider];
+        [ProfileEventHandling postLogoutStarted:provider];
     }
     void soomlaProfile_PushEventLogoutFinished(const char* sProvider) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
-        [UserProfileEventHandling postLogoutFinished:provider];
+        [ProfileEventHandling postLogoutFinished:provider];
     }
     void soomlaProfile_PushEventLogoutFailed(const char* sProvider, const char* sMessage) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString *message = [NSString stringWithUTF8String:sMessage];
-        [UserProfileEventHandling postLogoutFailed:provider withMessage:message];
+        [ProfileEventHandling postLogoutFailed:provider withMessage:message];
     }
     void soomlaProfile_PushEventSocialActionStarted(const char* sProvider, const char* sActionType, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
@@ -59,7 +59,7 @@ extern "C"{
         NSString* actionType = [NSString stringWithUTF8String:sActionType];
         SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postSocialActionStarted:provider withType:socialActionType withPayload:payloadS];
+        [ProfileEventHandling postSocialActionStarted:provider withType:socialActionType withPayload:payloadS];
     }
     void soomlaProfile_PushEventSocialActionFinished(const char* sProvider, const char* sActionType, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
@@ -67,7 +67,7 @@ extern "C"{
         NSString* actionType = [NSString stringWithUTF8String:sActionType];
         SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postSocialActionFinished:provider withType:socialActionType withPayload:payloadS];
+        [ProfileEventHandling postSocialActionFinished:provider withType:socialActionType withPayload:payloadS];
     }
     void soomlaProfile_PushEventSocialActionCancelled(const char* sProvider, const char* sActionType, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
@@ -75,7 +75,7 @@ extern "C"{
         NSString* actionType = [NSString stringWithUTF8String:sActionType];
         SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postSocialActionCancelled:provider withType:socialActionType withPayload:payloadS];
+        [ProfileEventHandling postSocialActionCancelled:provider withType:socialActionType withPayload:payloadS];
     }
     void soomlaProfile_PushEventSocialActionFailed(const char* sProvider, const char* sActionType,  const char* sMessage, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
@@ -84,7 +84,7 @@ extern "C"{
         NSString *message = [NSString stringWithUTF8String:sMessage];
         SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [UserProfileEventHandling postSocialActionFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
+        [ProfileEventHandling postSocialActionFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
     }
     
     //    void pushEventGetContactsStarted(enum SocialActionType socialActionType) {
@@ -111,7 +111,7 @@ extern "C"{
 - (id) init {
     if (self = [super init]) {
         LogDebug(@"UnityProfileEventDispatcher", @"INIT");
-        [UserProfileEventHandling observeAllEventsWithObserver:self withSelector:@selector(handleEvent:)];
+        [ProfileEventHandling observeAllEventsWithObserver:self withSelector:@selector(handleEvent:)];
     }
     
     return self;

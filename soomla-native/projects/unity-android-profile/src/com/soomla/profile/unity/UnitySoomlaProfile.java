@@ -13,10 +13,8 @@ import com.soomla.profile.exceptions.UserProfileNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.*;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import static com.soomla.profile.domain.IProvider.Provider;
 

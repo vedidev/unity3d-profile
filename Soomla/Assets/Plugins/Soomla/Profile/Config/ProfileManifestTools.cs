@@ -62,11 +62,14 @@ namespace Soomla.Profile
 			}
 			else 
 			{
-				SoomlaManifestTools.RemovePermission("android.permission.INTERNET");
-				SoomlaManifestTools.RemovePermission("android.permission.GET_ACCOUNTS");
-				SoomlaManifestTools.RemovePermission("android.permission.USE_CREDENTIALS");
+				// NOTE: We don't remove permissions or general purpose meta-data tags b/c other modules might need them.
+				// 		This is why they are commented out
+
+//				SoomlaManifestTools.RemovePermission("android.permission.INTERNET");
+//				SoomlaManifestTools.RemovePermission("android.permission.GET_ACCOUNTS");
+//				SoomlaManifestTools.RemovePermission("android.permission.USE_CREDENTIALS");
 				SoomlaManifestTools.RemoveActivity("com.soomla.profile.social.google.SoomlaGooglePlus$SoomlaGooglePlusActivity");
-				SoomlaManifestTools.RemoveApplicationElement("meta-data", "com.google.android.gms.version");
+//				SoomlaManifestTools.RemoveApplicationElement("meta-data", "com.google.android.gms.version");
 			}
 		}
 		

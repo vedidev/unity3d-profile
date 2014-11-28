@@ -2,7 +2,6 @@
 #import "UserProfile.h"
 #import "UserProfileStorage.h"
 #import "SocialActionUtils.h"
-#import "UserProfileEventHandling.h"
 #import "UserProfileNotFoundException.h"
 #import "ProviderNotFoundException.h"
 #import "UnityProfileCommons.h"
