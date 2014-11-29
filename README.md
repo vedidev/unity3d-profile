@@ -18,14 +18,17 @@ unity3d-profile
 
 unity3d-profile is the Unity3D flavour of SOOMLA's Profile Module. This project uses android-profile and ios-profile in order to provide game developers with social network connectivity for their Unity3D projects.
 
-unity3d-profile easily connects to SOOMLA's virtual economy model (unity3d-store), thus you can reward players for performing social interactions with virtual rewards (`VirtualItemReward`, etc). That said this integration is completely optional. 
+unity3d-profile easily connects to SOOMLA's virtual economy model (unity3d-store), thus you can reward players for performing social interactions with virtual rewards (`VirtualItemReward`, etc). That said this integration is completely optional.
 
 ![SOOMLA's Profile Module](http://know.soom.la/img/tutorial_img/soomla_diagrams/Profile.png)
 
 
 ## Download
 
-####Pre baked unitypackage: [unity3d-profile v1.0](http://bit.ly/1sUDdG0)  
+####Pre baked unitypackage:
+
+[soomla-unity3d-core v1.0.1](http://library.soom.la/fetch/unity3d-core/1.0.1?cf=github)  
+[unity3d-profile v2.0.0](http://library.soom.la/fetch/unity3d-profile/2.0.0?cf=github)  
 
 ## Debugging
 
@@ -42,7 +45,7 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
 
 ## Getting Started
 
-1. Download and import [soomla-unity3d-core.unitypackage](https://github.com/soomla/unity3d-profile/blob/master/soomla-unity3d-core.unitypackage) and [unity3d-profile.unitypackage](http://bit.ly/1sUDdG0). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
+1. Download and import [soomla-unity3d-core.unitypackage](http://library.soom.la/fetch/unity3d-core/1.0.1?cf=github) and [unity3d-profile.unitypackage](http://library.soom.la/fetch/unity3d-profile/2.0.0?cf=github). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
 2. Drag the `CoreEvents` and `ProfileEvents` Prefabs from `Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
 3. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
     - _Soomla Secret_ - is an encryption secret you provide that will be used to secure your data. (If you used versions before v1.5.2 this secret MUST be the same as Custom Secret)  
@@ -110,7 +113,7 @@ Twitter is supported out-of-the-box, authentication is done either through the s
   > Set the PACKAGE NAME of your Google+ app to the value of "Bundle Identifier" of your Unity3d app.
 
   > To create a custom keystore file with Unity3d, navigate to "Player Settings" -> "Publishing Settings" and click "Create New Keystore". In your Google+ app page, navigate to "API & Auth " -> "Credentials" and update the value of "CERTIFICATE FINGERPRINT (SHA1)" with the SHA-1 of your new keystore file.
-  
+
   1. Navigate to "Window -> Soomla -> Edit Settings" and toggle "google" check box (ignore the Client Id text box).
 
   1. Navigate to "Publishing Settings" and browse for your keystore file (debug.keystore/custom keystore).

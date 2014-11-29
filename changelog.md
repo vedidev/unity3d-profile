@@ -1,4 +1,5 @@
-### v2.0.0 (17.11.14)
+### v2.0.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v1.0...v2.0.0)
+
 * New Features
   * The module is integrated with Facebook, Google Plus and Twitter
   * Ability to preform following actions on multiple social networks (parallel):
