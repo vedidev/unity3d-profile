@@ -70,12 +70,3 @@ proguard/
 **/.idea/dictionaries
 **/.idea/libraries
 **/.idea/artifacts
-
-# Social Providers Integration
-# google+
-Soomla/Assets/Plugins/Android/*[gG]oogle*
-Soomla/Assets/Plugins/iOS/*[gG]oogle*.a*
-
-# twitter
-Soomla/Assets/Plugins/Android/*[tT]witter*.jar*
-Soomla/Assets/Plugins/iOS/*[tT]witter*.a*
