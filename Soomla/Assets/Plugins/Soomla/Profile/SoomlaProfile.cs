@@ -76,7 +76,8 @@ namespace Soomla.Profile
 		}
 
 		/// <summary>
-		/// Logs the user into the given provider. 
+		/// Logs the user into the given provider.
+		/// Supported platforms: Facebook, Twitter, Google+
 		/// </summary>
 		/// <param name="provider">The provider to log in to.</param>
 		/// <param name="payload">A string to receive when the function returns.</param>
@@ -117,6 +118,7 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Logs the user out of the given provider. 
+		/// Supported platforms: Facebook, Twitter, Google+
 		/// 
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
@@ -146,6 +148,7 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Checks if the user is logged into the given provider.
+		/// Supported platforms: Facebook, Twitter, Google+
 		/// </summary>
 		/// <returns>If is logged into the specified provider, returns <c>true</c>; 
 		/// otherwise, <c>false</c>.</returns>
@@ -167,7 +170,8 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Updates the user's status on the given provider. 
-		///
+		/// Supported platforms: Facebook, Twitter, Google+
+		/// 
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The <c>Provider</c> the given status should be posted to.</param>
@@ -207,7 +211,9 @@ namespace Soomla.Profile
 		/// <summary>
 		/// Posts a full story to the user's social page on the given Provider. 
 		/// A story contains a title, description, image and more.
-		///
+		/// Supported platforms: Facebook (full support), 
+		/// Twitter and Google+ (partial support - message and link only)
+		/// 
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The <c>Provider</c> the given story should be posted to.</param>
@@ -260,6 +266,7 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Uploads an image to the user's social page on the given Provider.
+		/// Supported platforms: Facebook
 		/// 
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
@@ -304,6 +311,7 @@ namespace Soomla.Profile
 
 		// <summary>
 		// Uploads an image to the user's social page on the given Provider.
+		// Supported platforms: Facebook
 		// 
 		// NOTE: This operation requires a successful login.
 		// </summary>
@@ -339,6 +347,7 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Uploads the current screen shot image to the user's social page on the given Provider.
+		/// Supported platforms: Facebook
 		/// 
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
@@ -354,7 +363,10 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Fetches UserProfiles of contacts of the current user.
-		///
+		/// Supported platforms: Facebook, Twitter, Google+.
+		/// Missing contact information for Twitter: email, gender, birthday.
+		/// Missing contact information for Google+: username, email, gender, bithday
+		/// 
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The <c>Provider</c> to fetch contacts from.</param>
@@ -418,6 +430,7 @@ namespace Soomla.Profile
 
 		/// <summary>
 		/// Likes the page (with the given name) of the given provider.
+		/// Supported platforms: Facebook, Twitter, Google+.
 		/// 
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
