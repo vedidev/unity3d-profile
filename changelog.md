@@ -1,3 +1,15 @@
+### v2.0.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v1.0...v2.0.1)
+
+* Changes
+  * Getting google-play-services_lib from sdk
+  * Disabling removal of plugins
+  * Added debug.keystore for the sake of running example with google+
+  * Documentation for social platform support for each social action
+  * Updated new changes from submodules
+
+* Fixes
+  * Fixing google play services issues
+
 ### v2.0.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v1.0...v2.0.0)
 
 * New Features
