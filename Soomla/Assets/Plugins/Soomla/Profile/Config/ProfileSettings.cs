@@ -24,33 +24,33 @@ using UnityEditor;
 
 namespace Soomla.Profile
 {
-	
+
 	#if UNITY_EDITOR
 	[InitializeOnLoad]
 	#endif
 	/// <summary>
-	/// This class holds the store's configurations. 
+	/// This class holds the store's configurations.
 	/// </summary>
 	public class ProfileSettings : ISoomlaSettings
 	{
-		
+
 		#if UNITY_EDITOR
-		
+
 		static ProfileSettings instance = new ProfileSettings();
 		static ProfileSettings()
 		{
 			SoomlaEditorScript.addSettings(instance);
 		}
 
-		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iPhone, 
+		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iPhone,
 			BuildTargetGroup.WebPlayer, BuildTargetGroup.Standalone};
-		
+
 //		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
 //		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
 
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
-		
+
 //		GUIContent fbAppId = new GUIContent("FB app Id:");
 //		GUIContent fbAppNS = new GUIContent("FB app namespace:");
 
@@ -118,17 +118,17 @@ namespace Soomla.Profile
 			ReadSocialIntegrationState(socialIntegrationState);
 			AutomaticallyIntegratedDetected(socialIntegrationState);
 		}
-		
+
 		public void OnModuleGUI() {
 			IntegrationGUI();
 		}
-		
+
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.0");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.1");
 			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
 			EditorGUILayout.Space();
 		}
-		
+
 		public void OnSoomlaGUI() {
 		}
 
@@ -161,7 +161,7 @@ namespace Soomla.Profile
 				else {
 					doIntegrate = IsSocialPlatformDetected(socialPlatform);
 					toggleResult = EditorGUILayout.Toggle(socialPlatform, doIntegrate);
-					
+
 					// User changed automatic value
 					if (doIntegrate != toggleResult) {
 						doIntegrate = toggleResult;
@@ -265,7 +265,7 @@ namespace Soomla.Profile
 		private string GetSocialPlatformFlag(string socialPlatform) {
 			return "SOOMLA_" + socialPlatform.ToUpper();
 		}
-		
+
 		void DrawPlatformParams(string socialPlatform, bool isDisabled){
 			switch(socialPlatform)
 			{
@@ -285,7 +285,7 @@ namespace Soomla.Profile
 				EditorGUILayout.LabelField(twCustKey, GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
 				TwitterConsumerKey = EditorGUILayout.TextField(TwitterConsumerKey, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
-				
+
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(twCustSecret,  GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
@@ -298,9 +298,9 @@ namespace Soomla.Profile
 				break;
 			}
 		}
-		
+
 		#endif
-		
+
 		/** Profile Specific Variables **/
 
 		public static Dictionary<string, bool?> IntegrationState
@@ -332,7 +332,7 @@ namespace Soomla.Profile
 				Type fbType = Type.GetType("FB");
 				return (fbType != null);
 			}
-			
+
 			return false;
 		}
 
@@ -340,14 +340,14 @@ namespace Soomla.Profile
 		{
 			string value = string.Empty;
 			SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("SocialIntegration", out value);
-			
+
 			if (value != null) {
 				string[] savedIntegrations = value.Split(';');
 				foreach (var savedIntegration in savedIntegrations) {
 					string[] platformValue = savedIntegration.Split(',');
 					string platform = platformValue[0];
 					int state = int.Parse(platformValue[1]);
-					
+
 					bool? platformState = null;
 					if (toTarget.TryGetValue(platform, out platformState)) {
 						toTarget[platform] = (state > 0);
@@ -355,18 +355,18 @@ namespace Soomla.Profile
 				}
 			}
 		}
-		
+
 		/** FACEBOOK **/
 
 		public static string FB_APP_ID_DEFAULT = "YOUR FB APP ID";
-		
+
 		public static string FBAppId
 		{
 			get {
 				string value;
 				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppId", out value) ? value : FB_APP_ID_DEFAULT;
 			}
-			set 
+			set
 			{
 				string v;
 				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppId", out v);
@@ -379,14 +379,14 @@ namespace Soomla.Profile
 		}
 
 		public static string FB_APP_NS_DEFAULT = "YOUR FB APP ID";
-		
+
 		public static string FBAppNamespace
 		{
 			get {
 				string value;
 				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppNS", out value) ? value : FB_APP_NS_DEFAULT;
 			}
-			set 
+			set
 			{
 				string v;
 				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppNS", out v);
@@ -408,7 +408,7 @@ namespace Soomla.Profile
 				string value;
 				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GPClientId", out value) ? value : GP_CLIENT_ID_DEFAULT;
 			}
-			set 
+			set
 			{
 				string v;
 				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GPClientId", out v);
@@ -424,14 +424,14 @@ namespace Soomla.Profile
 
 		public static string TWITTER_CONSUMER_KEY_DEFAULT = "YOUR TWITTER CONSUMER KEY";
 		public static string TWITTER_CONSUMER_SECRET_DEFFAULT = "YOUR TWITTER CONSUMER SECRET";
-		
+
 		public static string TwitterConsumerKey
 		{
 			get {
 				string value;
 				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerKey", out value) ? value : TWITTER_CONSUMER_KEY_DEFAULT;
 			}
-			set 
+			set
 			{
 				string v;
 				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerKey", out v);
@@ -449,7 +449,7 @@ namespace Soomla.Profile
 				string value;
 				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerSecret", out value) ? value : TWITTER_CONSUMER_SECRET_DEFFAULT;
 			}
-			set 
+			set
 			{
 				string v;
 				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerSecret", out v);
