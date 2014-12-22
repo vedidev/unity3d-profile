@@ -245,7 +245,7 @@ namespace Soomla.Profile
 		public override void AppRequest(string message, string[] to, string extraData, string dialogTitle, AppRequestSuccess success, AppRequestFailed fail) {
 			FB.AppRequest(message,
 			              to,
-			              "", null, null,
+			              null, null, null,
 			              extraData,
 			              dialogTitle,
 			              (FBResult result) => {
