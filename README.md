@@ -78,7 +78,7 @@ Note that currently only Facebook is supported for work in Editor.
 
 1. Go over the guidelines for downloading and importing the official Facebook SDK: https://developers.facebook.com/docs/unity/getting-started/canvas    - You don't need to initialize FB. SoomlaProfile will initialize it for you.
 
-    > **NOTE:** unity3d-profile currently supports FB Unity SDK v5.1.  Make sure to use that one, support for v6.0 is in the works.
+    > **NOTE:** for unity 4.6, use FB Unity SDK v6.1.
 
 2. Create an empty folder named `Facebook` under `Assets/Plugins`
 3. Move the folder `Scripts` from `Assets/Facebook` to `Assets/Plugins/Facebook`  -  SOOMLA works from the Plugins folder so it'll be available to UnityScript devs. So you'll have to move Facebook in there as well.
