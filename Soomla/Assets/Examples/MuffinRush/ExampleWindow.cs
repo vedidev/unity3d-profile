@@ -270,13 +270,10 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tUpload;
 			GUI.skin.button.active.background = tUploadPress;
 			if(GUI.Button(new Rect(timesW(50.0f),timesH(rowsTop),timesW(212.0f),timesH(120.0f)), "")){
-				string path = "";
-#if UNITY_IOS
-				path = Application.dataPath + "/Raw" + "BTN-Upload-Normal.png";
-#elif UNITY_ANDROID
-				path = "jar:file://" + Application.dataPath + "!/assets/" + "BTN-Upload-Normal.png";
-#endif
-				SoomlaProfile.UploadImage(targetProvider, "Awesome Test App of SOOMLA Profile!", path, null, exampleReward);
+				string fileName = "soom.jpg";
+				string path = Path.Combine(Application.streamingAssetsPath, fileName);
+				byte[] bytes = File.ReadAllBytes(path);
+				SoomlaProfile.UploadImage(targetProvider, "Awesome Test App of SOOMLA Profile!", fileName, bytes, null, exampleReward);
 //				SoomlaProfile.UploadCurrentScreenShot(this, targetProvider, "Awesome Test App of SOOMLA Profile!", "This a screenshot of the current state of SOOMLA's test app on my computer.", null);
 			}
 		} else {

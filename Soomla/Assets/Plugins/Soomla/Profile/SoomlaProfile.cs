@@ -258,46 +258,25 @@ namespace Soomla.Profile
 			}
 		}
 
-//		public static void UploadImage(Provider provider, string message, string filename,
-//		                               byte[] imageBytes, int quality, Reward reward) {
-//			instance._uploadImage(provider, message, filename, imageBytes, quality, reward);
-//		}
-//
-
-		/// <summary>
-		/// Uploads an image to the user's social page on the given Provider.
-		/// Supported platforms: Facebook
-		/// 
-		/// NOTE: This operation requires a successful login.
-		/// </summary>
-		/// <param name="provider">The <c>Provider</c> the given image should be uploaded to.</param>
-		/// <param name="tex2D">Texture2D for image.</param>
-		/// <param name="fileName">Name of image file.</param>
-		/// <param name="message">Message to post with the image.</param>
-		/// <param name="payload">A string to receive when the function returns.</param>
-		/// <param name="reward">A <c>Reward</c> to give the user after a successful upload.</param>
-		public static void UploadImage(Provider provider, Texture2D tex2D, string fileName, string message, string payload="",
-		                               Reward reward = null) {
-
+		public static void UploadImage(Provider provider, string message, string fileName,
+		                               byte[] imageBytes, string payload="", Reward reward = null) {
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 				return;
-
+			
 			if (targetProvider.IsNativelyImplemented())
 			{
-				//fallback to native
-				ProfileEvents.OnSocialActionFailed(provider, 
-				                                   SocialActionType.UPLOAD_IMAGE, 
-				                                   "Image uploading is not supported with Texture for natively implemented social providers",
-				                                   userPayload);
+				string rewardId = reward != null ? reward.ID: "";
+				instance._uploadImage(provider, message, fileName, imageBytes, 
+				                      ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
-
+			
 			else 
 			{
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
-				targetProvider.UploadImage(tex2D.EncodeToPNG(), fileName, message,
-				    /* success */	() => { 
+				targetProvider.UploadImage(imageBytes, fileName, message,
+				                           /* success */	() => { 
 					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
 					if (reward != null) {
 						reward.Give();
@@ -306,42 +285,6 @@ namespace Soomla.Profile
 				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload); },
 				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, userPayload); }
 				);
-			}
-		}
-
-		// <summary>
-		// Uploads an image to the user's social page on the given Provider.
-		// Supported platforms: Facebook
-		// 
-		// NOTE: This operation requires a successful login.
-		// </summary>
-		// <param name="provider">The <c>Provider</c> the given image should be uploaded to.</param>
-		// <param name="message">Message to post with the image.</param>
-		// <param name="filePath">Path of image file.</param>
-		// <param name="payload">A string to receive when the function returns.</param>
-		// <param name="reward">A <c>Reward</c> to give the user after a successful upload.</param>
-		public static void UploadImage(Provider provider, string message, string filePath, string payload="",
-		                               Reward reward = null) {
-			
-			SocialProvider targetProvider = GetSocialProvider(provider);
-			string userPayload = (payload == null) ? "" : payload;
-			if (targetProvider == null)
-				return;
-			
-			if (targetProvider.IsNativelyImplemented())
-			{
-				//fallback to native
-				string rewardId = reward != null ? reward.ID : "";
-				instance._uploadImage(provider, message, filePath, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
-			}
-			
-			else 
-			{
-				Texture2D tex2D = new Texture2D(4, 4);
-				tex2D.LoadImage(File.ReadAllBytes(filePath));
-				string fileName = Path.GetFileName(filePath);
-
-				UploadImage(provider, tex2D, fileName, message, userPayload, reward);
 			}
 		}
 
@@ -549,7 +492,7 @@ namespace Soomla.Profile
 		                                     string caption, string description, string link,
 		                                     string pictureUrl, string payload) { }
 
-		protected virtual void _uploadImage(Provider provider, string message, string filePath, string payload) { }
+		protected virtual void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, string payload) { }
 
 		protected virtual void _getContacts(Provider provider, string payload) { }
 
@@ -589,8 +532,9 @@ namespace Soomla.Profile
 			// Read screen contents into the texture
 			tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
 			tex.Apply();
-			
-			UploadImage(provider, tex, title, message, payload, reward);
+
+			byte[] bytes = tex.EncodeToPNG();
+			UploadImage(provider, "", "", bytes, payload, reward);
 		}
 
 		/** keys when running in editor **/
