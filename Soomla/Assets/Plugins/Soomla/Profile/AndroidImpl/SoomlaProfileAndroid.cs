@@ -90,13 +90,12 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
-		protected override void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, string payload){
-//			AndroidJNI.PushLocalFrame(100);
-//			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
-//				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "uploadImage", provider.ToString(), message, fileName, payload);
-//			}
-//			AndroidJNI.PopLocalFrame(IntPtr.Zero);
-			SoomlaUtils.LogError("SoomlaProfileAndroid", "Image uploading is not supported targetting Android");
+		protected override void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload){
+			AndroidJNI.PushLocalFrame(100);
+			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "uploadImage", provider.ToString(), message, fileName, AndroidJNI.ToByteArray(imageBytes), jpegQuality, payload);
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
 		protected override void _getContacts(Provider provider, string payload){

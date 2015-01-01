@@ -82,7 +82,7 @@ namespace Soomla.Profile {
 			soomlaProfile_UpdateStory(provider.ToString(), message, name, caption, description, link, pictureUrl, payload);
 		}
 
-		protected override void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, string payload){
+		protected override void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload){
 			string base64Str = Convert.ToBase64String(imageBytes);
 			soomlaProfile_UploadImage(provider.ToString(), message, fileName, base64Str, payload);
 		}

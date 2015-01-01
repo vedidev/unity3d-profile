@@ -258,8 +258,8 @@ namespace Soomla.Profile
 			}
 		}
 
-		public static void UploadImage(Provider provider, string message, string fileName,
-		                               byte[] imageBytes, string payload="", Reward reward = null) {
+		public static void UploadImage(Provider provider, string message, string fileName, byte[] imageBytes,
+		                                int jpegQuality, string payload="", Reward reward = null) {
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
@@ -268,7 +268,7 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				string rewardId = reward != null ? reward.ID: "";
-				instance._uploadImage(provider, message, fileName, imageBytes, 
+				instance._uploadImage(provider, message, fileName, imageBytes, jpegQuality, 
 				                      ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 			
@@ -492,7 +492,7 @@ namespace Soomla.Profile
 		                                     string caption, string description, string link,
 		                                     string pictureUrl, string payload) { }
 
-		protected virtual void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, string payload) { }
+		protected virtual void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload) { }
 
 		protected virtual void _getContacts(Provider provider, string payload) { }
 
@@ -534,7 +534,7 @@ namespace Soomla.Profile
 			tex.Apply();
 
 			byte[] bytes = tex.EncodeToPNG();
-			UploadImage(provider, "", "", bytes, payload, reward);
+			UploadImage(provider, "", "", bytes, 10, payload, reward);
 		}
 
 		/** keys when running in editor **/
