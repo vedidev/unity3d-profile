@@ -105,10 +105,10 @@ namespace Soomla.Profile
 				targetProvider.Login(
 					/* success */	(UserProfile userProfile) => { 
 					StoreUserProfile(userProfile);
-					ProfileEvents.OnLoginFinished(userProfile, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
+					ProfileEvents.OnLoginFinished(userProfile, userPayload);
 				},
 				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, userPayload); },
 				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, userPayload); }
@@ -198,10 +198,10 @@ namespace Soomla.Profile
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
 				targetProvider.UpdateStatus(status,
 				    /* success */	() => {
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
 				},
 					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, userPayload); }
 				);
@@ -247,10 +247,10 @@ namespace Soomla.Profile
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
 				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
 				    /* success */	() => { 
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, userPayload);
 				},
 					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, userPayload); },
 					/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, userPayload); }
@@ -298,10 +298,10 @@ namespace Soomla.Profile
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
 				targetProvider.UploadImage(tex2D.EncodeToPNG(), fileName, message,
 				    /* success */	() => { 
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
 					if (reward != null) {
 						reward.Give();
 					}
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
 				},
 				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload); },
 				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, userPayload); }
