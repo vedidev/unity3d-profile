@@ -1,3 +1,13 @@
+### v2.0.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.1...v2.0.2)
+
+* New Features
+  * Supporting Facebook SDK v6.x
+  * Supporting new features from submodules
+
+* Fixes
+  * Moving reward handout before event sending
+
+
 ### v2.0.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v1.0...v2.0.1)
 
 * Changes
