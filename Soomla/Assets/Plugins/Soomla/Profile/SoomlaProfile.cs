@@ -533,8 +533,8 @@ namespace Soomla.Profile
 			tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
 			tex.Apply();
 
-			byte[] bytes = tex.EncodeToPNG();
-			UploadImage(provider, message, "current_screenshot", bytes, 10, payload, reward);
+			byte[] bytes = tex.EncodeToJPG();
+			UploadImage(provider, message, "current_screenshot.jpeg", bytes, 10, payload, reward);
 		}
 
 		/** keys when running in editor **/
