@@ -534,7 +534,7 @@ namespace Soomla.Profile
 			tex.Apply();
 
 			byte[] bytes = tex.EncodeToPNG();
-			UploadImage(provider, "", "", bytes, 10, payload, reward);
+			UploadImage(provider, message, "current_screenshot", bytes, 10, payload, reward);
 		}
 
 		/** keys when running in editor **/
