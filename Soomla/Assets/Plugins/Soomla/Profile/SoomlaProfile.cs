@@ -298,12 +298,12 @@ namespace Soomla.Profile
 		/// <param name="message">Message to post with the image.</param>
 		/// <param name="fileName">Name of image file with extension (jpeg/pgn).</param>
 		/// <param name="imageBytes">Image bytes.</param>
-		/// <param name="imageQuality">Image quality, number from 0 to 100. 0 meaning compress for small size, 100 meaning compress for max quality. 
+		/// <param name="jpegQuality">Image quality, number from 0 to 100. 0 meaning compress for small size, 100 meaning compress for max quality. 
 		/// Some formats, like PNG which is lossless, will ignore the quality setting
 		/// <param name="payload">A string to receive when the function returns.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful upload.</param>
 		public static void UploadImage(Provider provider, string message, string fileName, byte[] imageBytes,
-		                                int imageQuality, string payload="", Reward reward = null) {
+		                               int jpegQuality, string payload="", Reward reward = null) {
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
@@ -312,7 +312,7 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				string rewardId = reward != null ? reward.ID: "";
-				instance._uploadImage(provider, message, fileName, imageBytes, imageQuality, 
+				instance._uploadImage(provider, message, fileName, imageBytes, jpegQuality,
 				                      ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 			
