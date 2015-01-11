@@ -3,6 +3,7 @@ package com.soomla.profile.unity;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import com.soomla.SoomlaUtils;
 import com.soomla.profile.SoomlaProfile;
@@ -62,11 +63,12 @@ public class UnitySoomlaProfile {
         SoomlaProfile.getInstance().uploadImage(provider, message, filePath, payload, null);
     }
 
-    public static void uploadImage(String providerStr, String message, String fileName, byte[] imageBytes,
+    public static void uploadImage(String providerStr, String message, String fileName, String imageBase64Str,
                                    int jpegQuality, String payload) throws ProviderNotFoundException{
         Provider provider = Provider.getEnum(providerStr);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-        SoomlaProfile.getInstance().uploadImage(provider, message, fileName, bitmap, jpegQuality, payload, null);
+        byte[] decodedString = Base64.decode(imageBase64Str, Base64.DEFAULT);
+        Bitmap imageBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        SoomlaProfile.getInstance().uploadImage(provider, message, fileName, imageBitmap, jpegQuality, payload, null);
     }
 
     public static void getContacts(String providerStr, String payload) throws ProviderNotFoundException {
