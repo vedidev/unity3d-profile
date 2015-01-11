@@ -1,6 +1,8 @@
 package com.soomla.profile.unity;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.soomla.SoomlaUtils;
 import com.soomla.profile.SoomlaProfile;
@@ -13,6 +15,7 @@ import com.soomla.profile.exceptions.UserProfileNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.*;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -57,6 +60,13 @@ public class UnitySoomlaProfile {
     public static void uploadImage(String providerStr, String message, String filePath, String payload) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
         SoomlaProfile.getInstance().uploadImage(provider, message, filePath, payload, null);
+    }
+
+    public static void uploadImage(String providerStr, String message, String fileName, byte[] imageBytes,
+                                   int jpegQuality, String payload) throws ProviderNotFoundException{
+        Provider provider = Provider.getEnum(providerStr);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        SoomlaProfile.getInstance().uploadImage(provider, message, fileName, bitmap, jpegQuality, payload, null);
     }
 
     public static void getContacts(String providerStr, String payload) throws ProviderNotFoundException {

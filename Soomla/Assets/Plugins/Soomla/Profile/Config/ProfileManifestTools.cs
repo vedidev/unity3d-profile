@@ -50,6 +50,7 @@ namespace Soomla.Profile
 				SoomlaManifestTools.SetPermission("android.permission.INTERNET");
 				SoomlaManifestTools.SetPermission("android.permission.GET_ACCOUNTS");
 				SoomlaManifestTools.SetPermission("android.permission.USE_CREDENTIALS");
+				SoomlaManifestTools.SetPermission("android.permission.WRITE_EXTERNAL_STORAGE");
 				
 				//google+ activity
 				SoomlaManifestTools.AddActivity("com.soomla.profile.social.google.SoomlaGooglePlus$SoomlaGooglePlusActivity",

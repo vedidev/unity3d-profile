@@ -9,6 +9,7 @@
 #import "Reward.h"
 #import "SoomlaUtils.h"
 #import "UnityProfileEventDispatcher.h"
+#import "NSData-Base64.h"
 
 extern "C"{
 	
@@ -76,13 +77,15 @@ extern "C"{
                                                   andPayload:payloadS andReward:nil];
     }
     
-    void soomlaProfile_UploadImage(const char* sProvider, const char* message, const char* filePath, const char* payload){
+    void soomlaProfile_UploadImage(const char* sProvider, const char* message, const char* fileName, const char *imageBase64Str, const char* payload){
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         NSString* messageS = [NSString stringWithUTF8String:message];
-        NSString* filePathS = [NSString stringWithUTF8String:filePath];
+        NSString* fileNameS = [NSString stringWithUTF8String:fileName];
+        NSString* imageBase64StrS = [NSString stringWithUTF8String:imageBase64Str];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         
-        [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andFilePath:filePathS andPayload:payloadS andReward:nil];
+        NSData *imageData = [NSData dataFromBase64String:imageBase64StrS];
+        [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andImageFileName:fileNameS andImageData:imageData andPayload:payloadS andReward:nil];
     }
     
     void soomlaProfile_GetContacts(const char* sProvider, const char* payload){

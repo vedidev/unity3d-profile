@@ -15,6 +15,7 @@
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using Soomla;
 
 namespace Soomla.Profile {
 
@@ -89,10 +90,11 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
-		protected override void _uploadImage(Provider provider, string message, string filePath, string payload){
+		protected override void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload){
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "uploadImage", provider.ToString(), message, filePath, payload);
+				string base64Str = Convert.ToBase64String(imageBytes);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "uploadImage", provider.ToString(), message, fileName, base64Str, jpegQuality, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
