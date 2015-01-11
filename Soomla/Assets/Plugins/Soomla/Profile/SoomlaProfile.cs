@@ -272,20 +272,7 @@ namespace Soomla.Profile
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful upload.</param>
 		public static void UploadImage(Provider provider, string message, string fileName, Texture2D tex2D, string payload="",
 		                               Reward reward = null) {
-			byte[] imageBytes = GetImageBytesFromTexture (fileName, tex2D);
-			if (imageBytes == null){
-				string userPayload = (payload == null) ? "" : payload;
-				string errorMessage = "Unable to convert Texture2D to byte array for file: " + fileName;
-				ProfileEvents.OnSocialActionFailed(provider, 
-				                                   SocialActionType.UPLOAD_IMAGE, 
-				                                   errorMessage,
-				                                   userPayload);
-			}
-
-			else 
-			{
-				UploadImage (provider, message, fileName, GetImageBytesFromTexture (fileName, tex2D), 100, payload, reward);
-			}
+			UploadImage (provider, message, fileName, GetImageBytesFromTexture (fileName, tex2D), 100, payload, reward);
 		}
 
 		/// <summary>
@@ -575,15 +562,11 @@ namespace Soomla.Profile
 				return null;
 			}
 
-			switch (fileNameComponents[1]) {
-			case "jpeg":
-				return imageTexture.EncodeToJPG();
-			case "png":
+			string fileExtension = fileNameComponents [1];
+			if (fileExtension == "png")
 				return imageTexture.EncodeToPNG();
-			default:
-				SoomlaUtils.LogError(TAG, "(GetImageBytesFromTexture) image file extension unknown for image file " + imageFileName);
-				return null;
-			}
+			else
+				return imageTexture.EncodeToJPG();
 		}
 		
 		private static IEnumerator TakeScreenshot(Provider provider, string title, string message, string payload, Reward reward)
