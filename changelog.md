@@ -1,3 +1,12 @@
+### v2.0.3 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.2...v2.0.3)
+
+* New Features
+  * Fully supporting uploadImage for all social platforms (Facebook, Twitter and Google+)
+  * Added option for uploading image with byte array and Texture
+
+* Fixes
+  * Making profile remove the UserProfile from storage when doing Logout
+
 ### v2.0.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.1...v2.0.2)
 
 * New Features
