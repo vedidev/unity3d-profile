@@ -134,6 +134,15 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
+		protected override void _removeUserProfile(UserProfile userProfile) {
+			AndroidJNI.PushLocalFrame(100);
+			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "removeUserProfile",
+				                                 userProfile.toJSONObject().ToString());
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
+
 		protected override void _openAppRatingPage() {
 			AndroidJNI.PushLocalFrame(100);
 			using (AndroidJavaClass unityActivityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) {

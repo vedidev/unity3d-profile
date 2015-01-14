@@ -90,6 +90,14 @@ public class UnitySoomlaProfile {
         UserProfileStorage.setUserProfile(userProfile);
     }
 
+    public static void removeUserProfile(String userJSON)
+            throws ProviderNotFoundException, JSONException {
+        JSONObject jsonObject = new JSONObject(userJSON);
+        final UserProfile userProfile = new UserProfile(jsonObject);
+
+        UserProfileStorage.removeUserProfile(userProfile);
+    }
+
     public static void openAppRatingPage(Activity activity) {
         SoomlaProfile.getInstance().openAppRatingPage(activity.getApplicationContext());
     }

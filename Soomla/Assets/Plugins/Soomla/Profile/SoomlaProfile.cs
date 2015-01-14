@@ -140,7 +140,13 @@ namespace Soomla.Profile
 			{
 				ProfileEvents.OnLogoutStarted(provider);
 				targetProvider.Logout(
-					/* success */	() => { ProfileEvents.OnLogoutFinished(provider); },
+					/* success */	() => { 
+					UserProfile userProfile = GetStoredUserProfile(provider);
+					if (userProfile != null) {
+						RemoveUserProfile(userProfile);
+					}
+					ProfileEvents.OnLogoutFinished(provider); 
+				},
 					/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
 				);
 			}
@@ -446,6 +452,16 @@ namespace Soomla.Profile
 		}
 
 		/// <summary>
+		/// Removes the given user profile in the relevant provider (contained internally in the UserProfile).
+		/// 
+		/// NOTE: This operation requires a successful login.
+		/// </summary>
+		/// <param name="userProfile">User profile to store.</param>
+		public static void RemoveUserProfile (UserProfile userProfile) {
+			instance._removeUserProfile (userProfile);
+		}
+
+		/// <summary>
 		/// Opens the app rating page.
 		/// 
 		/// NOTE: This operation requires a successful login.
@@ -508,6 +524,13 @@ namespace Soomla.Profile
 			if (notify) {
 				ProfileEvents.OnUserProfileUpdated(userProfile);
 			}
+			#endif
+		}
+
+		protected virtual void _removeUserProfile(UserProfile userProfile) {
+			#if UNITY_EDITOR
+			string key = keyUserProfile(userProfile.Provider);
+			PlayerPrefs.DeleteKey(key);
 			#endif
 		}
 

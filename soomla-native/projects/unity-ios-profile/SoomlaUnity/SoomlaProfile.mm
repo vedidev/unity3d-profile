@@ -138,6 +138,13 @@ extern "C"{
         UserProfile* userProfile = [[UserProfile alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:userProfileJson]];
         [UserProfileStorage setUserProfile:userProfile andNotify:notify];
 	}
+    
+    void soomlaProfile_RemoveUserProfile(const char* json) {
+        NSLog(@"SOOMLA/UNITY soomlaProfile_RemoveUserProfile");
+        NSString* userProfileJson = [NSString stringWithUTF8String:json];
+        UserProfile* userProfile = [[UserProfile alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:userProfileJson]];
+        [UserProfileStorage removeUserProfile:userProfile];
+    }
 	   
     void soomlaProfile_OpenAppRatingPage() {
         [[SoomlaProfile getInstance] openAppRatingPage];

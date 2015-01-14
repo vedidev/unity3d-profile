@@ -221,13 +221,13 @@ namespace Soomla.Profile
 				if (paths != null) {
 					if (remove) {
 						//TODO: remove without hurting other components!
-//						foreach (var pathEntry in paths) {
-//							//maybe someone else needs google play services...
-//							if (!pathEntry.Value.Contains("google-play-services_lib") ){
-//								FileUtil.DeleteFileOrDirectory(pluginsRootPath + pathEntry.Value);
-//								FileUtil.DeleteFileOrDirectory(pluginsRootPath + pathEntry.Value + ".meta");
-//							}
-//						}
+						foreach (var pathEntry in paths) {
+							//maybe someone else needs google play services...
+							if (!pathEntry.Value.Contains("google-play-services_lib") ){
+								FileUtil.DeleteFileOrDirectory(pluginsRootPath + pathEntry.Value);
+								FileUtil.DeleteFileOrDirectory(pluginsRootPath + pathEntry.Value + ".meta");
+							}
+						}
 					} else {
 						foreach (var pathEntry in paths) {
 							FileUtil.CopyFileOrDirectory(compilationsRootPath + pathEntry.Key,

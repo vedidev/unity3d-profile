@@ -52,6 +52,8 @@ namespace Soomla.Profile {
 		private static extern int soomlaProfile_GetStoredUserProfile(string provider, out IntPtr json);
 		[DllImport ("__Internal")]
 		private static extern int soomlaProfile_SetStoredUserProfile(string userProfileJson, bool notify);
+		[DllImport ("__Internal")]
+		private static extern int soomlaProfile_RemoveUserProfile(string userProfileJson);
 
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_OpenAppRatingPage();
@@ -106,6 +108,10 @@ namespace Soomla.Profile {
 
 		protected override void _storeUserProfile(UserProfile userProfile, bool notify) {
 			soomlaProfile_SetStoredUserProfile(userProfile.toJSONObject().ToString(), notify);
+		}
+
+		protected override void _removeUserProfile(UserProfile userProfile) {
+			soomlaProfile_RemoveUserProfile(userProfile.toJSONObject().ToString());
 		}
 
 		protected override void _openAppRatingPage() {
