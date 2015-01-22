@@ -30,6 +30,7 @@ namespace Soomla.Profile
 	public class FBSocialProvider : SocialProvider
 	{
 		private static string TAG = "SOOMLA FBSocialProvider";
+		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
 
 		/// <summary>
 		/// Constructor. Initializes the Facebook SDK.
@@ -213,10 +214,11 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
+		/// <param name="pageNumber">The contacts' page number to get</param>
 		/// <param name="success">Callback function that is called if the contacts were fetched successfully.</param>
 		/// <param name="fail">Callback function that is called if fetching contacts failed.</param>
-		public override void GetContacts(ContactsSuccess success, ContactsFailed fail) {
-			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name",
+		public override void GetContacts(int pageNumber, ContactsSuccess success, ContactsFailed fail) {
+			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * pageNumber,
 			        Facebook.HttpMethod.GET,
 			        (FBResult result) => {
 						if (result.Error != null) {
@@ -227,7 +229,17 @@ namespace Soomla.Profile
 							SoomlaUtils.LogDebug(TAG, "GetContactsCallback[result.Text]: "+result.Text);
 							SoomlaUtils.LogDebug(TAG, "GetContactsCallback[result.Texture]: "+result.Texture);
 							JSONObject jsonContacts = new JSONObject(result.Text);
-							success(UserProfilesFromFBJsonObjs(jsonContacts["data"].list));
+							
+							SocialPageData<UserProfile> resultData = new SocialPageData<UserProfile>(); 
+							resultData.PageData = UserProfilesFromFBJsonObjs(jsonContacts["data"].list);
+							resultData.PageNumber = pageNumber;
+
+							JSONObject paging = jsonContacts["paging"];
+							if (paging != null) {
+								resultData.HasMore = (paging["next"] != null);
+							}
+
+							success(resultData);
 						}
 					});
 		}

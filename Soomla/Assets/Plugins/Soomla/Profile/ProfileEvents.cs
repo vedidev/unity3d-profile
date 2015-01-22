@@ -333,7 +333,7 @@ namespace Soomla.Profile {
 
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
-			ProfileEvents.OnGetContactsStarted (provider, ProfilePayload.GetUserPayload (payloadJSON));
+			ProfileEvents.OnGetContactsStarted (provider, 0, ProfilePayload.GetUserPayload (payloadJSON));
 		}
 
 		/// <summary>
@@ -357,8 +357,13 @@ namespace Soomla.Profile {
 			foreach (JSONObject userProfileJson in userProfilesArray.list) {
 				userProfiles.Add(new UserProfile(userProfileJson));
 			}
+
+			SocialPageData<UserProfile> data = new SocialPageData<UserProfile>();
+			data.PageData = userProfiles;
+			data.PageNumber = 0;
+			data.HasMore = false;
 				                
-			ProfileEvents.OnGetContactsFinished (provider, userProfiles, ProfilePayload.GetUserPayload(payloadJSON));
+			ProfileEvents.OnGetContactsFinished (provider, data, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
 		/// <summary>
@@ -378,7 +383,7 @@ namespace Soomla.Profile {
 
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
-			ProfileEvents.OnGetContactsFailed (provider, errorMessage, ProfilePayload.GetUserPayload(payloadJSON));
+			ProfileEvents.OnGetContactsFailed (provider, 0, errorMessage, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
 		/// <summary>
@@ -470,11 +475,11 @@ namespace Soomla.Profile {
 
 		public static Action<Provider, SocialActionType, string> OnSocialActionCancelled = delegate {};
 
-		public static Action<Provider, string, string> OnGetContactsFailed = delegate {};
+		public static Action<Provider, int, string, string> OnGetContactsFailed = delegate {};
 		
-		public static Action<Provider, List<UserProfile>, string> OnGetContactsFinished = delegate {};
+		public static Action<Provider, SocialPageData<UserProfile>, string> OnGetContactsFinished = delegate {};
 		
-		public static Action<Provider, string> OnGetContactsStarted = delegate {};
+		public static Action<Provider, int, string> OnGetContactsStarted = delegate {};
 
 		public static Action<Provider, string> OnGetFeedFailed = delegate {};
 		
@@ -487,7 +492,6 @@ namespace Soomla.Profile {
 		public static Action<Provider, string> OnAddAppRequestFinished = delegate {};
 
 		public static Action<Provider, string> OnAddAppRequestFailed = delegate {};
-
 
 		public class ProfileEventPusher {
 

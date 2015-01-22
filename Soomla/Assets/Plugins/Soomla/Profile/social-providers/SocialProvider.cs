@@ -31,7 +31,7 @@ namespace Soomla.Profile
 		public delegate void LogoutFailed(string message);
 		public delegate void LogoutSuccess();
 		public delegate void ContactsFailed(string message);
-		public delegate void ContactsSuccess(List<UserProfile> userProfiles);
+		public delegate void ContactsSuccess(SocialPageData<UserProfile> contactsData);
 		public delegate void UserProfileFailed(string message);
 		public delegate void UserProfileSuccess(UserProfile userProfile);
 		public delegate void SocialActionFailed(string message);
@@ -41,7 +41,6 @@ namespace Soomla.Profile
 		public delegate void AppRequestFailed(string message);
 		//		public delegate void FeedFailed(string message);
 		//		public delegate void FeedSuccess(List<String> feeds);
-
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStatus"/>
@@ -62,7 +61,7 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
-		public abstract void GetContacts(ContactsSuccess success, ContactsFailed fail);
+		public abstract void GetContacts(int pageNumber, ContactsSuccess success, ContactsFailed fail);
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.Logout"/>
@@ -93,7 +92,6 @@ namespace Soomla.Profile
 		//		public abstract void GetFeed(FeedSuccess success, FeedFailed fail);
 
 		public abstract bool IsNativelyImplemented();
-
 	}
 }
 

@@ -350,8 +350,9 @@ namespace Soomla.Profile
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The <c>Provider</c> to fetch contacts from.</param>
+		/// <param name="pageNumber">The contacts' page number to get.</param>
 		/// <param name="payload">A string to receive when the function returns.</param>
-		public static void GetContacts(Provider provider, string payload="") {
+		public static void GetContacts(Provider provider, int pageNumber = 0, string payload="") {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			string userPayload = (payload == null) ? "" : payload;
@@ -361,17 +362,18 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
+				//TODO: add pageNumber here when implemented natively
 				instance._getContacts(provider, ProfilePayload.ToJSONObj(userPayload).ToString());
 			}
 
 			else 
 			{
-				ProfileEvents.OnGetContactsStarted(provider, userPayload);
-				targetProvider.GetContacts(
-					/* success */	(List<UserProfile> profiles) => { 
-					ProfileEvents.OnGetContactsFinished(provider, profiles, userPayload);
+				ProfileEvents.OnGetContactsStarted(provider, pageNumber, userPayload);
+				targetProvider.GetContacts(pageNumber,
+					/* success */	(SocialPageData<UserProfile> contactsData) => { 
+					ProfileEvents.OnGetContactsFinished(provider, contactsData, userPayload);
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, userPayload); }
+				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, pageNumber, message, userPayload); }
 				);
 			}
 		}

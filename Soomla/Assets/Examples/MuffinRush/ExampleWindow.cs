@@ -129,10 +129,14 @@ public class ExampleWindow : MonoBehaviour {
 			SoomlaProfile.GetContacts(targetProvider);
 		};
 		
-		ProfileEvents.OnGetContactsFinished += (Provider provider, List<UserProfile> profiles, string payload) => {
-			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "get contacts for: " + profiles.Count);
-			foreach (var profile in profiles) {
+		ProfileEvents.OnGetContactsFinished += (Provider provider, SocialPageData<UserProfile> contactsData, string payload) => {
+			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "get contacts for: " + contactsData.PageData.Count + " page: " + contactsData.PageNumber + " More? " + contactsData.HasMore);
+			foreach (var profile in contactsData.PageData) {
 				Soomla.SoomlaUtils.LogDebug("ExampleWindow", "Contact: " + profile.toJSONObject().print());
+			}
+
+			if (contactsData.HasMore) {
+				SoomlaProfile.GetContacts(targetProvider, contactsData.PageNumber + 1);
 			}
 		};
 
