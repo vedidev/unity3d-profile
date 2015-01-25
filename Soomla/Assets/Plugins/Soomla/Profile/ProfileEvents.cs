@@ -493,6 +493,14 @@ namespace Soomla.Profile {
 
 		public static Action<Provider, string> OnAddAppRequestFailed = delegate {};
 
+		public static Action<Provider, string> OnInviteStarted = delegate {};
+
+		public static Action<Provider, string, List<string>, string> OnInviteFinished = delegate {};
+
+		public static Action<Provider, string, string> OnInviteFailed = delegate {};
+
+		public static Action<Provider, string> OnInviteCancelled = delegate {};
+
 		public class ProfileEventPusher {
 
 			/// <summary>
@@ -510,6 +518,13 @@ namespace Soomla.Profile {
 				ProfileEvents.OnSocialActionFailed += _pushEventSocialActionFailed;
 				ProfileEvents.OnSocialActionFinished += _pushEventSocialActionFinished;
 				ProfileEvents.OnSocialActionStarted += _pushEventSocialActionStarted;
+				ProfileEvents.OnGetContactsStarted += _pushEventGetContactsStarted;
+				ProfileEvents.OnGetContactsFinished += _pushEventGetContactsFinished;
+				ProfileEvents.OnGetContactsFailed += _pushEventGetContactsFailed;
+				ProfileEvents.OnInviteStarted += _pushEventInviteStarted;
+				ProfileEvents.OnInviteFinished += _pushEventInviteFinished;
+				ProfileEvents.OnInviteFailed += _pushEventInviteFailed;
+				ProfileEvents.OnInviteCancelled += _pushEventInviteCancelled;
 			}
 
 			// Event pushing back to native (when using FB Unity SDK)
@@ -524,6 +539,13 @@ namespace Soomla.Profile {
 			protected virtual void _pushEventSocialActionFinished(Provider provider, SocialActionType actionType, string payload){}
 			protected virtual void _pushEventSocialActionCancelled(Provider provider, SocialActionType actionType, string payload){}
 			protected virtual void _pushEventSocialActionFailed(Provider provider, SocialActionType actionType, string message, string payload){}
+			protected virtual void _pushEventGetContactsStarted(Provider provider, int pageNumber, string payload){}
+			protected virtual void _pushEventGetContactsFinished(Provider provider, SocialPageData<UserProfile> contactsPage, string payload){}
+			protected virtual void _pushEventGetContactsFailed(Provider provider, int pageNumber, string message, string payload){}
+			protected virtual void _pushEventInviteStarted(Provider provider, string payload){}
+			protected virtual void _pushEventInviteFinished(Provider provider, string requestId, List<string> invitedIds, string payload){}
+			protected virtual void _pushEventInviteFailed(Provider provider, string message, string payload){}
+			protected virtual void _pushEventInviteCancelled(Provider provider, string payload){}
 		}
 	}
 }

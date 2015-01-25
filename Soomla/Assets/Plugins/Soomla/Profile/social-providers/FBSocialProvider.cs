@@ -244,6 +244,41 @@ namespace Soomla.Profile
 					});
 		}
 
+		public override void Invite(string inviteMessage, string dialogTitle, InviteSuccess success, InviteFailed fail, InviteCancelled cancel)
+		{
+			FB.AppRequest(inviteMessage, null, null, null, null, "", dialogTitle, 
+			              (FBResult result) => {
+				if (result.Error != null) {
+					SoomlaUtils.LogError(TAG, "Invite[result.Error]: "+result.Error);
+					fail(result.Error);
+				}
+				else {
+					SoomlaUtils.LogDebug(TAG, "Invite[result.Text]: "+result.Text);
+
+					JSONObject jsonResponse = new JSONObject(result.Text);
+					if (jsonResponse.HasField("cancelled")) {
+						bool cancelled = jsonResponse["cancelled"].b;
+						if (cancelled) {
+							cancel();
+							return;
+						}
+					}
+
+					if (jsonResponse.HasField("to")) {
+						List<JSONObject> jsonRecipinets = jsonResponse["to"].list;
+						List<string> invitedIds = new List<string>();
+						foreach (JSONObject o in jsonRecipinets) {
+							invitedIds.Add(o.str);
+						}
+						success(jsonResponse["request"].str, invitedIds);
+					}
+					else {
+						fail("Unable to send invite");
+					}
+				}
+			});
+		}
+
 		/// <summary>
 		/// A wrapper function that calls <c>AppRequest</c> from Facebook's API: "Prompts the user to  
 		/// send app requests, short messages between users."

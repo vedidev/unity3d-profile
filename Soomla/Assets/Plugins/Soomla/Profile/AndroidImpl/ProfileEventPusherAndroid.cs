@@ -15,9 +15,11 @@
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Soomla.Profile {
 
+	//TODO: add invite push
 	public class ProfileEventPusherAndroid : Soomla.Profile.ProfileEvents.ProfileEventPusher {
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -113,6 +115,42 @@ namespace Soomla.Profile {
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
 				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventSocialActionFailed", 
 				                                 provider.ToString(), actionType.ToString(), message, payload);
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
+
+		protected override void _pushEventGetContactsStarted (Provider provider, int pageNumber, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			AndroidJNI.PushLocalFrame(100);
+			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventGetContactsStarted", 
+				                                 provider.ToString(), payload);
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
+
+		protected override void _pushEventGetContactsFinished (Provider provider, SocialPageData<UserProfile> contactsPage, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			List<JSONObject> profiles = new List<JSONObject>();
+			foreach (var profile in contactsPage.PageData) {
+				profiles.Add(profile.toJSONObject());
+			}
+			JSONObject contacts = new JSONObject(profiles.ToArray());
+
+			AndroidJNI.PushLocalFrame(100);
+			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventGetContactsFinished", 
+				                                 provider.ToString(), contacts.ToString(), payload);
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
+
+		protected override void _pushEventGetContactsFailed (Provider provider, int pageNumber, string message, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			AndroidJNI.PushLocalFrame(100);
+			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventGetContactsFailed", 
+				                                 provider.ToString(), message, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}

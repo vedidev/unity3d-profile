@@ -58,6 +58,11 @@ namespace Soomla.Profile
 		public override bool IsLoggedIn() {
 			return false;
 		}
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.Invite"/>
+		/// </summary>
+		public override void Invite (string inviteMessage, string dialogTitle, InviteSuccess success, InviteFailed fail, InviteCancelled cancel) {}
 		
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.AppRequest"/>

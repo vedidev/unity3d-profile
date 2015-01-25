@@ -395,4 +395,31 @@ public class ProfileEventHandler {
         ISocialProvider.SocialActionType socialActionType = ISocialProvider.SocialActionType.getEnum(actionTypeStr);
         BusProvider.getInstance().post(new SocialActionFailedEvent(provider, socialActionType, message, payload));
     }
+
+    public static void pushEventGetContactsStarted(String providerStr, String payload) {
+        IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
+        BusProvider.getInstance().post(new GetContactsStartedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, payload));
+    }
+
+    public static void pushEventGetContactsFinished(String providerStr, String userProfilesJSON, String payload) {
+        IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
+        List<UserProfile> contacts = new ArrayList<UserProfile>();
+        try {
+            JSONArray jsonArray = new JSONArray(userProfilesJSON);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject userProfileJSON = jsonArray.getJSONObject(i);
+                UserProfile profile = new UserProfile(userProfileJSON);
+                contacts.add(profile);
+            }
+        } catch (JSONException e) {
+            SoomlaUtils.LogError(TAG, "(pushEventGetContactsFinished) Unable to parse user profiles from Unity " + userProfilesJSON +
+                    "reason: " + e.getLocalizedMessage());
+        }
+        BusProvider.getInstance().post(new GetContactsFinishedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, contacts, payload));
+    }
+
+    public static void pushEventGetContactsFailed(String providerStr, String message, String payload) {
+        IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
+        BusProvider.getInstance().post(new GetContactsFailedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, message, payload));
+    }
 }

@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 
 namespace Soomla.Profile {
 
+	//TODO: add invite push
 	public class ProfileEventPusherIOS : Soomla.Profile.ProfileEvents.ProfileEventPusher {
 #if UNITY_IOS && !UNITY_EDITOR
 
@@ -45,6 +46,12 @@ namespace Soomla.Profile {
 		private static extern void soomlaProfile_PushEventSocialActionCancelled(string provider, string actionType, string payload);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventSocialActionFailed(string provider, string actionType, string message, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_PushEventGetContactsStarted(string provider, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_PushEventGetContactsFinished(string provider, string userProfilesJson, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_PushEventGetContactsFailed(string provider, string message, string payload);
 
 
 		// event pushing back to native (when using FB Unity SDK)
@@ -93,7 +100,24 @@ namespace Soomla.Profile {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventSocialActionFailed(provider.ToString(), actionType.ToString(), message, payload);
 		}
+		protected override void _pushEventGetContactsStarted (Provider provider, int pageNumber, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			soomlaProfile_PushEventGetContactsStarted(provider.ToString(), payload);
+		}
+		protected override void _pushEventGetContactsFinished (Provider provider, SocialPageData<UserProfile> contactsPage, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			List<JSONObject> profiles = new List<JSONObject>();
+			foreach (var profile in contactsPage.PageData) {
+				profiles.Add(profile.toJSONObject());
+			}
+			JSONObject contacts = new JSONObject(profiles.ToArray());
 
+			soomlaProfile_PushEventGetContactsFinished(provider.ToString(), contacts.ToString(), payload);
+		}
+		protected override void _pushEventGetContactsFailed (Provider provider, int pageNumber, string message, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			soomlaProfile_PushEventGetContactsFailed(provider.ToString(), message, payload);
+		}
 #endif
 	}
 }

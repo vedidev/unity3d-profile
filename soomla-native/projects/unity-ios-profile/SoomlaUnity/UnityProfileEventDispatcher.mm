@@ -86,16 +86,40 @@ extern "C"{
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         [ProfileEventHandling postSocialActionFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
     }
-    
-    //    void pushEventGetContactsStarted(enum SocialActionType socialActionType) {
-    //
-    //    }
-    //    void pushEventGetContactsFinished(enum SocialActionType socialActionType, const char** contacts) {
-    //
-    //    }
-    //    void pushEventGetContactsFailed(enum SocialActionType socialActionType, const char* message) {
-    //
-    //    }
+    void soomlaProfile_PushEventGetContactsStarted(const char* sProvider, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        SocialActionType socialActionType = SocialActionType::GET_CONTACTS;
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postGetContactsStarted:provider withType:socialActionType withPayload:payloadS];
+    }
+    void soomlaProfile_PushEventGetContactsFinished(const char* sProvider, const char* sUserProfilesJson, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        SocialActionType socialActionType = SocialActionType::GET_CONTACTS;
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        
+        NSMutableArray *contacts = [NSMutableArray array];
+        NSMutableArray *contactsDictArray = [SoomlaUtils jsonStringToArray:[NSString stringWithUTF8String:sUserProfilesJson]];
+        if (contactsDictArray) {
+            for (NSDictionary *contactDict in contactsDictArray) {
+                UserProfile *contactProfile = [[UserProfile alloc] initWithDictionary:contactDict];
+                if (contactProfile) {
+                    [contacts addObject:contactProfile];
+                }
+            }
+        }
+        
+        [ProfileEventHandling postGetContactsFinished:provider withType:socialActionType withContacts:contacts withPayload:payloadS];
+    }
+    void soomlaProfile_PushEventGetContactsFailed(const char* sProvider, const char* sMessage, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString *message = [NSString stringWithUTF8String:sMessage];
+        SocialActionType socialActionType = SocialActionType::GET_CONTACTS;
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postGetContactsFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
+    }
 
 }
 

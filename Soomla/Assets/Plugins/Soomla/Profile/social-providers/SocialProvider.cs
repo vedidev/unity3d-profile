@@ -39,6 +39,9 @@ namespace Soomla.Profile
 		public delegate void SocialActionCancel();
 		public delegate void AppRequestSuccess(string requestId, List<string> recipients);
 		public delegate void AppRequestFailed(string message);
+		public delegate void InviteSuccess(string requestId, List<string> invitedIds);
+		public delegate void InviteFailed(string message);
+		public delegate void InviteCancelled();
 		//		public delegate void FeedFailed(string message);
 		//		public delegate void FeedSuccess(List<String> feeds);
 
@@ -77,6 +80,11 @@ namespace Soomla.Profile
 		/// See docs in <see cref="SoomlaProfile.IsLoggedIn"/>
 		/// </summary>
 		public abstract bool IsLoggedIn();
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.Invite"/>
+		/// </summary>
+		public abstract void Invite(string inviteMessage, string dialogTitle, InviteSuccess success, InviteFailed fail, InviteCancelled cancel);
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.AppRequest"/>

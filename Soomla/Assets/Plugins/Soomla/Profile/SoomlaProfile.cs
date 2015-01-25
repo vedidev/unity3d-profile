@@ -378,6 +378,41 @@ namespace Soomla.Profile
 			}
 		}
 
+		public static void Invite(Provider provider, string inviteMessage, string dialogTitle = null, string payload="", Reward reward = null) {
+
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			string userPayload = (payload == null) ? "" : payload;
+			if (targetProvider == null)
+				return;
+			
+			if (targetProvider.IsNativelyImplemented())
+			{
+				//fallback to native
+				string rewardId = reward != null ? reward.ID: "";
+				//TODO: add invite implementation when implemented in native
+				instance._invite(provider, inviteMessage, dialogTitle, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
+			}
+			
+			else 
+			{
+				ProfileEvents.OnInviteStarted(provider, userPayload);
+				targetProvider.Invite(inviteMessage, dialogTitle,
+				                      /* success */ (string requestId, List<string> invitedIds) => {
+
+					if (reward != null) {
+						reward.Give();
+					}
+					ProfileEvents.OnInviteFinished(provider, requestId, invitedIds, userPayload);
+				},
+									     /* fail */ (string message) => {  
+					ProfileEvents.OnInviteFailed(provider, message, userPayload);
+				},
+										/* cancel */ () => {  
+					ProfileEvents.OnInviteCancelled(provider, userPayload);
+				});
+			}
+		}
+
 		// TODO: this is irrelevant for now. Will be updated soon.
 //		public static void AddAppRequest(Provider provider, string message, string[] to, string extraData, string dialogTitle) {
 //			providers[provider].AppRequest(message, to, extraData, dialogTitle,
@@ -502,6 +537,8 @@ namespace Soomla.Profile
 		protected virtual void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload) { }
 		
 		protected virtual void _getContacts(Provider provider, string payload) { }
+
+		protected virtual void _invite(Provider provider, string inviteMessage, string dialogTitle, string payload) { }
 		
 		protected virtual void _openAppRatingPage() { }
 		
