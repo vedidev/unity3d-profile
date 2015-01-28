@@ -43,6 +43,23 @@ namespace Soomla.Profile
 			return name;
 		}
 
+		//// <summary>
+		/// Converts this provider into an int. 
+		/// </summary>
+		/// <returns>A int representation of the current <c>Provider</c>.</returns>
+		public int toInt(){
+			switch(name) {
+			case("facebook"):
+				return 0;
+			case("google"):
+				return 2;
+			case("twitter"):
+				return 5;
+			default:
+				return -1;
+			}
+		}
+
 		/// <summary>
 		/// Converts the given string into a <c>Provider</c>
 		/// </summary>
