@@ -1,3 +1,12 @@
+### v2.0.4 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.3...v2.0.4)
+
+* New Features
+  * Ability to page contacts (supported in Facebook only)
+  * Ability to invite friends (supported in Facebook only)
+
+* Fixes
+  * Pushing get contacts events to native
+
 ### v2.0.3 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.2...v2.0.3)
 
 * New Features
