@@ -223,6 +223,24 @@ public class ProfileEventHandler {
     }
 
     @Subscribe
+    public void onSocialActionFailed(final SocialActionFailedEvent socialActionFailedEvent){
+        IProvider.Provider provider = socialActionFailedEvent.Provider;
+        ISocialProvider.SocialActionType socialActionType = socialActionFailedEvent.SocialActionType;
+        String message = socialActionFailedEvent.ErrorDescription;
+        String payload = socialActionFailedEvent.Payload;
+        JSONObject eventJSON = new JSONObject();
+        try {
+            eventJSON.put("provider", provider.getValue());
+            eventJSON.put("socialActionType", socialActionType.getValue());
+            eventJSON.put("message", message);
+            eventJSON.put("payload", payload);
+            UnitySendFilteredMessage(eventJSON.toString(), "onSocialActionFailed", provider.getValue());
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Subscribe
     public void onGetContactsStarted(final GetContactsStartedEvent getContactsStartedEvent){
         IProvider.Provider provider = getContactsStartedEvent.Provider;
         String payload = getContactsStartedEvent.Payload;
