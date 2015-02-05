@@ -334,6 +334,8 @@ namespace Soomla.Profile
 		private void OnInitComplete()
 		{
 			SoomlaUtils.LogDebug(TAG, "FB.Init completed: Is user logged in? " + FB.IsLoggedIn);
+
+			SoomlaProfile.ProviderBecameReady(this);
 		}
 
 		private void OnHideUnity(bool isGameShown)

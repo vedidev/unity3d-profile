@@ -21,6 +21,10 @@ namespace Soomla.Profile
 	{
 		private static string TAG = "SOOMLA GPSocialProvider";
 
+		public GPSocialProvider () {
+			SoomlaProfile.ProviderBecameReady(this);
+		}
+
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStatus"/>
 		/// </summary>

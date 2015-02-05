@@ -52,6 +52,8 @@ namespace Soomla.Profile
 		/// </summary>
 		static Dictionary<Provider, SocialProvider> providers = new Dictionary<Provider, SocialProvider>();
 
+		static private int unreadyProviders = 0;
+
 		/// <summary>
 		/// Initializes the SOOMLA Profile Module.
 		/// 
@@ -59,19 +61,22 @@ namespace Soomla.Profile
 		/// </summary>
 		public static void Initialize() {
 			instance._initialize(GetCustomParamsJson()); //add parameters
+
 #if SOOMLA_FACEBOOK
+			unreadyProviders++;
 			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
 #endif
 #if SOOMLA_GOOGLE
+			unreadyProviders++;
 			providers.Add(Provider.GOOGLE, new GPSocialProvider());
 #endif
 #if SOOMLA_TWITTER
-			SoomlaUtils.LogDebug (TAG, "Adding TWITTER provider!!!!!");
+			unreadyProviders++;
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
 
 #if UNITY_EDITOR
-			ProfileEvents.OnSoomlaProfileInitialized();
+			TryFireProfileInitialized();
 #endif
 		}
 
@@ -516,6 +521,26 @@ namespace Soomla.Profile
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// Checks if all the social providers finished their initialization
+		/// </summary>
+		/// <returns><c>true</c>, if all providers are initialized, <c>false</c> otherwise.</returns>
+		internal static bool AllProvidersInitialized() {
+			return (unreadyProviders == 0);
+		}
+
+		internal static void ProviderBecameReady(SocialProvider socialProvider) {
+			--unreadyProviders;
+
+			TryFireProfileInitialized();
+		}
+
+		internal static void TryFireProfileInitialized () {
+			if (AllProvidersInitialized()) {
+				ProfileEvents.OnSoomlaProfileInitialized();
+			}
 		}
 
 		/** PROTECTED & PRIVATE FUNCTIONS **/

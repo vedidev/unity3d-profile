@@ -64,7 +64,7 @@ namespace Soomla.Profile {
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 			#elif UNITY_IOS && !UNITY_EDITOR
-			// On iOS, this is initialized inside the bridge library when we call "soomlaStore_Init" in SoomlaStoreIOS
+			// On iOS, this is initialized inside the bridge library when we call "soomlaProfile_Initialize" in SoomlaProfileIOS
 			#endif
 		}
 
@@ -75,7 +75,8 @@ namespace Soomla.Profile {
 		public void onSoomlaProfileInitialized()
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onSoomlaProfileInitialized");
-			ProfileEvents.OnSoomlaProfileInitialized ();
+
+			SoomlaProfile.TryFireProfileInitialized();
 		}
 
 		/// <summary>
