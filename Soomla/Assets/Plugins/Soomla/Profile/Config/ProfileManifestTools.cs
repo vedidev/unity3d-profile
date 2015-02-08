@@ -44,7 +44,7 @@ namespace Soomla.Profile
 			bool value = ProfileSettings.IntegrationState.TryGetValue ("google", out enabled);
 
 			//check if google+ is enabled in settings
-			if (value && enabled.Value)
+			if (value && (enabled != null) && enabled.Value)
 			{
 				//google+ permissions
 				SoomlaManifestTools.SetPermission("android.permission.INTERNET");
@@ -80,7 +80,7 @@ namespace Soomla.Profile
 			bool value = ProfileSettings.IntegrationState.TryGetValue ("twitter", out enabled);
 
 			//check if twitter is enabled in settings
-			if (value && enabled.Value)
+			if (value && (enabled != null) && enabled.Value)
 			{
 				//twitter activity
 				SoomlaManifestTools.AddActivity("com.soomla.profile.social.twitter.SoomlaTwitter$SoomlaTwitterActivity",

@@ -1,3 +1,10 @@
+### v2.0.5 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.4...v2.0.5)
+
+* Fixes
+  * Making profile initialize event wait for FB to complete initialization
+  * Adding missing social action failed event from native android
+  * Login cancelled will be fired when going back from Twitter login web view (android)
+
 ### v2.0.4 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.3...v2.0.4)
 
 * New Features

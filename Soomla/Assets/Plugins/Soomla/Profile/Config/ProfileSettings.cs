@@ -124,7 +124,7 @@ namespace Soomla.Profile
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.4");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.5");
 			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
 			EditorGUILayout.Space();
 		}
@@ -352,6 +352,13 @@ namespace Soomla.Profile
 					if (toTarget.TryGetValue(platform, out platformState)) {
 						toTarget[platform] = (state > 0);
 					}
+				}
+			}
+			else {
+				Dictionary<string, bool?>.KeyCollection keys = toTarget.Keys;
+				for (int i = 0; i < keys.Count; i++) {
+					string key = keys.ElementAt(i);
+					toTarget[key] = null;
 				}
 			}
 		}
