@@ -74,6 +74,8 @@ And that's it ! You have social capabilities for your game.
 **unity3d-profile** is structured to support multiple social networks, and currently supports Facebook, Twitter and Google+.
 Note that currently only Facebook is supported for work in Editor.
 
+> __IMPORTANT__: When upgrading this module it is important that you uncheck and then re-check your social networks, to make the new libraries copy over to your project
+
 ### Facebook
 
 1. Go over the guidelines for downloading and importing the official Facebook SDK: https://developers.facebook.com/docs/unity/getting-started/canvas    - You don't need to initialize FB. SoomlaProfile will initialize it for you.
