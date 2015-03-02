@@ -16,8 +16,7 @@ print ("build_path:{0}".format(build_path))
 print ("metadata:{0}".format(meta_data))
 
 frameworks = [
-              'System/Library/Frameworks/Security.framework',
-              'usr/lib/libsqlite3.0.dylib'
+              'System/Library/Frameworks/Security.framework'
               ]
 
 google_frameworks = [
