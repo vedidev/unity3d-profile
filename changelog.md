@@ -1,3 +1,8 @@
+### v2.0.7 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.6...v2.0.7)
+
+* Changes
+  * Added core post build script
+
 ### v2.0.6 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.5...v2.0.6)
 
 * Changes
