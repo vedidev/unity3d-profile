@@ -124,7 +124,7 @@ namespace Soomla.Profile
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.7");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.8");
 			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
 			EditorGUILayout.Space();
 		}
@@ -210,7 +210,7 @@ namespace Soomla.Profile
 			}
 		}
 
-		private string compilationsRootPath = Application.dataPath + "/Soomla/compilations";
+		private string compilationsRootPath = Application.dataPath + "/WebPlayerTemplates/SoomlaConfig";
 		private string pluginsRootPath = Application.dataPath + "/Plugins";
 
 		void ApplyIntegretionLibraries (string socialPlatform, bool remove)

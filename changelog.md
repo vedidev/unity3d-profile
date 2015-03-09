@@ -1,3 +1,8 @@
+### v2.0.8 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.7...v2.0.8)
+
+* Changes
+  * Making Store module Unity 5 compatible
+
 ### v2.0.7 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.6...v2.0.7)
 
 * Changes

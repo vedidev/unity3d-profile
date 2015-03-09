@@ -9,6 +9,12 @@ SoomlaProfile.UpdateStatus(Provider.FACEBOOK, "I love this game !", new VirtualI
 unity3d-profile
 ---
 
+**March 9th:** v2.0.8 **Unity 5** compatibility patch.
+
+> If you are upgrading an already imported profile module, make sure to delete the `<project>/Assets/Soomla/compilations` folder, and the `<project>/Assets/WebPlayerTemplates/SoomlaSdkResources` folder.
+
+> If you get the “API Update Required” window, click the "I Made a Backup. Go Ahead!" button, Unity will automatically update some of our code.
+
 **November 17th**: v2.0 **unity3d-profile** supports Facebook, Google+ and Twitter
 
 *SOOMLA's Profile Module for Unity3d*
@@ -28,7 +34,7 @@ unity3d-profile easily connects to SOOMLA's virtual economy model (unity3d-store
 ####Pre baked unitypackage:
 
 [soomla-unity3d-core v1.0.6](http://library.soom.la/fetch/unity3d-core/1.0.6?cf=github)  
-[unity3d-profile v2.0.7](http://library.soom.la/fetch/unity3d-profile/2.0.7?cf=github)  
+[unity3d-profile v2.0.8](http://library.soom.la/fetch/unity3d-profile/2.0.8?cf=github)  
 
 ## Debugging
 
