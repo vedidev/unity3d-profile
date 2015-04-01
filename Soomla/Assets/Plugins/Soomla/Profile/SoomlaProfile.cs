@@ -459,10 +459,10 @@ namespace Soomla.Profile
 		/// <param name="provider">The provider that the page belongs to.</param>
 		/// <param name="pageName">The name of the page to like.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after he/she likes the page.</param>
-		public static void Like(Provider provider, string pageName, Reward reward=null) {
+		public static void Like(Provider provider, string pageId, Reward reward=null) {
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			if (targetProvider != null) {
-				targetProvider.Like(pageName);
+				targetProvider.Like(pageId);
 
 				if (reward != null) {
 					reward.Give();

@@ -94,7 +94,7 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.Like"/>
 		/// </summary>
-		public abstract void Like(string pageName);
+		public abstract void Like(string pageId);
 
 		// TODO: irrelevant for now. Will be updated soon.
 		//		public abstract void GetFeed(FeedSuccess success, FeedFailed fail);

@@ -319,8 +319,8 @@ namespace Soomla.Profile
 		/// </summary>
 		/// <param name="pageName">The name of the page as written in facebook in the URL. 
 		/// For a FB url http://www.facebook.com/MyPage you need to provide pageName="MyPage".</param>
-		public override void Like(string pageName) {
-			Application.OpenURL("https://www.facebook.com/" + pageName);
+		public override void Like(string pageId) {
+			Application.OpenURL("https://www.facebook.com/" + pageId);
 		}
 
 		public override bool IsNativelyImplemented(){
