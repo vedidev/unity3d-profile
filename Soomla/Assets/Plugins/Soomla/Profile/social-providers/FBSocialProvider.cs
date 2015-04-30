@@ -217,7 +217,7 @@ namespace Soomla.Profile
 		/// <param name="pageNumber">The contacts' page number to get</param>
 		/// <param name="success">Callback function that is called if the contacts were fetched successfully.</param>
 		/// <param name="fail">Callback function that is called if fetching contacts failed.</param>
-		public override void GetContacts(int pageNumber, ContactsSuccess success, ContactsFailed fail) {
+		public override void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail) {
 			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * pageNumber,
 			        Facebook.HttpMethod.GET,
 			        (FBResult result) => {
@@ -232,7 +232,7 @@ namespace Soomla.Profile
 							
 							SocialPageData<UserProfile> resultData = new SocialPageData<UserProfile>(); 
 							resultData.PageData = UserProfilesFromFBJsonObjs(jsonContacts["data"].list);
-							resultData.PageNumber = pageNumber;
+							resultData.PageNumber = pageNumber; // TODO: Support fromStart here
 
 							JSONObject paging = jsonContacts["paging"];
 							if (paging != null) {

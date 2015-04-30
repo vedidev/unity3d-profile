@@ -100,7 +100,7 @@ namespace Soomla.Profile {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventSocialActionFailed(provider.ToString(), actionType.ToString(), message, payload);
 		}
-		protected override void _pushEventGetContactsStarted (Provider provider, int pageNumber, string payload) {
+		protected override void _pushEventGetContactsStarted (Provider provider, bool fromStart, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventGetContactsStarted(provider.ToString(), payload);
 		}
@@ -114,7 +114,7 @@ namespace Soomla.Profile {
 
 			soomlaProfile_PushEventGetContactsFinished(provider.ToString(), contacts.ToString(), payload);
 		}
-		protected override void _pushEventGetContactsFailed (Provider provider, int pageNumber, string message, string payload) {
+		protected override void _pushEventGetContactsFailed (Provider provider, bool fromStart, string message, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventGetContactsFailed(provider.ToString(), message, payload);
 		}

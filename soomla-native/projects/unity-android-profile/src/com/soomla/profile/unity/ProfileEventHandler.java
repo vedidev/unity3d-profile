@@ -258,6 +258,7 @@ public class ProfileEventHandler {
     public void onGetContactsFinished(final GetContactsFinishedEvent getContactsFinishedEvent){
         IProvider.Provider provider = getContactsFinishedEvent.Provider;
         String payload = getContactsFinishedEvent.Payload;
+        boolean hasNext = getContactsFinishedEvent.HasNext;
 
         List<UserProfile> contacts = getContactsFinishedEvent.Contacts;
         try{
@@ -270,6 +271,7 @@ public class ProfileEventHandler {
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("contacts", contactsJSONArray);
             eventJSON.put("payload", payload);
+            eventJSON.put("hasNext", hasNext);
             UnitySendFilteredMessage(eventJSON.toString(), "onGetContactsFinished", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
@@ -414,12 +416,12 @@ public class ProfileEventHandler {
         BusProvider.getInstance().post(new SocialActionFailedEvent(provider, socialActionType, message, payload));
     }
 
-    public static void pushEventGetContactsStarted(String providerStr, String payload) {
+    public static void pushEventGetContactsStarted(String providerStr, boolean fromStart, String payload) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
-        BusProvider.getInstance().post(new GetContactsStartedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, payload));
+        BusProvider.getInstance().post(new GetContactsStartedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, fromStart, payload));
     }
 
-    public static void pushEventGetContactsFinished(String providerStr, String userProfilesJSON, String payload) {
+    public static void pushEventGetContactsFinished(String providerStr, String userProfilesJSON, String payload, boolean hasNext) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
         List<UserProfile> contacts = new ArrayList<UserProfile>();
         try {
@@ -433,7 +435,7 @@ public class ProfileEventHandler {
             SoomlaUtils.LogError(TAG, "(pushEventGetContactsFinished) Unable to parse user profiles from Unity " + userProfilesJSON +
                     "reason: " + e.getLocalizedMessage());
         }
-        BusProvider.getInstance().post(new GetContactsFinishedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, contacts, payload));
+        BusProvider.getInstance().post(new GetContactsFinishedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, contacts, payload, hasNext));
     }
 
     public static void pushEventGetContactsFailed(String providerStr, String message, String payload) {

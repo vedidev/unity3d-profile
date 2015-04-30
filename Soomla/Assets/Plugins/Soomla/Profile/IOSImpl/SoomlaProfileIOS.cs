@@ -89,7 +89,7 @@ namespace Soomla.Profile {
 			soomlaProfile_UploadImage(provider.ToString(), message, fileName, base64Str, payload);
 		}
 
-		protected override void _getContacts(Provider provider, string payload){
+		protected override void _getContacts(Provider provider, bool fromStart, string payload){
 			soomlaProfile_GetContacts(provider.ToString(), payload);
 		}
 

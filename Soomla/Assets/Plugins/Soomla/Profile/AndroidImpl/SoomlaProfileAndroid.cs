@@ -99,10 +99,10 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
-		protected override void _getContacts(Provider provider, string payload){
+		protected override void _getContacts(Provider provider, bool fromStart, string payload) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "getContacts", provider.ToString(), payload);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "getContacts", provider.ToString(), fromStart, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
