@@ -423,7 +423,7 @@ public class ProfileEventHandler {
 
     public static void pushEventGetContactsFinished(String providerStr, String userProfilesJSON, String payload, boolean hasNext) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
-        List<UserProfile> contacts = new ArrayList<UserProfile>();
+        List<UserProfile> contacts = new ArrayList<UserProfile> ();
         try {
             JSONArray jsonArray = new JSONArray(userProfilesJSON);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -438,8 +438,8 @@ public class ProfileEventHandler {
         BusProvider.getInstance().post(new GetContactsFinishedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, contacts, payload, hasNext));
     }
 
-    public static void pushEventGetContactsFailed(String providerStr, String message, String payload) {
+    public static void pushEventGetContactsFailed(String providerStr, String message, Boolean fromStart, String payload) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
-        BusProvider.getInstance().post(new GetContactsFailedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, message, payload));
+        BusProvider.getInstance().post(new GetContactsFailedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, message, fromStart, payload));
     }
 }
