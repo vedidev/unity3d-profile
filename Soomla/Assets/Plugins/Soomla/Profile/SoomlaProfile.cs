@@ -367,7 +367,6 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				//TODO: add pageNumber here when implemented natively
 				instance._getContacts(provider, fromStart, ProfilePayload.ToJSONObj(userPayload).ToString());
 			}
 
@@ -378,7 +377,7 @@ namespace Soomla.Profile
 					/* success */	(SocialPageData<UserProfile> contactsData) => { 
 					ProfileEvents.OnGetContactsFinished(provider, contactsData, userPayload);
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, fromStart, message, userPayload); }
+				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, fromStart, userPayload); }
 				);
 			}
 		}

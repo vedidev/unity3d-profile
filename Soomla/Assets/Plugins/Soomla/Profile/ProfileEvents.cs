@@ -353,7 +353,7 @@ namespace Soomla.Profile {
 			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 
-			bool hasMore = eventJson["hasNext"].b;
+			bool hasNext = eventJson["hasNext"].b;
 
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
@@ -366,7 +366,7 @@ namespace Soomla.Profile {
 			SocialPageData<UserProfile> data = new SocialPageData<UserProfile>();
 			data.PageData = userProfiles;
 			data.PageNumber = 0;
-			data.HasMore = hasMore;
+			data.HasMore = hasNext;
 				                
 			ProfileEvents.OnGetContactsFinished(provider, data, ProfilePayload.GetUserPayload(payloadJSON));
 		}
@@ -390,7 +390,7 @@ namespace Soomla.Profile {
 
 			bool fromStart = eventJson["fromStart"].b;
 
-			ProfileEvents.OnGetContactsFailed (provider, fromStart, errorMessage, ProfilePayload.GetUserPayload(payloadJSON));
+			ProfileEvents.OnGetContactsFailed (provider, errorMessage, fromStart, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
 		/// <summary>
@@ -482,7 +482,7 @@ namespace Soomla.Profile {
 
 		public static Action<Provider, SocialActionType, string> OnSocialActionCancelled = delegate {};
 
-		public static Action<Provider, bool, string, string> OnGetContactsFailed = delegate {};
+		public static Action<Provider, string, bool, string> OnGetContactsFailed = delegate {};
 		
 		public static Action<Provider, SocialPageData<UserProfile>, string> OnGetContactsFinished = delegate {};
 		
@@ -548,7 +548,7 @@ namespace Soomla.Profile {
 			protected virtual void _pushEventSocialActionFailed(Provider provider, SocialActionType actionType, string message, string payload){}
 			protected virtual void _pushEventGetContactsStarted(Provider provider, bool fromStart, string payload){}
 			protected virtual void _pushEventGetContactsFinished(Provider provider, SocialPageData<UserProfile> contactsPage, string payload){}
-			protected virtual void _pushEventGetContactsFailed(Provider provider, bool fromStart, string message, string payload){}
+			protected virtual void _pushEventGetContactsFailed(Provider provider, string message, bool fromStart, string payload){}
 			protected virtual void _pushEventInviteStarted(Provider provider, string payload){}
 			protected virtual void _pushEventInviteFinished(Provider provider, string requestId, List<string> invitedIds, string payload){}
 			protected virtual void _pushEventInviteFailed(Provider provider, string message, string payload){}

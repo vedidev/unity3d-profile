@@ -145,12 +145,12 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
-		protected override void _pushEventGetContactsFailed (Provider provider, bool fromStart, string message, string payload) {
+		protected override void _pushEventGetContactsFailed (Provider provider, string message, bool fromStart, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
 				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventGetContactsFailed", 
-				                                 provider.ToString(), message, payload);
+				                                 provider.ToString(), message, fromStart, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
