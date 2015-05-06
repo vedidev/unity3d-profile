@@ -93,7 +93,7 @@ extern "C"{
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         [ProfileEventHandling postGetContactsStarted: provider withType: socialActionType withFromStart: fromStart withPayload:payloadS];
     }
-    void soomlaProfile_PushEventGetContactsFinished(const char* sProvider, const char* sUserProfilesJson, const char* payload, bool hasNext) {
+    void soomlaProfile_PushEventGetContactsFinished(const char* sProvider, const char* sUserProfilesJson, const char* payload, bool hasMore) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         SocialActionType socialActionType = SocialActionType::GET_CONTACTS;
@@ -109,8 +109,8 @@ extern "C"{
                 }
             }
         }
-        
-        [ProfileEventHandling postGetContactsFinished:provider withType:socialActionType withContacts:contacts withPayload:payloadS withHasNext: hasNext];
+
+        [ProfileEventHandling postGetContactsFinished:provider withType:socialActionType withContacts:contacts withPayload:payloadS withHasMore:hasMore];
     }
     void soomlaProfile_PushEventGetContactsFailed(const char* sProvider, const char* sMessage, bool fromStart, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
@@ -313,7 +313,7 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_UP_GET_CONTACTS_FINISHED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
-        NSNumber* hasNext = [userInfo valueForKey:DICT_ELEMENT_HAS_NEXT];
+        NSNumber*hasMore = [userInfo valueForKey:DICT_ELEMENT_HAS_MORE];
 
         NSArray* contacts = [userInfo valueForKey:DICT_ELEMENT_CONTACTS];
         NSMutableArray* contactsJsonArray = [NSMutableArray array];
@@ -325,7 +325,7 @@ extern "C"{
                 @"provider":provider,
                 @"contacts":contactsJsonArray,
                 @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD],
-                @"hasNext":hasNext
+                @"hasMore": hasMore
         }];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr

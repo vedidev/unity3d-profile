@@ -258,7 +258,7 @@ public class ProfileEventHandler {
     public void onGetContactsFinished(final GetContactsFinishedEvent getContactsFinishedEvent){
         IProvider.Provider provider = getContactsFinishedEvent.Provider;
         String payload = getContactsFinishedEvent.Payload;
-        boolean hasNext = getContactsFinishedEvent.HasNext;
+        boolean hasMore = getContactsFinishedEvent.HasMore;
 
         List<UserProfile> contacts = getContactsFinishedEvent.Contacts;
         try{
@@ -271,7 +271,7 @@ public class ProfileEventHandler {
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("contacts", contactsJSONArray);
             eventJSON.put("payload", payload);
-            eventJSON.put("hasNext", hasNext);
+            eventJSON.put("hasMore", hasMore);
             UnitySendFilteredMessage(eventJSON.toString(), "onGetContactsFinished", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
@@ -421,7 +421,7 @@ public class ProfileEventHandler {
         BusProvider.getInstance().post(new GetContactsStartedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, fromStart, payload));
     }
 
-    public static void pushEventGetContactsFinished(String providerStr, String userProfilesJSON, String payload, boolean hasNext) {
+    public static void pushEventGetContactsFinished(String providerStr, String userProfilesJSON, String payload, boolean hasMore) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
         List<UserProfile> contacts = new ArrayList<UserProfile> ();
         try {
@@ -435,7 +435,7 @@ public class ProfileEventHandler {
             SoomlaUtils.LogError(TAG, "(pushEventGetContactsFinished) Unable to parse user profiles from Unity " + userProfilesJSON +
                     "reason: " + e.getLocalizedMessage());
         }
-        BusProvider.getInstance().post(new GetContactsFinishedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, contacts, payload, hasNext));
+        BusProvider.getInstance().post(new GetContactsFinishedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, contacts, payload, hasMore));
     }
 
     public static void pushEventGetContactsFailed(String providerStr, String message, Boolean fromStart, String payload) {

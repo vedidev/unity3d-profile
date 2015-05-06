@@ -355,7 +355,7 @@ namespace Soomla.Profile
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The <c>Provider</c> to fetch contacts from.</param>
-		/// <param name="pageNumber">The contacts' page number to get.</param>
+		/// <param name="fromStart">Should we reset pagination or request the next page.</param>
 		/// <param name="payload">A string to receive when the function returns.</param>
 		public static void GetContacts(Provider provider, bool fromStart = false, string payload="") {
 

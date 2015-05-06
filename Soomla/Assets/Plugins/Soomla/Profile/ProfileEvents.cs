@@ -353,7 +353,7 @@ namespace Soomla.Profile {
 			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 
-			bool hasNext = eventJson["hasNext"].b;
+			bool hasMore = eventJson["hasMore"].b;
 
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
@@ -366,7 +366,7 @@ namespace Soomla.Profile {
 			SocialPageData<UserProfile> data = new SocialPageData<UserProfile>();
 			data.PageData = userProfiles;
 			data.PageNumber = 0;
-			data.HasMore = hasNext;
+			data.HasMore = hasMore;
 				                
 			ProfileEvents.OnGetContactsFinished(provider, data, ProfilePayload.GetUserPayload(payloadJSON));
 		}

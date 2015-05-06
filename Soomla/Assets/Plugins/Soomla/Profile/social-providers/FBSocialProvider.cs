@@ -216,7 +216,7 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
-		/// <param name="pageNumber">The contacts' page number to get</param>
+		/// <param name="fromStart">Should we reset pagination or request the next page</param>
 		/// <param name="success">Callback function that is called if the contacts were fetched successfully.</param>
 		/// <param name="fail">Callback function that is called if fetching contacts failed.</param>
 		public override void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail) {
