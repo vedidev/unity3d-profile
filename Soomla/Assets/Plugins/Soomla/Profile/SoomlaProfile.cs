@@ -355,9 +355,9 @@ namespace Soomla.Profile
 		/// NOTE: This operation requires a successful login.
 		/// </summary>
 		/// <param name="provider">The <c>Provider</c> to fetch contacts from.</param>
-		/// <param name="pageNumber">The contacts' page number to get.</param>
+		/// <param name="fromStart">Should we reset pagination or request the next page.</param>
 		/// <param name="payload">A string to receive when the function returns.</param>
-		public static void GetContacts(Provider provider, int pageNumber = 0, string payload="") {
+		public static void GetContacts(Provider provider, bool fromStart = false, string payload="") {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			string userPayload = (payload == null) ? "" : payload;
@@ -367,18 +367,17 @@ namespace Soomla.Profile
 			if (targetProvider.IsNativelyImplemented())
 			{
 				//fallback to native
-				//TODO: add pageNumber here when implemented natively
-				instance._getContacts(provider, ProfilePayload.ToJSONObj(userPayload).ToString());
+				instance._getContacts(provider, fromStart, ProfilePayload.ToJSONObj(userPayload).ToString());
 			}
 
 			else 
 			{
-				ProfileEvents.OnGetContactsStarted(provider, pageNumber, userPayload);
-				targetProvider.GetContacts(pageNumber,
+				ProfileEvents.OnGetContactsStarted(provider, fromStart, userPayload);
+				targetProvider.GetContacts(fromStart,
 					/* success */	(SocialPageData<UserProfile> contactsData) => { 
 					ProfileEvents.OnGetContactsFinished(provider, contactsData, userPayload);
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, pageNumber, message, userPayload); }
+				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, fromStart, userPayload); }
 				);
 			}
 		}
@@ -561,7 +560,7 @@ namespace Soomla.Profile
 		
 		protected virtual void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload) { }
 		
-		protected virtual void _getContacts(Provider provider, string payload) { }
+		protected virtual void _getContacts(Provider provider, bool fromStart, string payload) { }
 
 		protected virtual void _invite(Provider provider, string inviteMessage, string dialogTitle, string payload) { }
 		

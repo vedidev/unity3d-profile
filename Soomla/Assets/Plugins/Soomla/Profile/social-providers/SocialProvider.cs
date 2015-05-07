@@ -64,7 +64,7 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
-		public abstract void GetContacts(int pageNumber, ContactsSuccess success, ContactsFailed fail);
+		public abstract void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail);
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.Logout"/>

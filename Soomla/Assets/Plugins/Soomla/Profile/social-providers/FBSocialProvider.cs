@@ -32,6 +32,8 @@ namespace Soomla.Profile
 		private static string TAG = "SOOMLA FBSocialProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
 
+		private int lastPageNumber = 0;
+
 		/// <summary>
 		/// Constructor. Initializes the Facebook SDK.
 		/// </summary>
@@ -214,10 +216,19 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
-		/// <param name="pageNumber">The contacts' page number to get</param>
+		/// <param name="fromStart">Should we reset pagination or request the next page</param>
 		/// <param name="success">Callback function that is called if the contacts were fetched successfully.</param>
 		/// <param name="fail">Callback function that is called if fetching contacts failed.</param>
-		public override void GetContacts(int pageNumber, ContactsSuccess success, ContactsFailed fail) {
+		public override void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail) {
+			int pageNumber;
+			if (fromStart || this.lastPageNumber == 0) {
+				pageNumber = 1;
+			} else {
+				pageNumber = this.lastPageNumber + 1;
+			}
+
+			this.lastPageNumber = 0;
+
 			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * pageNumber,
 			        Facebook.HttpMethod.GET,
 			        (FBResult result) => {
@@ -233,6 +244,8 @@ namespace Soomla.Profile
 							SocialPageData<UserProfile> resultData = new SocialPageData<UserProfile>(); 
 							resultData.PageData = UserProfilesFromFBJsonObjs(jsonContacts["data"].list);
 							resultData.PageNumber = pageNumber;
+
+					        this.lastPageNumber = pageNumber;
 
 							JSONObject paging = jsonContacts["paging"];
 							if (paging != null) {

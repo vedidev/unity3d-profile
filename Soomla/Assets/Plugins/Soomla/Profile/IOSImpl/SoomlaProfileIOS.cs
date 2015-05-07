@@ -47,7 +47,7 @@ namespace Soomla.Profile {
 		private static extern void soomlaProfile_UploadImage(string provider, string message, string fileName,
 		                                                     string imageBase64Str, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_GetContacts(string provider, string payload);
+		private static extern void soomlaProfile_GetContacts(string provider, bool fromStart, string payload);
 		[DllImport ("__Internal")]
 		private static extern int soomlaProfile_GetStoredUserProfile(string provider, out IntPtr json);
 		[DllImport ("__Internal")]
@@ -89,8 +89,8 @@ namespace Soomla.Profile {
 			soomlaProfile_UploadImage(provider.ToString(), message, fileName, base64Str, payload);
 		}
 
-		protected override void _getContacts(Provider provider, string payload){
-			soomlaProfile_GetContacts(provider.ToString(), payload);
+		protected override void _getContacts(Provider provider, bool fromStart, string payload){
+			soomlaProfile_GetContacts(provider.ToString(), fromStart, payload);
 		}
 
 		protected override UserProfile _getStoredUserProfile(Provider provider) { 

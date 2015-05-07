@@ -86,14 +86,14 @@ extern "C"{
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         [ProfileEventHandling postSocialActionFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
     }
-    void soomlaProfile_PushEventGetContactsStarted(const char* sProvider, const char* payload) {
+    void soomlaProfile_PushEventGetContactsStarted(const char* sProvider, bool fromStart, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         SocialActionType socialActionType = SocialActionType::GET_CONTACTS;
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postGetContactsStarted:provider withType:socialActionType withPayload:payloadS];
+        [ProfileEventHandling postGetContactsStarted: provider withType: socialActionType withFromStart: fromStart withPayload:payloadS];
     }
-    void soomlaProfile_PushEventGetContactsFinished(const char* sProvider, const char* sUserProfilesJson, const char* payload) {
+    void soomlaProfile_PushEventGetContactsFinished(const char* sProvider, const char* sUserProfilesJson, const char* payload, bool hasMore) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         SocialActionType socialActionType = SocialActionType::GET_CONTACTS;
@@ -109,16 +109,16 @@ extern "C"{
                 }
             }
         }
-        
-        [ProfileEventHandling postGetContactsFinished:provider withType:socialActionType withContacts:contacts withPayload:payloadS];
+
+        [ProfileEventHandling postGetContactsFinished:provider withType:socialActionType withContacts:contacts withPayload:payloadS withHasMore:hasMore];
     }
-    void soomlaProfile_PushEventGetContactsFailed(const char* sProvider, const char* sMessage, const char* payload) {
+    void soomlaProfile_PushEventGetContactsFailed(const char* sProvider, const char* sMessage, bool fromStart, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString *message = [NSString stringWithUTF8String:sMessage];
         SocialActionType socialActionType = SocialActionType::GET_CONTACTS;
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postGetContactsFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
+        [ProfileEventHandling postGetContactsFailed:provider withType:socialActionType withMessage:message withFromStart: fromStart withPayload:payloadS];
     }
 
 }
@@ -298,10 +298,13 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_UP_GET_CONTACTS_STARTED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
-        
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
-                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
-                                                            }];
+        NSNumber* fromStart = [userInfo valueForKey:DICT_ELEMENT_FROM_START];
+
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                @"provider":provider,
+                @"fromStart":fromStart,
+                @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+        }];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetContactsStarted"
@@ -310,17 +313,20 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_UP_GET_CONTACTS_FINISHED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
-        
+        NSNumber*hasMore = [userInfo valueForKey:DICT_ELEMENT_HAS_MORE];
+
         NSArray* contacts = [userInfo valueForKey:DICT_ELEMENT_CONTACTS];
         NSMutableArray* contactsJsonArray = [NSMutableArray array];
         for (int i = 0; i < [contacts count]; i++) {
             [contactsJsonArray addObject:[[contacts objectAtIndex:i] toDictionary]];
         }
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
-                                                            @"contacts":contactsJsonArray,
-                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
-                                                            }];
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                @"provider":provider,
+                @"contacts":contactsJsonArray,
+                @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD],
+                @"hasMore": hasMore
+        }];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetContactsFinished"
@@ -329,11 +335,14 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_UP_GET_CONTACTS_FAILED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
-        
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
-                                                            @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
-                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
-                                                            }];
+        NSNumber* fromStart = [userInfo valueForKey:DICT_ELEMENT_FROM_START];
+
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                @"provider":provider,
+                @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
+                @"fromStart":fromStart,
+                @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+        }];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetContactsFailed"

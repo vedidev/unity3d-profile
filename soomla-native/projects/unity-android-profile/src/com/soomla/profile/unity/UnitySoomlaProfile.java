@@ -16,7 +16,6 @@ import com.soomla.profile.exceptions.UserProfileNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.*;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -71,9 +70,9 @@ public class UnitySoomlaProfile {
         SoomlaProfile.getInstance().uploadImage(provider, message, fileName, imageBitmap, jpegQuality, payload, null);
     }
 
-    public static void getContacts(String providerStr, String payload) throws ProviderNotFoundException {
+    public static void getContacts(String providerStr, boolean fromStart, String payload) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
-        SoomlaProfile.getInstance().getContacts(provider, payload, null);
+        SoomlaProfile.getInstance().getContacts(provider, fromStart, payload, null);
     }
 
     public static String getStoredUserProfile(String providerStr) throws ProviderNotFoundException, UserProfileNotFoundException {

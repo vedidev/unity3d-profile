@@ -88,12 +88,14 @@ extern "C"{
         [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andImageFileName:fileNameS andImageData:imageData andPayload:payloadS andReward:nil];
     }
     
-    void soomlaProfile_GetContacts(const char* sProvider, const char* payload){
+    void soomlaProfile_GetContacts(const char* sProvider, bool fromStart, const char* payload){
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        
+
         [[SoomlaProfile getInstance] getContactsWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
-                                                  andPayload:payloadS andReward:nil];
+                                                andFromStart:fromStart
+                                                  andPayload:payloadS
+                                                   andReward:nil];
     }
     
 	int soomlaProfile_GetStoredUserProfile(const char* sProvider, char** json) {

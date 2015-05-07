@@ -45,7 +45,7 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
-		public override void GetContacts(int pageNumber, ContactsSuccess success, ContactsFailed fail) {}
+		public override void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail) {}
 		
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.Logout"/>
