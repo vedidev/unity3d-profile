@@ -60,7 +60,8 @@ namespace Soomla.Profile
 		/// NOTE: This function must be called before any of the class methods can be used.
 		/// </summary>
 		public static void Initialize() {
-			instance._initialize(GetCustomParamsJson()); //add parameters
+			Dictionary<Provider, Dictionary<string, string>> customParams = GetCustomParamsDict();
+			instance._initialize(GetCustomParamsJson(customParams)); //add parameters
 
 #if SOOMLA_FACEBOOK
 			unreadyProviders++;
@@ -74,6 +75,13 @@ namespace Soomla.Profile
 			unreadyProviders++;
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
+
+			// pass params to non-native providers
+			foreach (KeyValuePair<Provider, SocialProvider> entry in providers) {
+				if (!entry.Value.IsNativelyImplemented()) {
+					entry.Value.Configure(customParams[entry.Key]);
+				}
+			}
 
 #if UNITY_EDITOR
 			TryFireProfileInitialized();
@@ -609,25 +617,36 @@ namespace Soomla.Profile
 			return result;
 		}
 
-		private static string GetCustomParamsJson()
+		private static Dictionary<Provider, Dictionary<string, string>> GetCustomParamsDict()
 		{
+			Dictionary<string, string> fbParams = new Dictionary<string, string>()
+			{
+				{"permissions", ProfileSettings.FBPermissions}
+			};
+			
 			Dictionary<string, string> gpParams = new Dictionary<string, string>()
 			{
 				{"clientId", ProfileSettings.GPClientId}
 			};
-
+			
 			Dictionary<string, string> twParams = new Dictionary<string, string> ()
 			{
 				{"consumerKey", ProfileSettings.TwitterConsumerKey},
 				{"consumerSecret", ProfileSettings.TwitterConsumerSecret}
 			};
-
+			
 			Dictionary<Provider, Dictionary<string, string>> customParams =  new Dictionary<Provider, Dictionary<string, string>> ()
 			{
+				{Provider.FACEBOOK, fbParams},
 				{Provider.GOOGLE, gpParams},
 				{Provider.TWITTER, twParams}
 			};
-
+			
+			return customParams;
+		}
+		
+		private static string GetCustomParamsJson(Dictionary<Provider, Dictionary<string, string>> customParams)
+		{
 			JSONObject customParamsJson = JSONObject.Create();
 			foreach(KeyValuePair<Provider, Dictionary<string, string>> parameter in customParams)
 			{
@@ -636,7 +655,7 @@ namespace Soomla.Profile
 				customParamsJson.AddField(currentProvider, currentProviderParams);
 			}
 
-			return customParamsJson.ToString ();
+			return customParamsJson.ToString();
 		}
 
 		private static byte[] GetImageBytesFromTexture(string imageFileName, Texture2D imageTexture)
