@@ -50,18 +50,18 @@ extern "C"{
         return [[SoomlaProfile getInstance] isLoggedInWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]];
     }
     
-    void soomlaProfile_UpdateStatus(const char* sProvider, const char* status, const char* payload){
+    void soomlaProfile_UpdateStatus(const char* sProvider, const char* status, const char* payload, bool showConfirmation) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         NSString* statusS = [NSString stringWithUTF8String:status];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         
         [[SoomlaProfile getInstance] updateStatusWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
-                                                    andStatus:statusS andPayload:payloadS andReward:nil];
+                                                    andStatus:statusS andPayload:payloadS andReward:nil andConfirmation:showConfirmation];
     }
     
     void soomlaProfile_UpdateStory(const char* sProvider, const char* message, const char* name,
                                    const char* caption, const char* description,
-                                   const char* link, const char* pictureUrl, const char* payload){
+                                   const char* link, const char* pictureUrl, const char* payload, bool showConfirmation) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         NSString* messageS = [NSString stringWithUTF8String:message];
         NSString* nameS = [NSString stringWithUTF8String:name];
@@ -74,10 +74,10 @@ extern "C"{
         [[SoomlaProfile getInstance] updateStoryWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
                                                   andMessage:messageS andName:nameS andCaption:captionS
                                               andDescription:descriptionS andLink:linkS andPicture:pictureUrlS
-                                                  andPayload:payloadS andReward:nil];
+                                                  andPayload:payloadS andReward:nil andShowConfirmation:showConfirmation];
     }
     
-    void soomlaProfile_UploadImage(const char* sProvider, const char* message, const char* fileName, const char *imageBase64Str, const char* payload){
+    void soomlaProfile_UploadImage(const char* sProvider, const char* message, const char* fileName, const char *imageBase64Str, const char* payload, bool showConfirmation) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         NSString* messageS = [NSString stringWithUTF8String:message];
         NSString* fileNameS = [NSString stringWithUTF8String:fileName];
@@ -85,7 +85,7 @@ extern "C"{
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         
         NSData *imageData = [NSData dataFromBase64String:imageBase64StrS];
-        [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andImageFileName:fileNameS andImageData:imageData andPayload:payloadS andReward:nil];
+        [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andImageFileName:fileNameS andImageData:imageData andPayload:payloadS andReward:nil andShowConfirmation:showConfirmation];
     }
     
     void soomlaProfile_GetContacts(const char* sProvider, bool fromStart, const char* payload){
@@ -152,4 +152,11 @@ extern "C"{
         [[SoomlaProfile getInstance] openAppRatingPage];
     }
     
+    void soomlaProfile_ShareNatively(const char* sText, const char* sImageFilePath) {
+        NSString* text = sText ? [NSString stringWithUTF8String:sText] : nullptr;
+        NSString* imageFilePath = sImageFilePath ? [NSString stringWithUTF8String:sImageFilePath] : nullptr;
+
+        [[SoomlaProfile getInstance] shareNativelyWithText:text andImageFilePath:imageFilePath];
+    }
+
 }
