@@ -1,3 +1,14 @@
+### v2.1.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.8...v2.1.0)
+
+* New Features
+  * Implemented Pagination for GetContacts and GetFeed
+  * Implemented multi-sharing (sharing with the native functionality of your target platform)
+  * Implemented methods to show confirmation dialog before some actions (not supported for FB)
+  * Supporting permissions param in FB
+
+* Fixes
+ * Fixed an issue on Google+ & Android where cancellation of login didn't work properly
+
 ### v2.0.8 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.7...v2.0.8)
 
 * Changes
