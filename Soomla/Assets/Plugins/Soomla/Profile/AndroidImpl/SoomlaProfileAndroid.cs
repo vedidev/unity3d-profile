@@ -71,30 +71,33 @@ namespace Soomla.Profile {
 			return loggedIn;
 		}
 
-		protected override void _updateStatus(Provider provider, string status, string payload, bool showConfirmation) {
+		protected override void _updateStatus(Provider provider, string status, string payload, 
+		                                      bool showConfirmation, string customMessage) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "updateStatus", provider.ToString(), status, payload, showConfirmation);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "updateStatus", provider.ToString(), status, payload, showConfirmation, customMessage);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
 		protected override void _updateStory(Provider provider, string message, string name,
 		                                     string caption, string description, string link,
-		                                     string pictureUrl, string payload, bool showConfirmation) {
+		                                     string pictureUrl, string payload, 
+		                                     bool showConfirmation, string customMessage) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
 				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "updateStory", provider.ToString(), message, name,
-				                                 caption, description, link, pictureUrl, payload, showConfirmation);
+				                                 caption, description, link, pictureUrl, payload, showConfirmation, customMessage);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
-		protected override void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload, bool showConfirmation) {
+		protected override void _uploadImage(Provider provider, string message, string fileName, byte[] imageBytes, int jpegQuality, string payload, 
+		                                     bool showConfirmation, string customMessage) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
 				string base64Str = Convert.ToBase64String(imageBytes);
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "uploadImage", provider.ToString(), message, fileName, base64Str, jpegQuality, payload, showConfirmation);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "uploadImage", provider.ToString(), message, fileName, base64Str, jpegQuality, payload, showConfirmation, customMessage);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
@@ -156,10 +159,10 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
-		protected override void _shareNatively(string text, string imageFilePath) {
+		protected override void _multiShare(string text, string imageFilePath) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "shareNatively", text, imageFilePath);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "multiShare", text, imageFilePath);
 			}
 
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
