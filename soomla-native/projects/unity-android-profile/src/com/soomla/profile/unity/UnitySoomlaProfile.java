@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import com.soomla.SoomlaApp;
 import com.soomla.SoomlaUtils;
 import com.soomla.profile.SoomlaProfile;
 import com.soomla.profile.data.UserProfileStorage;
@@ -13,6 +14,7 @@ import com.soomla.profile.domain.UserProfile;
 import com.soomla.profile.exceptions.ProviderNotFoundException;
 import com.soomla.profile.exceptions.UserProfileNotFoundException;
 
+import com.unity3d.player.UnityPlayer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,17 +46,29 @@ public class UnitySoomlaProfile {
         return SoomlaProfile.getInstance().isLoggedIn(activity, provider);
     }
 
-    public static void updateStatus(String providerStr, String status, String payload) throws ProviderNotFoundException {
+    public static void updateStatus(String providerStr, String status, String payload,
+                                    boolean showConfirmation, String customMessage) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
-        SoomlaProfile.getInstance().updateStatus(provider, status, payload, null);
+        if (!showConfirmation) {
+            SoomlaProfile.getInstance().updateStatus(provider, status, payload, null);
+        } else {
+            SoomlaProfile.getInstance().updateStatusWithConfirmation(provider, status, payload, null,
+                    UnityPlayer.currentActivity, customMessage);
+        }
     }
 
     public static void updateStory(String providerStr, String message, String name,
                                    String caption, String description, String link,
-                                   String pictureUrl, String payload) throws ProviderNotFoundException {
+                                   String pictureUrl, String payload,
+                                   boolean showConfirmation, String customMessage) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
-        SoomlaProfile.getInstance().updateStory(provider, message, name, caption, description,
-                link, pictureUrl, payload, null);
+        if (!showConfirmation) {
+            SoomlaProfile.getInstance().updateStory(provider, message, name, caption, description,
+                    link, pictureUrl, payload, null);
+        } else {
+            SoomlaProfile.getInstance().updateStoryWithConfirmation(provider, message, name, caption, description,
+                    link, pictureUrl, payload, null, UnityPlayer.currentActivity, customMessage);
+        }
     }
 
     public static void uploadImage(String providerStr, String message, String filePath, String payload) throws ProviderNotFoundException {
@@ -63,11 +77,18 @@ public class UnitySoomlaProfile {
     }
 
     public static void uploadImage(String providerStr, String message, String fileName, String imageBase64Str,
-                                   int jpegQuality, String payload) throws ProviderNotFoundException{
+                                   int jpegQuality, String payload,
+                                   boolean showConfirmation, String customMessage) throws ProviderNotFoundException{
         Provider provider = Provider.getEnum(providerStr);
         byte[] decodedString = Base64.decode(imageBase64Str, Base64.DEFAULT);
         Bitmap imageBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        SoomlaProfile.getInstance().uploadImage(provider, message, fileName, imageBitmap, jpegQuality, payload, null);
+        if (!showConfirmation) {
+            SoomlaProfile.getInstance().uploadImage(provider, message, fileName, imageBitmap, jpegQuality, payload, null);
+        } else {
+            SoomlaProfile.getInstance().uploadImageWithConfirmation(provider, message, fileName, imageBitmap, jpegQuality, payload, null,
+                    UnityPlayer.currentActivity, customMessage);
+
+        }
     }
 
     public static void getContacts(String providerStr, boolean fromStart, String payload) throws ProviderNotFoundException {
@@ -99,6 +120,10 @@ public class UnitySoomlaProfile {
 
     public static void openAppRatingPage(Activity activity) {
         SoomlaProfile.getInstance().openAppRatingPage(activity.getApplicationContext());
+    }
+
+    public static void multiShare(String text, String imageFilePath) {
+        SoomlaProfile.getInstance().multiShare(text, imageFilePath);
     }
 
     /*

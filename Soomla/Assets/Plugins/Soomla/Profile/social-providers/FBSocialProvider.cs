@@ -31,8 +31,12 @@ namespace Soomla.Profile
 	{
 		private static string TAG = "SOOMLA FBSocialProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
+		private static string DEFAULT_PERMISSIONS = "email,publish_action,user_birthday,user_photos,user_friends,read_stream";
 
 		private int lastPageNumber = 0;
+
+		private List<string> permissions;
+		private string permissionsStr;
 
 		/// <summary>
 		/// Constructor. Initializes the Facebook SDK.
@@ -59,7 +63,7 @@ namespace Soomla.Profile
 		/// <param name="fail">Callback function that is called if login failed.</param>
 		/// <param name="cancel">Callback function that is called if login was cancelled.</param>
 		public override void Login(LoginSuccess success, LoginFailed fail, LoginCancelled cancel) {
-			FB.Login("email,publish_actions", (FBResult result) => {
+			FB.Login(this.permissionsStr, (FBResult result) => {
 				if (result.Error != null) {
 					SoomlaUtils.LogDebug (TAG, "LoginCallback[result.Error]: " + result.Error);
 					fail(result.Error);
@@ -69,6 +73,8 @@ namespace Soomla.Profile
 					cancel();
 				}
 				else {
+					checkPermissions("publish_actions", "user_birthday");
+
 					FB.API("/me/permissions", Facebook.HttpMethod.GET, delegate (FBResult response) {
 						// inspect the response and adapt your UI as appropriate
 						// check response.Text and response.Error
@@ -112,6 +118,7 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the status update was successful.</param>
 		/// <param name="fail">Callback function that is called if the status update failed.</param>
 		public override void UpdateStatus(string status, SocialActionSuccess success, SocialActionFailed fail) {
+			checkPermission("publish_action");
 			var formData = new Dictionary<string, string>
 			{
 				{ "message", status }
@@ -146,6 +153,9 @@ namespace Soomla.Profile
 		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
 		public override void UpdateStory(string message, string name, string caption,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
+
+			checkPermission("publish_action");
+
 			FB.Feed(
 				link: link,
 				linkName: name,
@@ -186,6 +196,8 @@ namespace Soomla.Profile
 		/// <param name="cancel">Callback function that is called if the image upload was cancelled.</param>
 		public override void UploadImage(byte[] texBytes, string fileName, string message, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 			
+			checkPermission("publish_action");
+
 			var wwwForm = new WWWForm();
 			wwwForm.AddBinaryData("image", texBytes, fileName);
 			wwwForm.AddField("message", message);
@@ -220,6 +232,8 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the contacts were fetched successfully.</param>
 		/// <param name="fail">Callback function that is called if fetching contacts failed.</param>
 		public override void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail) {
+			checkPermission("user_friends");
+
 			int pageNumber;
 			if (fromStart || this.lastPageNumber == 0) {
 				pageNumber = 1;
@@ -340,6 +354,18 @@ namespace Soomla.Profile
 			return false;
 		}
 
+		/// <summary>
+		/// See docs in <see cref="SocialProvider.Configure"/>
+		/// </summary>
+		public override void Configure(Dictionary<string, string> providerParams) {
+			if (providerParams != null && providerParams.ContainsKey("permissions")) {
+				this.permissionsStr = providerParams["permissions"];
+			} else {
+				this.permissionsStr = DEFAULT_PERMISSIONS;
+			}
+			this.permissions = parsePermissions(permissionsStr);
+		}
+
 		/** PRIVATE FUNCTIONS **/
 
 		/** Initialize Callbacks **/
@@ -391,6 +417,30 @@ namespace Soomla.Profile
 			}
 			return profiles;
 		}
+
+		private List<string> parsePermissions(String permissionsStr) {
+			if (permissionsStr == null) {
+				throw new Exception("permissionsStr == null");
+			}
+
+			string[] permissionStrArr = permissionsStr.Split(',');
+			return new List<string>(permissionStrArr);
+		}
+		
+		private void checkPermissions(params string[] permissions) {
+            foreach (string permission in this.permissions) {
+				this.checkPermission(permission);
+			}
+		}
+		
+		private void checkPermission(string permission) {
+			if (!this.permissions.Contains(permission)) {
+				SoomlaUtils.LogError(TAG,
+	                    "You do not have enough permissions for requested action. It needs: " + permission);
+			}
+		}
+		
+
 	}
 }
 
