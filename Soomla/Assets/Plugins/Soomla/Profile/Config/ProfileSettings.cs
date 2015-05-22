@@ -55,7 +55,7 @@ namespace Soomla.Profile
 //		GUIContent fbAppNS = new GUIContent("FB app namespace:");
 
 		GUIContent fbPermissionsContent = new GUIContent ("Permissions [?]", "Permissions your app will request from users");
-		
+
 		GUIContent gpClientId = new GUIContent ("Client ID [?]", "Client id of your google+ app (iOS only)");
 
 		GUIContent twCustKey = new GUIContent ("Consumer Key [?]", "Consumer key of your twitter app");
@@ -126,7 +126,7 @@ namespace Soomla.Profile
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.0.8");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.1.0");
 			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
 			EditorGUILayout.Space();
 		}
