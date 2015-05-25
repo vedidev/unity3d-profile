@@ -31,7 +31,7 @@ namespace Soomla.Profile
 	{
 		private static string TAG = "SOOMLA FBSocialProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
-		private static string DEFAULT_PERMISSIONS = "email,publish_action,user_birthday,user_photos,user_friends,read_stream";
+		private static string DEFAULT_PERMISSIONS = "email,publish_actions,user_birthday,user_photos,user_friends,read_stream";
 
 		private int lastPageNumber = 0;
 
