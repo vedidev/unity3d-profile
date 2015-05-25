@@ -34,7 +34,7 @@ unity3d-profile easily connects to SOOMLA's virtual economy model (unity3d-store
 ####Pre baked unitypackage:
 
 [soomla-unity3d-core v1.0.7](http://library.soom.la/fetch/unity3d-core/1.0.7?cf=github)  
-[unity3d-profile v2.1.0](http://library.soom.la/fetch/unity3d-profile/2.1.0?cf=github)  
+[unity3d-profile v2.1.1](http://library.soom.la/fetch/unity3d-profile/2.1.1?cf=github)  
 
 ## Debugging
 
@@ -51,7 +51,7 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
 
 ## Getting Started
 
-1. Download and import [soomla-unity3d-core.unitypackage](http://library.soom.la/fetch/unity3d-core/1.0.7?cf=github) and [unity3d-profile.unitypackage](http://library.soom.la/fetch/unity3d-profile/2.1.0?cf=github). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
+1. Download and import [soomla-unity3d-core.unitypackage](http://library.soom.la/fetch/unity3d-core/1.0.7?cf=github) and [unity3d-profile.unitypackage](http://library.soom.la/fetch/unity3d-profile/2.1.1?cf=github). If you also want to use Store related rewards you'll need to go over the instructions of [unity3d-store](https://github.com/soomla/unity3d-store)
 2. Drag the `CoreEvents` and `ProfileEvents` Prefabs from `Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]
 3. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
     - _Soomla Secret_ - is an encryption secret you provide that will be used to secure your data. (If you used versions before v1.5.2 this secret MUST be the same as Custom Secret)  
