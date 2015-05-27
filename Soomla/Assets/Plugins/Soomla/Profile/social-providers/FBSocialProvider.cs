@@ -243,7 +243,7 @@ namespace Soomla.Profile
 
 			this.lastPageNumber = 0;
 
-			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * pageNumber,
+			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * (pageNumber - 1),
 			        Facebook.HttpMethod.GET,
 			        (FBResult result) => {
 						if (result.Error != null) {
