@@ -118,7 +118,7 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the status update was successful.</param>
 		/// <param name="fail">Callback function that is called if the status update failed.</param>
 		public override void UpdateStatus(string status, SocialActionSuccess success, SocialActionFailed fail) {
-			checkPermission("publish_action");
+			checkPermission("publish_actions");
 			var formData = new Dictionary<string, string>
 			{
 				{ "message", status }
@@ -154,7 +154,7 @@ namespace Soomla.Profile
 		public override void UpdateStory(string message, string name, string caption,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 
-			checkPermission("publish_action");
+			checkPermission("publish_actions");
 
 			FB.Feed(
 				link: link,
@@ -196,7 +196,7 @@ namespace Soomla.Profile
 		/// <param name="cancel">Callback function that is called if the image upload was cancelled.</param>
 		public override void UploadImage(byte[] texBytes, string fileName, string message, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 			
-			checkPermission("publish_action");
+			checkPermission("publish_actions");
 
 			var wwwForm = new WWWForm();
 			wwwForm.AddBinaryData("image", texBytes, fileName);
@@ -243,7 +243,7 @@ namespace Soomla.Profile
 
 			this.lastPageNumber = 0;
 
-			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * pageNumber,
+			FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * (pageNumber - 1),
 			        Facebook.HttpMethod.GET,
 			        (FBResult result) => {
 						if (result.Error != null) {
