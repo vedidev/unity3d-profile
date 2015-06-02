@@ -1,3 +1,11 @@
+### v2.1.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.0...v2.1.1)
+
+* Fixes
+  * Fix `publish_actions` permission
+
+* Changes
+  * Upgraded to latest version of FB SDK
+
 ### v2.1.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.0.8...v2.1.0)
 
 * New Features
