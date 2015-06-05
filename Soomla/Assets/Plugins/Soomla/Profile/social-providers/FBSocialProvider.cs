@@ -31,12 +31,12 @@ namespace Soomla.Profile
 	{
 		private static string TAG = "SOOMLA FBSocialProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
-		private static string DEFAULT_PERMISSIONS = "email,user_birthday,user_photos,user_friends,read_stream";
+		private static string DEFAULT_LOGIN_PERMISSIONS = "email,user_birthday,user_photos,user_friends,read_stream";
 
 		private int lastPageNumber = 0;
 
-		private List<string> permissions;
-		private string permissionsStr;
+		private List<string> permissions = null;
+		private string loginPermissionsStr;
 
 		/// <summary>
 		/// Constructor. Initializes the Facebook SDK.
@@ -63,7 +63,7 @@ namespace Soomla.Profile
 		/// <param name="fail">Callback function that is called if login failed.</param>
 		/// <param name="cancel">Callback function that is called if login was cancelled.</param>
 		public override void Login(LoginSuccess success, LoginFailed fail, LoginCancelled cancel) {
-			FB.Login(this.permissionsStr, (FBResult result) => {
+			FB.Login(this.loginPermissionsStr, (FBResult result) => {
 				if (result.Error != null) {
 					SoomlaUtils.LogDebug (TAG, "LoginCallback[result.Error]: " + result.Error);
 					fail(result.Error);
@@ -73,38 +73,28 @@ namespace Soomla.Profile
 					cancel();
 				}
 				else {
-                    FB.API("/me/permissions", Facebook.HttpMethod.GET, delegate (FBResult getPermissionsResult) {
-                        if (getPermissionsResult.Error != null) {
-                            fail(getPermissionsResult.Error);
-							return;
-                        }
-                        
-                        // inspect the response and adapt your UI as appropriate
-                        // check response.Text and response.Error
-                        SoomlaUtils.LogWarning(TAG, "me/permissions " + getPermissionsResult.Text);
-
-						JSONObject permissionsJson = new JSONObject(getPermissionsResult.Text);
-						this.permissions = parsePermissionsFromJson(permissionsJson);
-						
+					this.fetchPermissions(() => {
 						FB.API("/me?fields=id,name,email,first_name,last_name,picture",
-						       Facebook.HttpMethod.GET, (FBResult result2) => {
-							if (result2.Error != null) {
-								SoomlaUtils.LogDebug (TAG, "ProfileCallback[result.Error]: " + result2.Error);
-								
-								fail(result2.Error);
+						       Facebook.HttpMethod.GET, (FBResult meResult) => {
+							if (meResult.Error != null) {
+								SoomlaUtils.LogDebug (TAG, "ProfileCallback[result.Error]: " + meResult.Error);
+								fail(meResult.Error);
 							}
 							else {
-								SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Text]: "+result2.Text);
-								SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Texture]: "+result2.Texture);
-                                string fbUserJson = result2.Text;
-                                UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson);
-                                
+								SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Text]: "+meResult.Text);
+								SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Texture]: "+meResult.Texture);
+								string fbUserJson = meResult.Text;
+								UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson);
+								
                                 SoomlaProfile.StoreUserProfile (userProfile, true);
                                 
                                 success(userProfile);
                             }
-						});
-					});
+                        });
+                    },
+                    (string errorMessage) => {
+						fail(errorMessage);
+                    });
 				}
 			});
 		}
@@ -369,11 +359,10 @@ namespace Soomla.Profile
 		/// </summary>
 		public override void Configure(Dictionary<string, string> providerParams) {
 			if (providerParams != null && providerParams.ContainsKey("permissions")) {
-				this.permissionsStr = providerParams["permissions"];
+				this.loginPermissionsStr = providerParams["permissions"];
 			} else {
-				this.permissionsStr = DEFAULT_PERMISSIONS;
+				this.loginPermissionsStr = DEFAULT_LOGIN_PERMISSIONS;
 			}
-			this.permissions = parsePermissionsFromStr(permissionsStr);
 		}
 
 		/** PRIVATE FUNCTIONS **/
@@ -428,61 +417,80 @@ namespace Soomla.Profile
 			return profiles;
 		}
 
-		private List<string> parsePermissionsFromStr(String permissionsStr) {
-			if (permissionsStr == null) {
-				throw new Exception("permissionsStr == null");
-			}
-
-			string[] permissionStrArr = permissionsStr.Split(',');
-			return new List<string>(permissionStrArr);
-		}
-
 		private List<string> parsePermissionsFromJson(JSONObject permissionsJson) {
 			List<string> permissions = new List<string>();
 			List<JSONObject> dataJson = permissionsJson["data"].list;
 			foreach (JSONObject dataItem in dataJson) {
 				if ("granted".Equals(dataItem["status"].str)) {
-					this.permissions.Add(dataItem["permission"].str);
+					permissions.Add(dataItem["permission"].str);
 				}
 			}
 			return permissions;
 		}
 
-		private void checkPermission(string requestedPermission, Action success, Action<string> fail) {
-			this.checkPermissions(new string[] {requestedPermission}, success, fail);
-		}
-		
-		private void checkPermissions(string[] requestedPermissions, Action success, Action<string> fail) {
-			List<string> missedPermissions = new List<string>();
-			foreach (string requestedPermission in requestedPermissions) {
-				if (!this.permissions.Contains(requestedPermission)) {
-					missedPermissions.Add(requestedPermission);
-				}
-			}
-
-			if (missedPermissions.Count == 0) {
-				success();
-				return;
-			}
-
-			string permissionsStr = String.Join(",", missedPermissions.ToArray());
-
-			FB.Login(permissionsStr, (FBResult result) => {
-				if (result.Error != null) {
-					SoomlaUtils.LogDebug (TAG, "LoginCallback[result.Error]: " + result.Error);
-					fail(result.Error);
+		private void fetchPermissions(Action success, Action<string> fail) {
+			FB.API("/me/permissions", Facebook.HttpMethod.GET, delegate (FBResult getPermissionsResult) {
+				if (getPermissionsResult.Error != null) {
+					fail(getPermissionsResult.Error);
 					return;
 				}
 				
-				if (!FB.IsLoggedIn) {
-					SoomlaUtils.LogDebug (TAG, "LoginCallback[cancelled]");
-                    fail("User has not granter the permissions");
-                    return;
-                }
+				// inspect the response and adapt your UI as appropriate
+				// check response.Text and response.Error
+				SoomlaUtils.LogWarning(TAG, "me/permissions " + getPermissionsResult.Text);
+				
+				JSONObject permissionsJson = new JSONObject(getPermissionsResult.Text);
+				this.permissions = this.parsePermissionsFromJson(permissionsJson);
+				
+				SoomlaUtils.LogDebug(TAG, "fetched the following permissions: " + String.Join(",", this.permissions.ToArray()));
 
-				this.permissions.AddRange(missedPermissions);
 				success();
 			});
+		}
+
+        private void checkPermission(string requestedPermission, Action success, Action<string> fail) {
+            this.checkPermissions(new string[] {requestedPermission}, success, fail);
+		}
+		
+		private void checkPermissions(string[] requestedPermissions, Action success, Action<string> fail) {
+			Action checking = () => {
+				List<string> missedPermissions = new List<string>();
+				foreach (string requestedPermission in requestedPermissions) {
+					if (!this.permissions.Contains(requestedPermission)) {
+						missedPermissions.Add(requestedPermission);
+					}
+				}
+				
+				if (missedPermissions.Count == 0) {
+					success();
+					return;
+				}
+				
+				string permissionsStr = String.Join(",", missedPermissions.ToArray());
+				
+				FB.Login(permissionsStr, (FBResult result) => {
+					if (result.Error != null) {
+						SoomlaUtils.LogDebug (TAG, "LoginCallback[result.Error]: " + result.Error);
+						fail(result.Error);
+						return;
+                    }
+                    
+                    if (!FB.IsLoggedIn) {
+                        SoomlaUtils.LogDebug (TAG, "LoginCallback[cancelled]");
+                        fail("User has not granter the permissions");
+                        return;
+                    }
+                    
+                    this.permissions.AddRange(missedPermissions);
+                    success();
+                });
+			};
+
+			if (this.permissions == null) {
+				fetchPermissions(checking, fail);
+			} else {
+				checking();
+			}
         }
 	}
 }
