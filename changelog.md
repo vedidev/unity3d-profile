@@ -1,3 +1,11 @@
+### v2.1.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.1...v2.1.2)
+
+* Fixes
+  * fixed pagination in GetContacts
+  * multiShare crash on iPad with iOS8
+* Changes
+  * improve working with the permissions in FB
+
 ### v2.1.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.0...v2.1.1)
 
 * Fixes
