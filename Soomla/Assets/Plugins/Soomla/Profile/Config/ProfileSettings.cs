@@ -54,7 +54,7 @@ namespace Soomla.Profile
 //		GUIContent fbAppId = new GUIContent("FB app Id:");
 //		GUIContent fbAppNS = new GUIContent("FB app namespace:");
 
-		GUIContent fbPermissionsContent = new GUIContent ("Permissions [?]", "Permissions your app will request from users");
+		GUIContent fbPermissionsContent = new GUIContent ("Login Permissions [?]", "Permissions your app will request from users on login");
 
 		GUIContent gpClientId = new GUIContent ("Client ID [?]", "Client id of your google+ app (iOS only)");
 
