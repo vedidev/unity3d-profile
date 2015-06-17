@@ -40,6 +40,7 @@ namespace Soomla.Profile {
 				SoomlaUtils.LogDebug(TAG, "Initializing ProfileEvents (Awake)");
 
 				instance = this;
+                gameObject.name = "ProfileEvents";
 				GameObject.DontDestroyOnLoad(this.gameObject);
 				Initialize();
 				// now we initialize the event pusher
