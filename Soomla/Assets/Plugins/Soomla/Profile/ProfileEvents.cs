@@ -514,8 +514,8 @@ namespace Soomla.Profile {
 			/// Registers all events. 
 			/// </summary>
 			public ProfileEventPusher() {
-				ProfileEvents.OnLoginCancelled += _pushEventLoginStarted;
-				ProfileEvents.OnLoginFailed += _pushEventLoginFailed;
+                ProfileEvents.OnLoginCancelled += _pushEventLoginCancelled;
+                ProfileEvents.OnLoginFailed += _pushEventLoginFailed;
 				ProfileEvents.OnLoginFinished += _pushEventLoginFinished;
 				ProfileEvents.OnLoginStarted += _pushEventLoginStarted;
 				ProfileEvents.OnLogoutFailed += _pushEventLogoutFailed;
