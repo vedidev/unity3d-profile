@@ -150,7 +150,7 @@ namespace Soomla.Profile
 		public override void UpdateStory(string message, string name, string caption,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 
-			checkPermission("publish_actions", ()=> {
+//			checkPermission("publish_actions", ()=> {
 				FB.Feed(
 					link: link,
 					linkName: name,
@@ -176,9 +176,9 @@ namespace Soomla.Profile
                     }
                     
                 });
-			}, (string errorMessage)=>{
-				fail(message);
-            });
+//			}, (string errorMessage)=>{
+//				fail(message);
+//            });
         }
 
 		/// <summary>
