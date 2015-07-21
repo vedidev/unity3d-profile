@@ -356,12 +356,14 @@ namespace Soomla.Profile
 				string[] savedIntegrations = value.Split(';');
 				foreach (var savedIntegration in savedIntegrations) {
 					string[] platformValue = savedIntegration.Split(',');
-					string platform = platformValue[0];
-					int state = int.Parse(platformValue[1]);
+					if (platformValue.Length >= 2) {
+						string platform = platformValue[0];
+						int state = int.Parse(platformValue[1]);
 
-					bool? platformState = null;
-					if (toTarget.TryGetValue(platform, out platformState)) {
-						toTarget[platform] = (state > 0);
+						bool? platformState = null;
+						if (toTarget.TryGetValue(platform, out platformState)) {
+							toTarget[platform] = (state > 0);
+						}
 					}
 				}
 			}
