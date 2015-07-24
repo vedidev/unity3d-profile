@@ -90,7 +90,7 @@ extern "C"{
 
         NSData *imageData = [NSData dataFromBase64String:imageBase64StrS];
         [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andImageFileName:fileNameS andImageData:imageData andPayload:payloadS andReward:nil
-                                         andShowConfirmation:showConfirmation andCustomMessage:customMessageS];
+                                         andConfirmation:showConfirmation andCustomMessage:customMessageS];
     }
     
     void soomlaProfile_GetContacts(const char* sProvider, bool fromStart, const char* payload){
