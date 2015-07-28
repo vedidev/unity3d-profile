@@ -95,9 +95,7 @@ namespace Soomla.Profile
 		{
 			List<string> savedStates = new List<string>();
 			foreach (var entry in socialIntegrationState) {
-				if (entry.Value != null) {
-					savedStates.Add(entry.Key + "," + (entry.Value.Value ? 1 : 0));
-				}
+				savedStates.Add(entry.Key + "," + ((entry.Value != null && entry.Value.Value) ? 1 : 0));
 			}
 
 			string result = string.Empty;
