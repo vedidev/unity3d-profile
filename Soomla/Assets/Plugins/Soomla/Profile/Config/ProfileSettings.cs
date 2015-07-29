@@ -51,7 +51,9 @@ namespace Soomla.Profile
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
 
-//		GUIContent fbAppId = new GUIContent("FB app Id:");
+		GUIContent autoLoginContent = new GUIContent ("Auto Login [?]", "Should Soomla try to log in automatically on start, if user already was logged in in the previous sessions.");
+
+		//		GUIContent fbAppId = new GUIContent("FB app Id:");
 //		GUIContent fbAppNS = new GUIContent("FB app namespace:");
 
 		GUIContent fbPermissionsContent = new GUIContent ("Login Permissions [?]", "Permissions your app will request from users on login");
@@ -271,24 +273,39 @@ namespace Soomla.Profile
 			{
 			case "facebook":
 				EditorGUI.BeginDisabledGroup(isDisabled);
+
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(fbPermissionsContent,  GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
 				FBPermissions = EditorGUILayout.TextField(FBPermissions, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+				FBAutoLogin = EditorGUILayout.Toggle(autoLoginContent, FBAutoLogin);
+				EditorGUILayout.EndHorizontal();
+
 				EditorGUI.EndDisabledGroup();
 				break;
 			case "google":
 				EditorGUI.BeginDisabledGroup(isDisabled);
+
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(gpClientId,  GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
 				GPClientId = EditorGUILayout.TextField(GPClientId, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+				GPAutoLogin = EditorGUILayout.Toggle(autoLoginContent, GPAutoLogin);
+				EditorGUILayout.EndHorizontal();
+				
 				EditorGUI.EndDisabledGroup();
 				break;
 			case "twitter":
 				EditorGUI.BeginDisabledGroup(isDisabled);
+
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(twCustKey, GUILayout.Width(150), SoomlaEditorScript.FieldHeight);
@@ -301,6 +318,12 @@ namespace Soomla.Profile
 				TwitterConsumerSecret = EditorGUILayout.TextField(TwitterConsumerSecret, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
 				EditorGUILayout.Space();
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+				TwitterAutoLogin = EditorGUILayout.Toggle(autoLoginContent, TwitterAutoLogin);
+				EditorGUILayout.EndHorizontal();
+				
 				EditorGUI.EndDisabledGroup();
 				break;
 			default:
@@ -437,6 +460,24 @@ namespace Soomla.Profile
 			}
 		}
 
+		public static bool FBAutoLogin
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAutoLogin", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAutoLogin", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("FBAutoLogin", value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
 
 		/** GOOGLE+ **/
 
@@ -460,6 +501,24 @@ namespace Soomla.Profile
 			}
 		}
 
+		public static bool GPAutoLogin
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GoogleAutoLogin", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GoogleAutoLogin", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("GoogleAutoLogin", value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+		
 		/** TWITTER **/
 
 		public static string TWITTER_CONSUMER_KEY_DEFAULT = "YOUR TWITTER CONSUMER KEY";
@@ -501,5 +560,23 @@ namespace Soomla.Profile
 			}
 		}
 
+		public static bool TwitterAutoLogin
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterAutoLogin", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterAutoLogin", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("TwitterAutoLogin", value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+		
 	}
 }

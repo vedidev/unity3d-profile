@@ -25,10 +25,10 @@ import static com.soomla.profile.domain.IProvider.Provider;
 
 public class UnitySoomlaProfile {
 
-    public static void initialize(String customParamsJson) throws JSONException {
+    public static void initialize(Activity activity, String customParamsJson) throws JSONException {
         SoomlaUtils.LogDebug(TAG, "Initializing SoomlaProfile from bridge");
         JSONObject customParamsJsonObj = new JSONObject(customParamsJson);
-        SoomlaProfile.getInstance().initialize(parseProviderParams(customParamsJsonObj));
+        SoomlaProfile.getInstance().initialize(activity, parseProviderParams(customParamsJsonObj));
     }
 
     public static void login(Activity activity, String providerStr, String payload) throws ProviderNotFoundException {
