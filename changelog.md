@@ -1,3 +1,17 @@
+### v2.1.3 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.2...v2.1.3)
+
+* New Features
+  * Implemented auto login
+
+* Changes
+  * Removed publish_actions permission requirement for posting a story
+
+* Fixes
+  * Fixed crash when Logout is called twice
+  * Fixed IndexOutOfBoundsException in profile Editor
+  * Fix uploadImage
+  * Fixed crash in ProfileSettings.cs when editing FB permission in inspector
+
 ### v2.1.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.1...v2.1.2)
 
 * Fixes
