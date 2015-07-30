@@ -126,7 +126,7 @@ namespace Soomla.Profile
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.1.2");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.1.3");
 			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
 			EditorGUILayout.Space();
 		}
@@ -300,7 +300,7 @@ namespace Soomla.Profile
 				EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
 				GPAutoLogin = EditorGUILayout.Toggle(autoLoginContent, GPAutoLogin);
 				EditorGUILayout.EndHorizontal();
-				
+
 				EditorGUI.EndDisabledGroup();
 				break;
 			case "twitter":
@@ -323,7 +323,7 @@ namespace Soomla.Profile
 				EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
 				TwitterAutoLogin = EditorGUILayout.Toggle(autoLoginContent, TwitterAutoLogin);
 				EditorGUILayout.EndHorizontal();
-				
+
 				EditorGUI.EndDisabledGroup();
 				break;
 			default:
@@ -518,7 +518,7 @@ namespace Soomla.Profile
 				}
 			}
 		}
-		
+
 		/** TWITTER **/
 
 		public static string TWITTER_CONSUMER_KEY_DEFAULT = "YOUR TWITTER CONSUMER KEY";
@@ -577,6 +577,6 @@ namespace Soomla.Profile
 				}
 			}
 		}
-		
+
 	}
 }
