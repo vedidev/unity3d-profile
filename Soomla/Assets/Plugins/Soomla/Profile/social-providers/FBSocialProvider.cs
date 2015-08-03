@@ -92,10 +92,12 @@ namespace Soomla.Profile
 						SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Text]: "+meResult.Text);
 						SoomlaUtils.LogDebug(TAG, "ProfileCallback[result.Texture]: "+meResult.Texture);
 						string fbUserJson = meResult.Text;
-						UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson);
-						
+						UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson, this);
+
 						SoomlaProfile.StoreUserProfile (userProfile, true);
-						
+						foreach (String key in userProfile.Extra.Keys) {
+							Debug.Log(userProfile.Extra[key]);
+						}
 						success(userProfile);
 					}
 				});
@@ -403,11 +405,15 @@ namespace Soomla.Profile
 		private void ProfileCallback(FBResult result) {
 		}
 
-		private static UserProfile UserProfileFromFBJsonString(string fbUserJsonStr) {
-			return UserProfileFromFBJson(new JSONObject (fbUserJsonStr));
+		private static UserProfile UserProfileFromFBJsonString(string fbUserJsonStr, FBSocialProvider provider) {
+			return UserProfileFromFBJson(new JSONObject (fbUserJsonStr), provider);
 		}
-		
+
 		private static UserProfile UserProfileFromFBJson(JSONObject fbJsonObject) {
+			return UserProfileFromFBJson(fbJsonObject, null);
+		}
+
+		private static UserProfile UserProfileFromFBJson(JSONObject fbJsonObject, FBSocialProvider provider) {
 			JSONObject soomlaJsonObject = new JSONObject ();
 			soomlaJsonObject.AddField(PJSONConsts.UP_PROVIDER, Provider.FACEBOOK.ToString ());
 			soomlaJsonObject.AddField(PJSONConsts.UP_PROFILEID, fbJsonObject["id"].str);
@@ -421,7 +427,20 @@ namespace Soomla.Profile
 			soomlaJsonObject.AddField(PJSONConsts.UP_FIRSTNAME, fbJsonObject["first_name"].str);
 			soomlaJsonObject.AddField(PJSONConsts.UP_LASTNAME, fbJsonObject["last_name"].str);
 			soomlaJsonObject.AddField(PJSONConsts.UP_AVATAR, fbJsonObject["picture"]["data"]["url"].str);
-			UserProfile userProfile = new UserProfile (soomlaJsonObject);
+
+			if (provider != null) { //let us to know if method called during own profile receiving
+				Dictionary<String, JSONObject> extraDict = new Dictionary<String, JSONObject>();
+				extraDict.Add("access_token", JSONObject.StringObject(FB.AccessToken));
+				JSONObject permissionsObject = JSONObject.Create(JSONObject.Type.ARRAY);
+				foreach (String permission in provider.permissions) {
+					permissionsObject.Add(permission);
+				}
+				extraDict.Add("permissions", permissionsObject);
+				extraDict.Add("expiration_date", new JSONObject((FB.AccessTokenExpiresAt - new DateTime(1970, 1, 1)).TotalSeconds));
+				soomlaJsonObject.AddField(PJSONConsts.UP_EXTRA, new JSONObject(extraDict));
+			}
+
+			UserProfile userProfile = new UserProfile(soomlaJsonObject);
 			
 			return userProfile;
 		}
