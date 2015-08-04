@@ -95,9 +95,6 @@ namespace Soomla.Profile
 						UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson, this);
 
 						SoomlaProfile.StoreUserProfile (userProfile, true);
-						foreach (String key in userProfile.Extra.Keys) {
-							Debug.Log(userProfile.Extra[key]);
-						}
 						success(userProfile);
 					}
 				});
