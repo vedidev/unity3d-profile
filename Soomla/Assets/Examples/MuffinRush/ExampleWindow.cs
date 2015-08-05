@@ -124,7 +124,7 @@ public class ExampleWindow : MonoBehaviour {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "User opened rating page");
 		};
 		
-		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, string payload) => {
+		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, bool autoLogin, string payload) => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "login finished for: " + UserProfile.toJSONObject().print());
 			SoomlaProfile.GetContacts(targetProvider);
 		};

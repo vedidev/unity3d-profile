@@ -25,13 +25,13 @@ namespace Soomla.Profile {
 
 		// event pushing back to native (when using FB Unity SDK)
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventLoginStarted(string provider, string payload);
+		private static extern void soomlaProfile_PushEventLoginStarted(string provider, bool autoLogin, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventLoginFinished(string userProfileJson, string payload);
+		private static extern void soomlaProfile_PushEventLoginFinished(string userProfileJson, bool autoLogin, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventLoginFailed(string provider, string message, string payload);
+		private static extern void soomlaProfile_PushEventLoginFailed(string provider, string message, bool autoLogin, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventLoginCancelled(string provider, string payload);
+		private static extern void soomlaProfile_PushEventLoginCancelled(string provider, bool autoLogin, string payload);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventLogoutStarted(string provider);
 		[DllImport ("__Internal")]
@@ -55,22 +55,22 @@ namespace Soomla.Profile {
 
 
 		// event pushing back to native (when using FB Unity SDK)
-		protected override void _pushEventLoginStarted(Provider provider, string payload) {
+		protected override void _pushEventLoginStarted(Provider provider, bool autoLogin, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
-			soomlaProfile_PushEventLoginStarted(provider.ToString(), payload);
+			soomlaProfile_PushEventLoginStarted(provider.ToString(), autoLogin, payload);
 		}
 
-		protected override void _pushEventLoginFinished(UserProfile userProfile, string payload) { 
+		protected override void _pushEventLoginFinished(UserProfile userProfile, bool autoLogin, string payload) { 
 			if (SoomlaProfile.IsProviderNativelyImplemented(userProfile.Provider)) return;
-			soomlaProfile_PushEventLoginFinished(userProfile.toJSONObject().print(), payload);
+			soomlaProfile_PushEventLoginFinished(userProfile.toJSONObject().print(), autoLogin, payload);
 		}
-		protected override void _pushEventLoginFailed(Provider provider, string message, string payload) {
+		protected override void _pushEventLoginFailed(Provider provider, string message, bool autoLogin, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
-			soomlaProfile_PushEventLoginFailed(provider.ToString(), message, payload);
+			soomlaProfile_PushEventLoginFailed(provider.ToString(), message, autoLogin, payload);
 		}
-		protected override void _pushEventLoginCancelled(Provider provider, string payload) { 
+		protected override void _pushEventLoginCancelled(Provider provider, bool autoLogin, string payload) { 
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
-			soomlaProfile_PushEventLoginCancelled(provider.ToString(), payload);
+			soomlaProfile_PushEventLoginCancelled(provider.ToString(), autoLogin, payload);
 		}
 		protected override void _pushEventLogoutStarted(Provider provider) { 
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;

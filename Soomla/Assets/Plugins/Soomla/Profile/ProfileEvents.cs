@@ -116,10 +116,11 @@ namespace Soomla.Profile {
 
 			JSONObject eventJson = new JSONObject(message);
 			Provider provider = Provider.fromInt((int)(eventJson["provider"].n));
+			bool autoLogin = eventJson["autoLogin"].b;
 
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 			string payload = ProfilePayload.GetUserPayload(payloadJSON);
-			ProfileEvents.OnLoginStarted(provider, payload);
+			ProfileEvents.OnLoginStarted(provider, autoLogin, payload);
 		}
 
 		/// <summary>
@@ -134,6 +135,8 @@ namespace Soomla.Profile {
 
 			UserProfile userProfile = new UserProfile (eventJson ["userProfile"]);
 
+			bool autoLogin = eventJson["autoLogin"].b;
+
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
 			//give a reward
@@ -141,7 +144,7 @@ namespace Soomla.Profile {
 			if (reward !=null)
 				reward.Give();
 
-			ProfileEvents.OnLoginFinished (userProfile, ProfilePayload.GetUserPayload(payloadJSON));
+			ProfileEvents.OnLoginFinished(userProfile, autoLogin, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
 		/// <summary>
@@ -158,9 +161,11 @@ namespace Soomla.Profile {
 
 			Provider provider = Provider.fromInt((int)(eventJson["provider"].n));
 
+			bool autoLogin = eventJson["autoLogin"].b;
+
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
-			ProfileEvents.OnLoginCancelled (provider, ProfilePayload.GetUserPayload(payloadJSON));
+			ProfileEvents.OnLoginCancelled (provider, autoLogin, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
 		/// <summary>
@@ -178,9 +183,11 @@ namespace Soomla.Profile {
 			Provider provider = Provider.fromInt((int)(eventJson["provider"].n));
 			String errorMessage = eventJson["message"].str;
 
+			bool autoLogin = eventJson["autoLogin"].b;
+
 			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 
-			ProfileEvents.OnLoginFailed(provider, errorMessage, ProfilePayload.GetUserPayload(payloadJSON));
+			ProfileEvents.OnLoginFailed(provider, errorMessage, autoLogin, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
 		/// <summary>
@@ -460,16 +467,16 @@ namespace Soomla.Profile {
 
 		public static Action OnUserRatingEvent =delegate {};
 
-		public static Action<Provider, string> OnLoginCancelled = delegate {};
-
 		public static Action<UserProfile> OnUserProfileUpdated = delegate {};
 
-		public static Action<Provider, string, string> OnLoginFailed = delegate {};
+		public static Action<Provider, string, bool, string> OnLoginFailed = delegate {};
 
-		public static Action<UserProfile, string> OnLoginFinished = delegate {};
+		public static Action<UserProfile, bool, string> OnLoginFinished = delegate {};
 
-		public static Action<Provider, string> OnLoginStarted = delegate {};
+		public static Action<Provider, bool, string> OnLoginStarted = delegate {};
 
+		public static Action<Provider, bool, string> OnLoginCancelled = delegate {};
+		
 		public static Action<Provider, string> OnLogoutFailed = delegate {};
 		
 		public static Action<Provider> OnLogoutFinished = delegate {}; 
@@ -537,10 +544,10 @@ namespace Soomla.Profile {
 			}
 
 			// Event pushing back to native (when using FB Unity SDK)
-			protected virtual void _pushEventLoginStarted(Provider provider, string payload) {}
-			protected virtual void _pushEventLoginFinished(UserProfile userProfileJson, string payload){}
-			protected virtual void _pushEventLoginFailed(Provider provider, string message, string payload){}
-			protected virtual void _pushEventLoginCancelled(Provider provider, string payload){}
+			protected virtual void _pushEventLoginStarted(Provider provider, bool autoLogin, string payload) {}
+			protected virtual void _pushEventLoginFinished(UserProfile userProfileJson, bool autoLogin, string payload){}
+			protected virtual void _pushEventLoginFailed(Provider provider, string message, bool autoLogin, string payload){}
+			protected virtual void _pushEventLoginCancelled(Provider provider, bool autoLogin, string payload){}
 			protected virtual void _pushEventLogoutStarted(Provider provider){}
 			protected virtual void _pushEventLogoutFinished(Provider provider){}
 			protected virtual void _pushEventLogoutFailed(Provider provider, string message){}

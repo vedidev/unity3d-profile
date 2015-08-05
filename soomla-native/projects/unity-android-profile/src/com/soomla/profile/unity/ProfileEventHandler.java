@@ -86,6 +86,7 @@ public class ProfileEventHandler {
         JSONObject eventJSON = new JSONObject();
         try {
             eventJSON.put("provider", provider.getValue());
+            eventJSON.put("autoLogin", loginStartedEvent.AutoLogin);
             eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onLoginStarted", provider.getValue());
         } catch (JSONException e) {
@@ -101,6 +102,7 @@ public class ProfileEventHandler {
         JSONObject eventJSON = new JSONObject();
         try {
             eventJSON.put("userProfile", userProfile.toJSONObject());
+            eventJSON.put("autoLogin", loginFinishedEvent.AutoLogin);
             eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onLoginFinished", provider.getValue());
         } catch (JSONException e) {
@@ -115,6 +117,7 @@ public class ProfileEventHandler {
         JSONObject eventJSON = new JSONObject();
         try {
             eventJSON.put("provider", provider.getValue());
+            eventJSON.put("autoLogin", loginCancelledEvent.AutoLogin);
             eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onLoginCancelled", provider.getValue());
         } catch (JSONException e) {
@@ -131,6 +134,7 @@ public class ProfileEventHandler {
         try {
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("message", message);
+            eventJSON.put("autoLogin", loginFailedEvent.AutoLogin);
             eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onLoginFailed", provider.getValue());
         } catch (JSONException e) {
@@ -356,25 +360,25 @@ public class ProfileEventHandler {
     /**************************************************************************************************/
     // events pushed from external provider (Unity FB SDK etc.)
 
-    public static void pushEventLoginStarted(String providerStr, String payload) {
+    public static void pushEventLoginStarted(String providerStr, boolean autoLogin, String payload) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
-        BusProvider.getInstance().post(new LoginStartedEvent(provider, payload));
+        BusProvider.getInstance().post(new LoginStartedEvent(provider, autoLogin, payload));
     }
 
-    public static void pushEventLoginFinished(String userProfileJSON, String payload) throws Exception {
+    public static void pushEventLoginFinished(String userProfileJSON, boolean autoLogin, String payload) throws Exception {
         JSONObject jsonObject = new JSONObject(userProfileJSON);
         UserProfile userProfile = new UserProfile(jsonObject);
-        BusProvider.getInstance().post(new LoginFinishedEvent(userProfile, payload));
+        BusProvider.getInstance().post(new LoginFinishedEvent(userProfile, autoLogin, payload));
     }
 
-    public static void pushEventLoginFailed(String providerStr, String message, String payload) {
+    public static void pushEventLoginFailed(String providerStr, String message, boolean autoLogin, String payload) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
-        BusProvider.getInstance().post(new LoginFailedEvent(provider, message, payload));
+        BusProvider.getInstance().post(new LoginFailedEvent(provider, message, autoLogin, payload));
     }
 
-    public static void pushEventLoginCancelled(String providerStr, String payload) {
+    public static void pushEventLoginCancelled(String providerStr, boolean autoLogin, String payload) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
-        BusProvider.getInstance().post(new LoginCancelledEvent(provider, payload));
+        BusProvider.getInstance().post(new LoginCancelledEvent(provider, autoLogin, payload));
     }
 
     public static void pushEventLogoutStarted(String providerStr) {

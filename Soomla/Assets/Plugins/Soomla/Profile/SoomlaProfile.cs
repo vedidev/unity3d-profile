@@ -95,18 +95,18 @@ namespace Soomla.Profile
                                 if (entry.Value.IsLoggedIn()) {
                                     entry.Value.GetUserProfile((UserProfile userProfile) => {
                                         setLoggedInForProvider(provider, false);
-                                        ProfileEvents.OnLoginStarted(provider, payload);
+										ProfileEvents.OnLoginStarted(provider, true, payload);
                                         StoreUserProfile(userProfile);
                                         setLoggedInForProvider(provider, true);
-                                        ProfileEvents.OnLoginFinished(userProfile, payload);
+                                        ProfileEvents.OnLoginFinished(userProfile, true, payload);
                                         if (reward != null) {
                                             reward.Give();
                                         }
                                     }, (string message) => {  
-                                        ProfileEvents.OnLoginFailed(provider, message, payload);
+                                        ProfileEvents.OnLoginFailed(provider, message, true, payload);
                                     });
                                 } else {
-                                    Login(provider, payload, reward);
+									login(provider, true, payload, reward);
                                 }
                             }
                         }
@@ -119,14 +119,18 @@ namespace Soomla.Profile
             #endif
         }
         
-        /// <summary>
-        /// Logs the user into the given provider.
+		/// <summary>
+		/// Logs the user into the given provider.
 		/// Supported platforms: Facebook, Twitter, Google+
 		/// </summary>
 		/// <param name="provider">The provider to log in to.</param>
 		/// <param name="payload">A string to receive when the function returns.</param>
 		/// <param name="reward">A <c>Reward</c> to give the user after a successful login.</param>
 		public static void Login(Provider provider, string payload="", Reward reward = null) {
+			login(provider, false, payload, reward);
+		}
+
+		private static void login(Provider provider, bool autoLogin, string payload="", Reward reward = null) {
 			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			string userPayload = (payload == null) ? "" : payload;
@@ -146,22 +150,22 @@ namespace Soomla.Profile
 			else 
 			{
 				setLoggedInForProvider(provider, false);
-				ProfileEvents.OnLoginStarted(provider, userPayload);
+				ProfileEvents.OnLoginStarted(provider, autoLogin, userPayload);
 				targetProvider.Login(
 					/* success */	() => {
 					targetProvider.GetUserProfile((UserProfile userProfile) => {
 						StoreUserProfile(userProfile);
 						setLoggedInForProvider(provider, true);
-						ProfileEvents.OnLoginFinished(userProfile, userPayload);
+						ProfileEvents.OnLoginFinished(userProfile, autoLogin, userPayload);
 						if (reward != null) {
 							reward.Give();
 						}
 					}, (string message) => {  
-						ProfileEvents.OnLoginFailed (provider, message, userPayload);
+						ProfileEvents.OnLoginFailed (provider, message, autoLogin, userPayload);
 					});
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, userPayload); },
-				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, userPayload); }
+				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, autoLogin, userPayload); },
+				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, autoLogin, userPayload); }
 				);
 			}
 		}
