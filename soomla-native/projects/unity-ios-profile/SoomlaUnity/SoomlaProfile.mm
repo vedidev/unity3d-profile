@@ -88,7 +88,7 @@ extern "C"{
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         NSString* customMessageS = customMessage ? [NSString stringWithUTF8String:customMessage] : nil;
 
-        NSData *imageData = [NSData dataFromBase64String:imageBase64StrS];
+        NSData *imageData = [NSData dataFromBase64String_soomla:imageBase64StrS];
         [[SoomlaProfile getInstance] uploadImageWithProvider:[UserProfileUtils providerStringToEnum:providerIdS] andMessage:messageS andImageFileName:fileNameS andImageData:imageData andPayload:payloadS andReward:nil
                                          andConfirmation:showConfirmation andCustomMessage:customMessageS];
     }

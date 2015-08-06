@@ -12,30 +12,30 @@ extern "C"{
     
     // events pushed from external provider (Unity FB SDK etc.)
     
-    void soomlaProfile_PushEventLoginStarted (const char* sProvider, const char* payload) {
+    void soomlaProfile_PushEventLoginStarted (const char* sProvider, bool autoLogin, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postLoginStarted:provider withPayload:payloadS];
+        [ProfileEventHandling postLoginStarted:provider withAutoLogin:autoLogin andPayload:payloadS];
     }
-    void soomlaProfile_PushEventLoginFinished(const char* sUserProfileJson, const char* payload) {
+    void soomlaProfile_PushEventLoginFinished(const char* sUserProfileJson, bool autoLogin, const char* payload) {
         NSString *userProfileJson = [NSString stringWithUTF8String:sUserProfileJson];
         UserProfile* userProfile = [[UserProfile alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:userProfileJson]];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postLoginFinished:userProfile withPayload:payloadS];
+        [ProfileEventHandling postLoginFinished:userProfile withAutoLogin:autoLogin andPayload:payloadS];
     }
-    void soomlaProfile_PushEventLoginFailed(const char* sProvider, const char* sMessage, const char* payload) {
+    void soomlaProfile_PushEventLoginFailed(const char* sProvider, const char* sMessage, bool autoLogin, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString *message = [NSString stringWithUTF8String:sMessage];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postLoginFailed:provider withMessage:message withPayload:payloadS];
+        [ProfileEventHandling postLoginFailed:provider withMessage:message andAutoLogin:autoLogin andPayload:payloadS];
     }
-    void soomlaProfile_PushEventLoginCancelled(const char* sProvider, const char* payload) {
+    void soomlaProfile_PushEventLoginCancelled(const char* sProvider, bool autoLogin, const char* payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postLoginCancelled:provider withPayload:payloadS];
+        [ProfileEventHandling postLoginCancelled:provider withAutoLogin:autoLogin andPayload:payloadS];
     }
     void soomlaProfile_PushEventLogoutStarted(const char* sProvider) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
@@ -164,6 +164,7 @@ extern "C"{
         NSNumber *provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"autoLogin":[userInfo valueForKey:DICT_ELEMENT_AUTO_LOGIN],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         [UnityProfileEventDispatcher sendMessage:jsonStr
@@ -176,6 +177,7 @@ extern "C"{
         UserProfile* userProfile = [userInfo valueForKey:DICT_ELEMENT_USER_PROFILE];
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"userProfile":[userProfile toDictionary],
+                                                            @"autoLogin":[userInfo valueForKey:DICT_ELEMENT_AUTO_LOGIN],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         [UnityProfileEventDispatcher sendMessage:jsonStr
@@ -188,6 +190,7 @@ extern "C"{
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"autoLogin":[userInfo valueForKey:DICT_ELEMENT_AUTO_LOGIN],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -201,6 +204,7 @@ extern "C"{
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
+                                                            @"autoLogin":[userInfo valueForKey:DICT_ELEMENT_AUTO_LOGIN],
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         

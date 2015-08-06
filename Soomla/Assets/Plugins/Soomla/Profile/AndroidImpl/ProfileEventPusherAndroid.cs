@@ -25,35 +25,35 @@ namespace Soomla.Profile {
 #if UNITY_ANDROID && !UNITY_EDITOR
 
 		// event pushing back to native (when using FB Unity SDK)
-		protected override void _pushEventLoginStarted(Provider provider, string payload) {
+		protected override void _pushEventLoginStarted(Provider provider, bool autoLogin, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginStarted", provider.ToString(), payload);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginStarted", provider.ToString(), autoLogin, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
-		protected override void _pushEventLoginFinished(UserProfile userProfile, string payload) { 
+		protected override void _pushEventLoginFinished(UserProfile userProfile, bool autoLogin, string payload) { 
 			if (SoomlaProfile.IsProviderNativelyImplemented(userProfile.Provider)) return;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginFinished", userProfile.toJSONObject().print(), payload);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginFinished", userProfile.toJSONObject().print(), autoLogin, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
-		protected override void _pushEventLoginFailed(Provider provider, string message, string payload) {
+		protected override void _pushEventLoginFailed(Provider provider, string message, bool autoLogin, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginFailed", provider.ToString(), message, payload);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginFailed", provider.ToString(), message, autoLogin, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
-		protected override void _pushEventLoginCancelled(Provider provider, string payload) { 
+		protected override void _pushEventLoginCancelled(Provider provider, bool autoLogin, string payload) { 
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
-				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginCancelled", provider.ToString(), payload);
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventLoginCancelled", provider.ToString(), autoLogin, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
