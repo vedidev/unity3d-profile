@@ -15,6 +15,7 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
+using System.Collections.Generic;
 
 namespace Soomla.Profile {
 
@@ -41,18 +42,32 @@ namespace Soomla.Profile {
 		public string Gender;
 		public string Language;
 		public string Birthday;
-		
+		public readonly Dictionary<String, JSONObject> Extra;
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="provider">The provider this <c>UserProfile</c> belongs to.</param>
 		/// <param name="profileId">A unique ID that identifies the current user with the provider.</param>
 		/// <param name="username">The username of the current user in the provider.</param>
-		protected UserProfile(Provider provider, string profileId, string username)
+		/// <param name="extra">Additional info provided by SN.</param>
+		protected UserProfile(Provider provider, string profileId, string username, Dictionary<String, JSONObject> extra)
 		{
 			this.Provider = provider;
 			this.ProfileId = profileId;
 			this.Username = username;
+			this.Extra = extra;
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="provider">The provider this <c>UserProfile</c> belongs to.</param>
+		/// <param name="profileId">A unique ID that identifies the current user with the provider.</param>
+		/// <param name="username">The username of the current user in the provider.</param>
+		protected UserProfile(Provider provider, string profileId, string username) 
+			: this(provider, profileId, username, new Dictionary<String, JSONObject>())
+		{
 		}
 
 		/// <summary>
@@ -105,6 +120,12 @@ namespace Soomla.Profile {
 			} else {
 				this.Birthday = "";
 			}
+			this.Extra = new Dictionary<String, JSONObject>();
+			if (jsonUP[PJSONConsts.UP_EXTRA]) {
+				foreach (String key in jsonUP[PJSONConsts.UP_EXTRA].keys) {
+					this.Extra.Add(key, jsonUP[PJSONConsts.UP_EXTRA][key]);
+				}
+			}
 		}
 		
 		/// <summary>
@@ -125,6 +146,7 @@ namespace Soomla.Profile {
 			obj.AddField(PJSONConsts.UP_GENDER, this.Gender);
 			obj.AddField(PJSONConsts.UP_LANGUAGE, this.Language);
 			obj.AddField(PJSONConsts.UP_BIRTHDAY, this.Birthday);
+			obj.AddField(PJSONConsts.UP_EXTRA, new JSONObject(this.Extra));
 			
 			return obj;
 		}
