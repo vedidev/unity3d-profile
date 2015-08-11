@@ -121,6 +121,32 @@ extern "C"{
         [ProfileEventHandling postGetContactsFailed:provider withType:socialActionType withMessage:message withFromStart: fromStart withPayload:payloadS];
     }
 
+    void soomlaProfile_PushEventGetFeedFinished(const char* sProvider, const char* sFeedJson, const char* payload, bool hasMore) {
+        NSString *providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        SocialActionType socialActionType = SocialActionType::GET_FEED;
+        NSString *payloadS = [NSString stringWithUTF8String:payload];
+
+        NSMutableArray *feeds = [NSMutableArray array];
+        NSMutableArray *feedDictArray = [SoomlaUtils jsonStringToArray:[NSString stringWithUTF8String:sFeedJson]];
+        if (feedDictArray) {
+            for (NSString *feedEntry in feedDictArray) {
+                [feeds addObject:feedEntry];
+            }
+        }
+
+        [ProfileEventHandling postGetFeedFinished:provider withType:socialActionType withContacts:feeds withPayload:payloadS withHasMore:hasMore];
+    }
+
+    void soomlaProfile_PushEventGetFeedFailed(const char* sProvider, const char* sMessage, bool fromStart, const char * payload) {
+        NSString *providerIdS = [NSString stringWithUTF8String:sProvider];
+       Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString *message = [NSString stringWithUTF8String:sMessage];
+        SocialActionType socialActionType = SocialActionType::GET_FEED;
+        NSString *payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postGetFeedFailed:provider withType:socialActionType withMessage:message withFromStart:fromStart withPayload:payloadS];
+    }
+
 }
 
 @implementation UnityProfileEventDispatcher
