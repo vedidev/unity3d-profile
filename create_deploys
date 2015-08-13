@@ -1,3 +1,4 @@
+PROFILE_FILES=$(<files)
 
 echo "creating unitypackage for SOOMLA Profile"
 
@@ -6,13 +7,6 @@ echo "creating unitypackage for SOOMLA Profile"
   -logFile create_unity.log \
   -projectPath $PWD/Soomla/ \
   -exportPackage \
-    Assets/Plugins/Android/AndroidProfile.jar \
-    Assets/Plugins/Android/UnityAndroidProfile.jar \
-    Assets/Plugins/iOS/libSoomlaiOSProfile.a \
-    Assets/Plugins/iOS/libUnityiOSProfile.a \
-    Assets/Plugins/Soomla/Profile \
-    Assets/Soomla/Editor/build-tools/Soomla_ProfileRunner.py \
-    Assets/Soomla/Prefabs/ProfileEvents.prefab \
-    Assets/WebPlayerTemplates \
+    $PROFILE_FILES \
   $PWD/soomla-unity3d-profile.unitypackage \
   -quit
