@@ -33,8 +33,8 @@ unity3d-profile easily connects to SOOMLA's virtual economy model (unity3d-store
 
 ####Pre baked unitypackage:
 
-[soomla-unity3d-core v1.0.8](http://library.soom.la/fetch/unity3d-core/1.0.8?cf=github)  
-[unity3d-profile v2.1.3](http://library.soom.la/fetch/unity3d-profile/2.1.3?cf=github)  
+[soomla-unity3d-core v1.0.9](http://library.soom.la/fetch/unity3d-core/1.0.9?cf=github)  
+[unity3d-profile v2.1.4](http://library.soom.la/fetch/unity3d-profile/2.1.4?cf=github)  
 
 ## Debugging
 

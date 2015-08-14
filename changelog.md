@@ -1,3 +1,16 @@
+### v2.1.4 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.3...v2.1.4)
+
+* New Features
+  * Support extra params in UserProfile
+
+* Changes
+  * New build way
+
+* Fixes
+  * Fixed build for Unity 4.x
+  * Add "autoLogin" field to LoginFinishedEvent
+  * Change dataFromBase64String to dataFromBase64String_soomla in Unity3d
+
 ### v2.1.3 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.2...v2.1.3)
 
 * New Features
