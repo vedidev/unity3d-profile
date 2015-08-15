@@ -26,7 +26,7 @@ namespace Soomla.Profile {
 	/// See comments for functions in parent.
 	/// </summary>
 	public class SoomlaProfileIOS : SoomlaProfile {
-		#if !UNITY_IOS && UNITY_EDITOR
+		#if UNITY_IOS && !UNITY_EDITOR
 		
 		/// Functions that call iOS-store functions.
 		[DllImport ("__Internal")]

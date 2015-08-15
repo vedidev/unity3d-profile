@@ -428,21 +428,19 @@ namespace Soomla.Profile {
 		public void onGetFeedFinished(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetFeedFinished");
-			
+
 			JSONObject eventJson = new JSONObject(message);
-			
 			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
-			bool hasMore = eventJson["hasMore"].b;
-
-			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
-
 			JSONObject feedsJson = eventJson ["feeds"];
 			List<String> feeds = new List<String>();
-			foreach (String key in feedsJson.keys) {
+			foreach (JSONObject feedVal in feedsJson.list) {
 				//iterate "feed" keys
-				feeds.Add(feedsJson[key].str);
+				feeds.Add(feedVal.str);
 			}
 
+			bool hasMore = eventJson["hasMore"].b;
+			
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
 			SocialPageData<String> result = new SocialPageData<String>();
 			result.PageData = feeds;
 			result.PageNumber = 0;

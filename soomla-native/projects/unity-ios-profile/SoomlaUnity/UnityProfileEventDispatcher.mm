@@ -381,11 +381,14 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_UP_GET_FEED_STARTED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
-        
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
-                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
-                                                            }];
-        
+        NSNumber* fromStart = [userInfo valueForKey:DICT_ELEMENT_FROM_START];
+
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                @"provider":provider,
+                @"fromStart":fromStart,
+                @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+        }];
+
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetFeedStarted"
                                       withFilter:provider];
@@ -394,15 +397,19 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         NSArray* feeds = [userInfo valueForKey:DICT_ELEMENT_FEEDS];
+        NSNumber*hasMore = [userInfo valueForKey:DICT_ELEMENT_HAS_MORE];
         
         NSMutableArray* feedsJsonArray = [NSMutableArray array];
         for (int i = 0; i < [feeds count]; i++) {
             [feedsJsonArray addObject:[feeds objectAtIndex:i]];
         }
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
-                                                            @"feeds":feedsJsonArray
-                                                            }];
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                @"provider":provider,
+                @"feeds":feedsJsonArray,
+                @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD],
+                @"hasMore": hasMore
+        }];
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetFeedFinished"
                                       withFilter:provider];
@@ -410,10 +417,14 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_UP_GET_FEED_FAILED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        NSNumber* fromStart = [userInfo valueForKey:DICT_ELEMENT_FROM_START];
         
-        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
-                                                            @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
-                                                            }];
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                @"provider":provider,
+                @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
+                @"fromStart":fromStart,
+                @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+        }];
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetFeedFailed"
