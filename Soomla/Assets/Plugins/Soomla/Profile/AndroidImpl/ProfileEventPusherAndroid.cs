@@ -159,7 +159,7 @@ namespace Soomla.Profile {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			List<JSONObject> feeds = new List<JSONObject>();
 			foreach (var feed in feedPage.PageData) {
-				feeds.Add(feed);
+				feeds.Add(JSONObject.StringObject(feed));
 			}
 			JSONObject feedJson = new JSONObject(feeds.ToArray());
 
