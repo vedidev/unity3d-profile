@@ -31,6 +31,7 @@ namespace Soomla.Profile
 	{
 		private static string TAG = "SOOMLA FBSocialProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
+		private static int DEFAULT_FEED_PAGE_SIZE = 25;
 		private static string DEFAULT_LOGIN_PERMISSIONS = "email,user_birthday,user_photos,user_friends,read_stream";
 
 		private int lastPageNumber = 0;
@@ -252,7 +253,8 @@ namespace Soomla.Profile
 				}
 				
 				this.lastPageNumber = 0;
-				
+
+
 				FB.API ("/me/friends?fields=id,name,picture,email,first_name,last_name&limit=" + DEFAULT_CONTACTS_PAGE_SIZE + "&offset=" + DEFAULT_CONTACTS_PAGE_SIZE * (pageNumber - 1),
 				        Facebook.HttpMethod.GET,
 				        (FBResult result) => {
@@ -283,6 +285,49 @@ namespace Soomla.Profile
 				fail(errorMessage);
             });
         }
+
+		public override void GetFeed(bool fromStart, FeedSuccess success, FeedFailed fail) {
+			checkPermission("read_stream", () => {
+				int pageNumber;
+				if (fromStart || this.lastPageNumber == 0) {
+					pageNumber = 1;
+				} else {
+					pageNumber = this.lastPageNumber + 1;
+				}
+				
+				this.lastPageNumber = 0;
+
+				FB.API("/me/feed?limit=" + DEFAULT_FEED_PAGE_SIZE + "&offset=" + DEFAULT_FEED_PAGE_SIZE * (pageNumber - 1),
+				        Facebook.HttpMethod.GET,
+				        (FBResult result) => {
+					if (result.Error != null) {
+						SoomlaUtils.LogDebug(TAG, "GetFeedCallback[result.Error]: " + result.Error);
+						fail(result.Error);
+					}
+					else {
+						SoomlaUtils.LogDebug(TAG, "GetFeedCallback[result.Text]: " + result.Text);
+						SoomlaUtils.LogDebug(TAG, "GetFeedCallback[result.Texture]: "+result.Texture);
+						JSONObject jsonFeed = new JSONObject(result.Text);
+						
+						SocialPageData<String> resultData = new SocialPageData<String>(); 
+						resultData.PageData = StoriesFromFBJsonObjs(jsonFeed["data"].list);
+						resultData.PageNumber = pageNumber;
+						
+						this.lastPageNumber = pageNumber;
+						
+						JSONObject paging = jsonFeed["paging"];
+						if (paging != null) {
+							resultData.HasMore = (paging["next"] != null);
+						}
+						
+						success(resultData);
+					}
+				});
+			},
+			(string errorMessage) => {
+				fail(errorMessage);
+			});
+		}
         
         public override void Invite(string inviteMessage, string dialogTitle, InviteSuccess success, InviteFailed fail, InviteCancelled cancel)
 		{
@@ -448,6 +493,16 @@ namespace Soomla.Profile
 				profiles.Add(UserProfileFromFBJson(userObj));
 			}
 			return profiles;
+		}
+
+		private static List<String> StoriesFromFBJsonObjs(List<JSONObject> fbFeedObjects) {
+			List<String> stories = new List<String>();
+			foreach (JSONObject storyObj in fbFeedObjects) {
+				if (storyObj["message"] != null) {
+					stories.Add(storyObj["message"].str);
+				}	
+			}
+			return stories;
 		}
 
 		private List<string> parsePermissionsFromJson(JSONObject permissionsJson) {

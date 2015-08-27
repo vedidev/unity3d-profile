@@ -428,19 +428,24 @@ namespace Soomla.Profile {
 		public void onGetFeedFinished(String message)
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetFeedFinished");
-			
-			JSONObject eventJson = new JSONObject(message);
-			
-			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 
+			JSONObject eventJson = new JSONObject(message);
+			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
 			JSONObject feedsJson = eventJson ["feeds"];
 			List<String> feeds = new List<String>();
-			foreach (String key in feedsJson.keys) {
+			foreach (JSONObject feedVal in feedsJson.list) {
 				//iterate "feed" keys
-				feeds.Add(feedsJson[key].str);
+				feeds.Add(feedVal.str);
 			}
 
-			ProfileEvents.OnGetFeedFinished (provider, feeds);
+			bool hasMore = eventJson["hasMore"].b;
+			
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			SocialPageData<String> result = new SocialPageData<String>();
+			result.PageData = feeds;
+			result.PageNumber = 0;
+			result.HasMore = hasMore;
+			ProfileEvents.OnGetFeedFinished (provider, result);
 		}
 
 		/// <summary>
@@ -499,7 +504,7 @@ namespace Soomla.Profile {
 
 		public static Action<Provider, string> OnGetFeedFailed = delegate {};
 		
-		public static Action<Provider, List<string>> OnGetFeedFinished = delegate {};
+		public static Action<Provider, SocialPageData<String>> OnGetFeedFinished = delegate {};
 		
 		public static Action<Provider> OnGetFeedStarted = delegate {};
 
@@ -558,6 +563,9 @@ namespace Soomla.Profile {
 			protected virtual void _pushEventGetContactsStarted(Provider provider, bool fromStart, string payload){}
 			protected virtual void _pushEventGetContactsFinished(Provider provider, SocialPageData<UserProfile> contactsPage, string payload){}
 			protected virtual void _pushEventGetContactsFailed(Provider provider, string message, bool fromStart, string payload){}
+			protected virtual void _pushEventGetFeedFinished(Provider provider, SocialPageData<String> feedPage, string payload) {}
+			protected virtual void _pushEventGetFeedFailed(Provider provider, string message, bool fromStart, string payload) {}
+
 			protected virtual void _pushEventInviteStarted(Provider provider, string payload){}
 			protected virtual void _pushEventInviteFinished(Provider provider, string requestId, List<string> invitedIds, string payload){}
 			protected virtual void _pushEventInviteFailed(Provider provider, string message, string payload){}

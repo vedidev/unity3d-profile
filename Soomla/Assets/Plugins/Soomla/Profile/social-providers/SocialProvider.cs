@@ -44,8 +44,8 @@ namespace Soomla.Profile
 		public delegate void InviteSuccess(string requestId, List<string> invitedIds);
 		public delegate void InviteFailed(string message);
 		public delegate void InviteCancelled();
-		//		public delegate void FeedFailed(string message);
-		//		public delegate void FeedSuccess(List<String> feeds);
+		public delegate void FeedFailed(string message);
+		public delegate void FeedSuccess(SocialPageData<String> feedData);
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStatus"/>
@@ -67,6 +67,11 @@ namespace Soomla.Profile
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
 		public abstract void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail);
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.GetFeed"/>
+		/// </summary>
+		public abstract void GetFeed(bool fromStart, FeedSuccess success, FeedFailed fail);
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.Logout"/>

@@ -35,7 +35,7 @@ namespace Soomla.Profile {
 		public const string UP_GENDER           = "gender";
 		public const string UP_LANGUAGE         = "language";
 		public const string UP_BIRTHDAY         = "birthday";
-		public const string UP_EXTRA			= "extra";
+		public const string UP_EXTRA            = "extra";
 
 
 		/** Reward **/

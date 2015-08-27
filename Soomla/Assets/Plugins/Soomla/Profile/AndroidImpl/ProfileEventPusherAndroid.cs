@@ -155,6 +155,30 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
+		protected override void _pushEventGetFeedFinished (Provider provider, SocialPageData<String> feedPage, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			List<JSONObject> feeds = new List<JSONObject>();
+			foreach (var feed in feedPage.PageData) {
+				feeds.Add(JSONObject.StringObject(feed));
+			}
+			JSONObject feedJson = new JSONObject(feeds.ToArray());
+
+			AndroidJNI.PushLocalFrame(100);
+			using (AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventGetFeedFinished", 
+				                                 provider.ToString(), feedJson.ToString(), payload, feedPage.HasMore);
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
+		protected override void _pushEventGetFeedFailed(Provider provider, string message, bool fromStart, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			AndroidJNI.PushLocalFrame(100);
+			using (AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "pushEventGetFeedFailed", 
+				                                 provider.ToString(), message, fromStart, payload);
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
 #endif
 	}
 }
