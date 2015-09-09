@@ -381,7 +381,7 @@ namespace Soomla.Profile {
 		}
 
 		/// <summary>
-		/// Handles an <c>onGetContactsFinished</c> event
+		/// Handles an <c>onGetContactsFailed</c> event
 		/// </summary>
 		/// <param name="message">
 		/// Will contain a numeric representation of <c>Provider</c>,
