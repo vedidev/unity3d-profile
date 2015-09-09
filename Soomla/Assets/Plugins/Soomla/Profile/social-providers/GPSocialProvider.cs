@@ -45,6 +45,11 @@ namespace Soomla.Profile
 		/// See docs in <see cref="SoomlaProfile.GetContacts"/>
 		/// </summary>
 		public override void GetContacts(bool fromStart, ContactsSuccess success, ContactsFailed fail) {}
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.GetFeed"/>
+		/// </summary>
+		public override void GetFeed(bool fromStart, FeedSuccess success, FeedFailed fail) {}
 		
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.Logout"/>

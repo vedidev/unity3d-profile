@@ -315,7 +315,8 @@ public class ProfileEventHandler {
     @Subscribe
     public void onGetFeedFinished(final GetFeedFinishedEvent getFeedFinishedEvent){
         IProvider.Provider provider = getFeedFinishedEvent.Provider;
-
+        String payload = getFeedFinishedEvent.Payload;
+        boolean hasMore = getFeedFinishedEvent.HasMore;
         List<String> feeds = getFeedFinishedEvent.Posts;
         try{
             JSONArray feedsJSONArray = new JSONArray();
@@ -326,6 +327,8 @@ public class ProfileEventHandler {
             JSONObject eventJSON = new JSONObject();
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("feeds", feedsJSONArray);
+            eventJSON.put("payload", payload);
+            eventJSON.put("hasMore", hasMore);
 
             UnitySendFilteredMessage(eventJSON.toString(), "onGetFeedFinished", provider.getValue());
         } catch (JSONException e) {
@@ -337,10 +340,12 @@ public class ProfileEventHandler {
     public void onGetFeedFailed(final GetFeedFailedEvent getFeedFailedEvent){
         IProvider.Provider provider = getFeedFailedEvent.Provider;
         String message = getFeedFailedEvent.ErrorDescription;
+        String payload = getFeedFailedEvent.Payload;
         JSONObject eventJSON = new JSONObject();
         try {
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("message", message);
+            eventJSON.put("payload", payload);
             UnitySendFilteredMessage(eventJSON.toString(), "onGetFeedFailed", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
