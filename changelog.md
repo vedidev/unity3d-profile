@@ -1,3 +1,8 @@
+### v2.1.5 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.4...v2.1.5)
+
+* Changes
+  * Supporting changes in submodules
+
 ### v2.1.4 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.3...v2.1.4)
 
 * New Features
