@@ -83,7 +83,7 @@ namespace Soomla.Profile
 
 		public override void GetUserProfile(GetUserProfileSuccess success, GetUserProfileFailed fail) {
 			this.fetchPermissions(() => {
-				FB.API("/me?fields=id,name,email,first_name,last_name,picture",
+				FB.API("/me?fields=id,name,email,first_name,last_name,picture,languages,gender,location",
 				       Facebook.HttpMethod.GET, (FBResult meResult) => {
 					if (meResult.Error != null) {
 						SoomlaUtils.LogDebug (TAG, "ProfileCallback[result.Error]: " + meResult.Error);
@@ -469,6 +469,16 @@ namespace Soomla.Profile
 			soomlaJsonObject.AddField(PJSONConsts.UP_FIRSTNAME, fbJsonObject["first_name"].str);
 			soomlaJsonObject.AddField(PJSONConsts.UP_LASTNAME, fbJsonObject["last_name"].str);
 			soomlaJsonObject.AddField(PJSONConsts.UP_AVATAR, fbJsonObject["picture"]["data"]["url"].str);
+			if (fbJsonObject["gender"] != null) {
+				soomlaJsonObject.AddField(PJSONConsts.UP_GENDER, fbJsonObject["gender"].str);
+			}
+			if (fbJsonObject["languages"] != null && fbJsonObject["languages"].Count > 0 
+			    && fbJsonObject["languages"][0] != null && fbJsonObject["languages"][0]["name"] != null) {
+				soomlaJsonObject.AddField(PJSONConsts.UP_LANGUAGE, fbJsonObject["languages"][0]["name"].str);
+			}
+			if (fbJsonObject["location"] != null && fbJsonObject["location"]["name"] != null) {
+				soomlaJsonObject.AddField(PJSONConsts.UP_LOCATION, fbJsonObject["location"]["name"].str);
+			}
 
 			if (provider != null) { //let us to know if method called during own profile receiving
 				Dictionary<String, JSONObject> extraDict = new Dictionary<String, JSONObject>();
