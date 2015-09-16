@@ -13,6 +13,7 @@
 /// limitations under the License.using System;
 
 using UnityEngine;
+using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Collections;
@@ -574,6 +575,47 @@ namespace Soomla.Profile
 			}
 		}
 
+		/// <summary>
+		/// Retrieves a list of the user's feed entries from the supplied provider.
+		/// Upon a successful retrieval of feed entries the user will be granted the supplied reward.
+		/// 
+		/// NOTE: This operation requires a successful login.
+		/// </summary>
+		/// <param name="provider">The <c>Provider</c> on which to retrieve a list of feed entries.</param>
+		/// <param name="fromStart">Should we reset pagination or request the next page.</param>
+		/// <param name="payload">A string to receive when the function returns.</param>
+		/// <param name="reward">The reward which will be granted to the user upon a successful retrieval of feed.</param>
+		public static void GetFeed(Provider provider, bool fromStart = false, string payload = "", Reward reward = null) {
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			string userPayload = (payload == null) ? "" : payload;
+
+			if (targetProvider == null)
+				return;
+
+			if (targetProvider.IsNativelyImplemented())
+			{
+				string rewardId = reward != null ? reward.ID: "";
+				//fallback to native
+				instance._getFeed(provider, fromStart, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
+			}			
+			else 
+			{
+				ProfileEvents.OnGetFeedStarted(provider);
+				targetProvider.GetFeed(fromStart, 
+				/* success */
+				(SocialPageData<String> feeds) => {
+					if (reward != null) {
+						reward.Give();
+					}
+					ProfileEvents.OnGetFeedFinished(provider, feeds);
+				},
+				/* fail */
+				(string message) => {
+					ProfileEvents.OnGetFeedFailed(provider, message);
+				});
+			}
+		}
+
 		public static void Invite(Provider provider, string inviteMessage, string dialogTitle = null, string payload="", Reward reward = null) {
 
 			SocialProvider targetProvider = GetSocialProvider(provider);
@@ -766,6 +808,8 @@ namespace Soomla.Profile
 		                                    bool showConfirmation, string customMessage) { }
 		
 		protected virtual void _getContacts(Provider provider, bool fromStart, string payload) { }
+
+		protected virtual void _getFeed(Provider provider, bool fromStart, string payload) { }
 
 		protected virtual void _invite(Provider provider, string inviteMessage, string dialogTitle, string payload) { }
 		

@@ -18,6 +18,7 @@ import com.unity3d.player.UnityPlayer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.*;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -94,6 +95,11 @@ public class UnitySoomlaProfile {
     public static void getContacts(String providerStr, boolean fromStart, String payload) throws ProviderNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
         SoomlaProfile.getInstance().getContacts(provider, fromStart, payload, null);
+    }
+
+    public static void getFeed(String providerStr, boolean fromStart, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().getFeed(provider, fromStart, payload, null);
     }
 
     public static String getStoredUserProfile(String providerStr) throws ProviderNotFoundException, UserProfileNotFoundException {

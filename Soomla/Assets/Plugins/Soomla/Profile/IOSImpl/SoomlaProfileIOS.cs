@@ -49,6 +49,8 @@ namespace Soomla.Profile {
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_GetContacts(string provider, bool fromStart, string payload);
 		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_GetFeed(string provider, bool fromStart, string payload);
+		[DllImport ("__Internal")]
 		private static extern int soomlaProfile_GetStoredUserProfile(string provider, out IntPtr json);
 		[DllImport ("__Internal")]
 		private static extern int soomlaProfile_SetStoredUserProfile(string userProfileJson, bool notify);
@@ -98,6 +100,10 @@ namespace Soomla.Profile {
 
 		protected override void _getContacts(Provider provider, bool fromStart, string payload){
 			soomlaProfile_GetContacts(provider.ToString(), fromStart, payload);
+		}
+
+		protected override void _getFeed(Provider provider, bool fromStart, string payload) {
+			soomlaProfile_GetFeed(provider.ToString(), fromStart, payload);
 		}
 
 		protected override UserProfile _getStoredUserProfile(Provider provider) { 
