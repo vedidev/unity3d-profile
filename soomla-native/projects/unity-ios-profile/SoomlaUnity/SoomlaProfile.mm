@@ -103,6 +103,16 @@ extern "C"{
                                                    andReward:nil];
     }
     
+    void soomlaProfile_GetFeed(const char* sProvider, bool fromStart, const char *payload) {
+        NSString *providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString *payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] getFeedWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                            andFromStart:fromStart
+                                              andPayload:payloadS
+                                               andReward:nil];
+    }
+    
 	int soomlaProfile_GetStoredUserProfile(const char* sProvider, char** json) {
         NSLog(@"SOOMLA/UNITY soomlaProfile_GetStoredUserProfile");
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];

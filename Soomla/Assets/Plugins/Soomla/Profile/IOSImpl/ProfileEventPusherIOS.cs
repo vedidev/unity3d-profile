@@ -52,6 +52,10 @@ namespace Soomla.Profile {
 		private static extern void soomlaProfile_PushEventGetContactsFinished(string provider, string userProfilesJson, string payload, bool hasNext);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventGetContactsFailed(string provider, string message, bool fromStart, string payload);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_PushEventGetFeedFinished(string provider, string feedJson, string payload, bool hasNext);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_PushEventGetFeedFailed(string provider, string message, bool fromStart, string payload);
 
 
 		// event pushing back to native (when using FB Unity SDK)
@@ -117,6 +121,19 @@ namespace Soomla.Profile {
 		protected override void _pushEventGetContactsFailed (Provider provider, string message, bool fromStart, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
 			soomlaProfile_PushEventGetContactsFailed(provider.ToString(), message, fromStart, payload);
+		}
+		protected override void _pushEventGetFeedFinished(Provider provider ,SocialPageData<String> feedPage, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			List<JSONObject> feeds = new List<JSONObject>();
+			foreach (var feed in feedPage.PageData) {
+				feeds.Add(JSONObject.StringObject(feed));
+			}
+			JSONObject jsonFeeds = new JSONObject(feeds.ToArray());
+			soomlaProfile_PushEventGetFeedFinished(provider.ToString(), jsonFeeds.ToString(), payload, feedPage.HasMore);
+		}
+		protected override void _pushEventGetFeedFailed(Provider provider, string message, bool fromStart, string payload) {
+			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
+			soomlaProfile_PushEventGetFeedFailed(provider.ToString(), message, fromStart, payload);
 		}
 #endif
 	}
