@@ -1,3 +1,27 @@
+### v2.1.6 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.5...v2.1.6)
+
+* Changes
+  * Merge pull request #49 from soomla/removeBinaries
+  * Merge branch 'master' into removeBinaries
+  * Merge pull request #48 from vedi/dev
+  * Merge branch 'removeBinaries' of github.com:soomla/unity3d-profile into removeBinaries
+  * Removed unecessary meta files
+  * Improved deploy script
+  * updated submodules
+  * Added deploy/out to gitignore
+  * Removed binaries and improved build scripts
+  * update submodules
+  * update binaries
+  * Merge branch 'dev' of github.com:vedi/unity3d-profile into dev
+  * Merge branch 'master' into dev
+  * Merge pull request #2 from vedi/fix_3755-add_gender_location_lang
+  * Merge branch 'dev' of github.com:vedi/unity3d-profile into dev
+  * fix inline comment
+  * 3755 [FIX] UserProfile's fields are implemented in different way in different platforms
+  * Merge pull request #1 from vedi/feature_3670-implement_getfeed
+  * align free space according to other lines
+  * Merge branch 'master' of https://github.com/vedi/unity3d-profile into feature_3670-implement_getfeed
+
 ### v2.1.5 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.4...v2.1.5)
 
 * Changes
