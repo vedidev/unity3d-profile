@@ -1,6 +1,11 @@
 ### v2.1.6 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.5...v2.1.6)
 
 * Changes
+  * Removed binaries and improved build scripts
+
+### v2.1.6 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.5...v2.1.6)
+
+* Changes
   * Merge pull request #49 from soomla/removeBinaries
   * Merge branch 'master' into removeBinaries
   * Merge pull request #48 from vedi/dev
