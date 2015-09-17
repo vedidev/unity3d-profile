@@ -231,7 +231,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"${UNITY_HEADERS45}/**",
 					"../../../submodules/ios-profile/SoomlaiOSProfile/**",
-					"../../../submodules/soomla-ios-core/SoomlaiOSCore/**",
+					"../../../submodules/soomla-unity3d-core/submodules/soomla-ios-core/SoomlaiOSCore/**",
 					"${UNITY_HEADERS43}/**",
 					"../../../submodules/soomla-unity3d-core/soomla-native/projects/unity-soomla-ios-core/SoomlaUnity",
 				);
@@ -260,7 +260,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"${UNITY_HEADERS45}/**",
 					"../../../submodules/ios-profile/SoomlaiOSProfile/**",
-					"../../../submodules/soomla-ios-core/SoomlaiOSCore/**",
+					"../../../submodules/soomla-unity3d-core/submodules/soomla-ios-core/SoomlaiOSCore/**",
 					"${UNITY_HEADERS43}/**",
 					"../../../submodules/soomla-unity3d-core/soomla-native/projects/unity-soomla-ios-core/SoomlaUnity",
 				);
