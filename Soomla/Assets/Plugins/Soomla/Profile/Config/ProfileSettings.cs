@@ -285,6 +285,10 @@ namespace Soomla.Profile
 				FBPermissions = EditorGUILayout.TextField(FBPermissions, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
 
+				if (!isDisabled && !validateFacebookPermissionsString(FBPermissions)) {
+					EditorGUILayout.HelpBox("Please, make sure that your permissions strings is comma-separated and each permission consists of small letters and underscore symbol.", MessageType.Error);
+				}
+
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
 				FBAutoLogin = EditorGUILayout.Toggle(autoLoginContent, FBAutoLogin);
@@ -445,7 +449,7 @@ namespace Soomla.Profile
 		}
 
 		public static string FB_PERMISSIONS_DEFAULT = "email,user_birthday,user_photos,user_friends,read_stream";
-
+		private static string FB_PERMISSIONS_STRING_REGEXP = "([a-z]+(_[a-z]+)*)+(,([a-z]+(_[a-z]+)*)+)*";
 
 		public static string FBPermissions
 		{
@@ -460,7 +464,7 @@ namespace Soomla.Profile
 				if (v != value)
 				{
 					SoomlaEditorScript.Instance.setSettingsValue("FBPermissions",value);
-					SoomlaEditorScript.DirtyEditor ();
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -481,6 +485,11 @@ namespace Soomla.Profile
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
+		}
+
+		private static bool validateFacebookPermissionsString(string permissionString) {
+			return permissionString.Length > 0 && 
+				((new System.Text.RegularExpressions.Regex(FB_PERMISSIONS_STRING_REGEXP)).Match(permissionString).Length == permissionString.Length);
 		}
 
 
