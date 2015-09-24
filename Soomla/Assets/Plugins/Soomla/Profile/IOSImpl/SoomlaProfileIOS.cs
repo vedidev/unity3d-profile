@@ -40,9 +40,14 @@ namespace Soomla.Profile {
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_UpdateStatus(string provider, string status, string payload, bool showConfirmation, string customMessage);
 		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_UpdateStatusDialog(string provider, string link, string payload);
+		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_UpdateStory(string provider, string message,
 		                                                     string name, string caption, string description,
 		                                                     string link, string pictureUrl, string payload, bool showConfirmation, string customMessage);
+		[DllImport ("__Internal")]
+		private static extern void soomlaProfile_updateStoryDialog(string provider, string name, string caption, string description, 
+		                                                           string link, string picture, string payload);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_UploadImage(string provider, string message, string fileName,
 		                                                     string imageBase64Str, string payload, bool showConfirmation, string customMessage);
@@ -84,11 +89,20 @@ namespace Soomla.Profile {
 			soomlaProfile_UpdateStatus(provider.ToString(), status, payload, showConfirmation, customMessage); 
 		}
 
+		protected override void _updateStatusDialog(Provider provider, string link, string payload) {
+			soomlaProfile_UpdateStatusDialog(provider.ToString(), link, payload);
+		}
+
 		protected override void _updateStory(Provider provider, string message, string name, 
 		                                     string caption, string description, string link,
 		                                     string pictureUrl, string payload, 
 		                                     bool showConfirmation, string customMessage) {
 			soomlaProfile_UpdateStory(provider.ToString(), message, name, caption, description, link, pictureUrl, payload, showConfirmation, customMessage);
+		}
+
+		protected override void _updateStoryDialog(Provider provider, string name, string caption, string description, 
+		                                          string link, string picture, string payload) {
+			soomlaProfile_updateStoryDialog(provider.ToString(), name, caption, description, link, picture, payload);
 		}
 
 		protected override void _uploadImage(Provider provider, string message, 
