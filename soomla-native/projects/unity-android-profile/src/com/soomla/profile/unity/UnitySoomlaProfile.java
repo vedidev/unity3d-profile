@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import com.soomla.Soomla;
 import com.soomla.SoomlaApp;
 import com.soomla.SoomlaUtils;
 import com.soomla.profile.SoomlaProfile;
@@ -58,6 +59,11 @@ public class UnitySoomlaProfile {
         }
     }
 
+    public static void updateStatusDialog(String providerStr, String link, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().updateStatusDialog(provider, link, payload, null);
+    }
+
     public static void updateStory(String providerStr, String message, String name,
                                    String caption, String description, String link,
                                    String pictureUrl, String payload,
@@ -70,6 +76,13 @@ public class UnitySoomlaProfile {
             SoomlaProfile.getInstance().updateStoryWithConfirmation(provider, message, name, caption, description,
                     link, pictureUrl, payload, null, UnityPlayer.currentActivity, customMessage);
         }
+    }
+
+    public static void updateStoryDialog(String providerStr, String name,
+                                         String caption, String description, String link,
+                                         String picture, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().updateStoryDialog(provider, name, caption, description, link, picture, payload, null);
     }
 
     public static void uploadImage(String providerStr, String message, String filePath, String payload) throws ProviderNotFoundException {
