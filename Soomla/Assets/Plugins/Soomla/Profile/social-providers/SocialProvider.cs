@@ -60,13 +60,13 @@ namespace Soomla.Profile
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStory"/>
 		/// </summary>
-		public abstract void UpdateStory(string message, string name, string caption, 
+		public abstract void UpdateStory(string message, string name, string caption, string description,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel);
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStoryDialog"/>
 		/// </summary>
-		public abstract void UpdateStoryDialog(string name, string caption, string link, string picture, 
+		public abstract void UpdateStoryDialog(string name, string caption, string description, string link, string picture, 
 		                                       SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel);
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UploadImage"/>

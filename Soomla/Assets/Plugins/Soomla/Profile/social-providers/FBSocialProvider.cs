@@ -186,7 +186,7 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the story update was successful.</param>
 		/// <param name="fail">Callback function that is called if the story update failed.</param>
 		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
-		public override void UpdateStory(string message, string name, string caption,
+		public override void UpdateStory(string message, string name, string caption, string description,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 			checkPermission("publish_actions", ()=> {
 				var formData = new Dictionary<string, string>
@@ -194,6 +194,7 @@ namespace Soomla.Profile
 					{ "message", message },
 					{ "name", name },
 					{ "caption", caption },
+					{ "description", description },
 					{ "link", link },
 					{ "picture", pictureUrl }
 				};
@@ -224,12 +225,13 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the story update was successful.</param>
 		/// <param name="fail">Callback function that is called if the story update failed.</param>
 		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
-		public override void UpdateStoryDialog(string name, string caption, string link, string picture, 
+		public override void UpdateStoryDialog(string name, string caption, string description, string link, string picture, 
 		                                       SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
 			FB.Feed(
 				link: link,
 				linkName: name,
 				linkCaption: caption,
+				linkDescription: description,
 				picture: picture,
 				callback: (FBResult result) => {
 				
