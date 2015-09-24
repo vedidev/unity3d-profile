@@ -150,6 +150,17 @@ namespace Soomla.Profile
             });
         }
         
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.UpdateStatus"/>
+		/// </summary>
+		/// <param name="link">Link to post.</param>
+		/// <param name="success">Callback function that is called if the status update was successful.</param>
+		/// <param name="fail">Callback function that is called if the status update failed.</param>
+		public override void UpdateStatusDialog(string link, SocialActionSuccess success, SocialActionFailed fail) {
+
+		}
+
         /// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStory"/>
 		/// </summary>
@@ -194,6 +205,21 @@ namespace Soomla.Profile
 //				fail(message);
 //            });
         }
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.UpdateStoryDialog"/>
+		/// </summary>
+		/// <param name="name">The name (title) of the story.</param>
+		/// <param name="caption">A caption.</param>
+		/// <param name="link">A link to a web page.</param>
+		/// <param name="pictureUrl">A link to an image on the web.</param>
+		/// <param name="success">Callback function that is called if the story update was successful.</param>
+		/// <param name="fail">Callback function that is called if the story update failed.</param>
+		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
+		public override void UpdateStoryDialog(string name, string caption, string link, string picture, 
+		                                       SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
+
+		}
 
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UploadImage"/>

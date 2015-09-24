@@ -475,7 +475,7 @@ namespace Soomla.Profile
 				//fallback to native
 				string rewardId = reward != null ? reward.ID: "";
 				instance._updateStoryDialog(provider, name, caption, description, link, picture, 
-				                      ProfilePayload.ToJSONObj(userPayload, rewardId).ToString(), false, null);
+				                      ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 			
 			else
