@@ -314,6 +314,42 @@ namespace Soomla.Profile
 		}
 
 		/// <summary>
+		/// Shares the given status to the user's feed and grants the user a reward.
+        /// Using the provider's native dialog (when available).
+		/// </summary>
+		/// <param name="provider">The provider to us.</param>
+		/// <param name="link">The link to share (could be null).</param>
+		/// <param name="payload">a String to receive when the function returns..</param>
+		/// <param name="reward">The reward to give the user.</param>
+		public static void UpdateStatusDialog(Provider provider, string link, string payload = "", Reward reward = null) {
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			string userPayload = (payload == null) ? "" : payload;
+			
+			if (targetProvider == null)
+				return;
+			
+			if (targetProvider.IsNativelyImplemented())
+			{
+				//fallback to native
+				string rewardId = reward != null ? reward.ID : "";
+				instance._updateStatusDialog(provider, link, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
+			}			
+			else 
+			{
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
+				targetProvider.UpdateStatusDialog(link, () => {
+					if (reward != null) {
+						reward.Give();
+					}
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
+				},
+				(string error) => {
+					ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, userPayload);
+				});
+			}
+		}
+
+		/// <summary>
 		/// Posts a full story to the user's social page on the given Provider. 
 		/// A story contains a title, description, image and more.
 		/// Supported platforms: Facebook (full support), 
@@ -415,7 +451,53 @@ namespace Soomla.Profile
 				);
 			}
 		}
-		
+
+		/// <summary>
+		/// Shares a story to the user's feed and grants the user a reward.
+        /// Using the provider's native dialog (when available).
+		/// </summary>
+		/// <param name="provider">The provider to use.</param>
+		/// <param name="name">he headline for the link which will be integrated in the story.</param>
+		/// <param name="caption">The sub-headline for the link which will be integrated in the story.</param>
+		/// <param name="description">The description for the link which will be integrated in the story.</param>
+		/// <param name="link">The link which will be integrated into the user's story.</param>
+		/// <param name="picture">a Link to a picture which will be featured in the link.</param>
+		/// <param name="payload">A string to receive when the function returns.</param>
+		/// <param name="reward">The reward which will be granted to the user upon a successful update.</param>
+		public static void UpdateStoryDialog(Provider provider, string name, string caption, string description, string link, string picture, string payload, Reward reward = null) {
+			SocialProvider targetProvider = GetSocialProvider(provider);
+			string userPayload = (payload == null) ? "" : payload;
+			if (targetProvider == null)
+				return;
+			
+			if (targetProvider.IsNativelyImplemented())
+			{
+				//fallback to native
+				string rewardId = reward != null ? reward.ID: "";
+				instance._updateStoryDialog(provider, name, caption, description, link, picture, 
+				                      ProfilePayload.ToJSONObj(userPayload, rewardId).ToString(), false, null);
+			}
+			
+			else
+			{
+				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
+				targetProvider.UpdateStoryDialog(name, caption, link, picture,
+				() => { 
+					if (reward != null) {
+						reward.Give();
+					}
+					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, userPayload);
+				},
+				(string error) => {  
+					ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, userPayload); 
+				},
+				() => {  
+					ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, userPayload); 
+				});
+			}
+
+		}
+
 		/// <summary>
 		/// Uploads an image to the user's social page on the given Provider.
 		/// Supported platforms: Facebook, Twitter, Google+
@@ -795,12 +877,18 @@ namespace Soomla.Profile
 		
 		protected virtual bool _isLoggedIn(Provider provider) { return false; }
 		
-		protected virtual void _updateStatus(Provider provider, string status, string payload, bool showConfirmation, string customMessage) { }
+		protected virtual void _updateStatus(Provider provider, string status, string payload, bool showConfirmation, 
+		                                     string customMessage) { }
+
+		protected virtual void _updateStatusDialog(Provider provider, string link, string payload) { }
 		
 		protected virtual void _updateStory (Provider provider, string message, string name,
 		                                     string caption, string description, string link,
 		                                     string pictureUrl, string payload, 
 		                                     bool showConfirmation, string customMessage) { }
+
+		protected virtual void _updateStoryDialog(Provider provider, string name, string caption, string description, 
+		                                          string link, string picture, string payload) { }
 		
 		protected virtual void _uploadImage(Provider provider, string message, 
 		                                    string fileName, byte[] imageBytes, 
