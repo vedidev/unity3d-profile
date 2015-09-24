@@ -46,7 +46,7 @@ namespace Soomla.Profile {
 		                                                     string name, string caption, string description,
 		                                                     string link, string pictureUrl, string payload, bool showConfirmation, string customMessage);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_updateStoryDialog(string provider, string name, string caption, string description, 
+		private static extern void soomlaProfile_UpdateStoryDialog(string provider, string name, string caption, string description, 
 		                                                           string link, string picture, string payload);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_UploadImage(string provider, string message, string fileName,
@@ -102,7 +102,7 @@ namespace Soomla.Profile {
 
 		protected override void _updateStoryDialog(Provider provider, string name, string caption, string description, 
 		                                          string link, string picture, string payload) {
-			soomlaProfile_updateStoryDialog(provider.ToString(), name, caption, description, link, picture, payload);
+			soomlaProfile_UpdateStoryDialog(provider.ToString(), name, caption, description, link, picture, payload);
 		}
 
 		protected override void _uploadImage(Provider provider, string message, 
