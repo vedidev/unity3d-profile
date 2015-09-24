@@ -77,46 +77,46 @@ namespace Soomla.Profile {
 		/// <param name="jsonUP">A JSONObject representation of the wanted <c>UserProfile</c>.</param>
 		public UserProfile(JSONObject jsonUP) {
 			this.Provider = Provider.fromString(jsonUP[PJSONConsts.UP_PROVIDER].str);
-			this.Username = jsonUP[PJSONConsts.UP_USERNAME].str;
-			this.ProfileId = jsonUP[PJSONConsts.UP_PROFILEID].str;
+			this.Username = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_USERNAME].str);
+			this.ProfileId = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_PROFILEID].str);
 
 			if (jsonUP[PJSONConsts.UP_FIRSTNAME]) {
-				this.FirstName = jsonUP[PJSONConsts.UP_FIRSTNAME].str;
+				this.FirstName = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_FIRSTNAME].str);
 			} else {
 				this.FirstName = "";
 			}
 			if (jsonUP[PJSONConsts.UP_LASTNAME]) {
-				this.LastName = jsonUP[PJSONConsts.UP_LASTNAME].str;
+				this.LastName = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_LASTNAME].str);
 			} else {
 				this.LastName = "";
 			}
 			if (jsonUP[PJSONConsts.UP_EMAIL]) {
-				this.Email = jsonUP[PJSONConsts.UP_EMAIL].str;
+				this.Email = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_EMAIL].str);
 			} else {
 				this.Email = "";
 			}
 			if (jsonUP[PJSONConsts.UP_AVATAR]) {
-				this.AvatarLink = jsonUP[PJSONConsts.UP_AVATAR].str;
+				this.AvatarLink = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_AVATAR].str);
 			} else {
 				this.AvatarLink = "";
 			}
 			if (jsonUP[PJSONConsts.UP_LOCATION]) {
-				this.Location = jsonUP[PJSONConsts.UP_LOCATION].str;
+				this.Location = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_LOCATION].str);
 			} else {
 				this.Location = "";
 			}
 			if (jsonUP[PJSONConsts.UP_GENDER]) {
-				this.Gender = jsonUP[PJSONConsts.UP_GENDER].str;
+				this.Gender = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_GENDER].str);
 			} else {
 				this.Gender = "";
 			}
 			if (jsonUP[PJSONConsts.UP_LANGUAGE]) {
-				this.Language = jsonUP[PJSONConsts.UP_LANGUAGE].str;
+				this.Language = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_LANGUAGE].str);
 			} else {
 				this.Language = "";
 			}
 			if (jsonUP[PJSONConsts.UP_BIRTHDAY]) {
-				this.Birthday = jsonUP[PJSONConsts.UP_BIRTHDAY].str;
+				this.Birthday = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_BIRTHDAY].str);
 			} else {
 				this.Birthday = "";
 			}
