@@ -386,7 +386,7 @@ namespace Soomla.Profile
 			else
 			{
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
-				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
+				targetProvider.UpdateStory(message, name, caption, description, link, pictureUrl,
 				    /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
