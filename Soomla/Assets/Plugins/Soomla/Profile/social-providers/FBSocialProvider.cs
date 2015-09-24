@@ -158,10 +158,24 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the status update was successful.</param>
 		/// <param name="fail">Callback function that is called if the status update failed.</param>
 		public override void UpdateStatusDialog(string link, SocialActionSuccess success, SocialActionFailed fail) {
-
+			FB.Feed(
+				link: link,
+				callback: (FBResult result) => {
+				
+				if (result.Error != null) {
+					fail(result.Error);
+				}
+				else {
+					SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Text]:"+result.Text);
+					SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Texture]:"+result.Texture);
+					var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
+					object obj = 0;
+					success();						
+				}				
+			});
 		}
-
-        /// <summary>
+		
+		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStory"/>
 		/// </summary>
 		/// <param name="message">A message that will be shown along with the story.</param>
@@ -174,38 +188,32 @@ namespace Soomla.Profile
 		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
 		public override void UpdateStory(string message, string name, string caption,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
-
-//			checkPermission("publish_actions", ()=> {
-				FB.Feed(
-					link: link,
-					linkName: name,
-					linkCaption: caption,
-					linkDescription: message,
-					picture: pictureUrl,
-					callback: (FBResult result) => {
+			checkPermission("publish_actions", ()=> {
+				var formData = new Dictionary<string, string>
+				{
+					{ "message", message },
+					{ "name", name },
+					{ "caption", caption },
+					{ "link", link },
+					{ "picture", pictureUrl }
+				};
+				FB.API ("/me/feed", Facebook.HttpMethod.POST, 
+				        (FBResult postFeedResult) => {
 					
-					if (result.Error != null) {
-						fail(result.Error);
+					if (postFeedResult.Error != null) {
+						SoomlaUtils.LogDebug(TAG, "UpdateStatusCallback[result.Error]:"+postFeedResult.Error);
+						fail(postFeedResult.Error);
+					} else {
+						SoomlaUtils.LogDebug(TAG, "UpdateStatusCallback[result.Text]:"+postFeedResult.Text);
+						SoomlaUtils.LogDebug(TAG, "UpdateStatusCallback[result.Texture]:"+postFeedResult.Texture);
+						success();
 					}
-					else {
-						SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Text]:"+result.Text);
-						SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Texture]:"+result.Texture);
-						var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
-                        object obj = 0;
-                        if (responseObject.TryGetValue("cancelled", out obj)) {
-                            cancel();
-                        }
-                        else /*if (responseObject.TryGetValue ("id", out obj))*/ {
-                            success();
-                        }
-                    }
-                    
-                });
-//			}, (string errorMessage)=>{
-//				fail(message);
-//            });
-        }
-
+				}, formData);
+			}, (string errorMessage)=>{
+				fail(errorMessage);
+			});
+		}
+		
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStoryDialog"/>
 		/// </summary>
@@ -218,14 +226,36 @@ namespace Soomla.Profile
 		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
 		public override void UpdateStoryDialog(string name, string caption, string link, string picture, 
 		                                       SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
-
-		}
-
-		/// <summary>
-		/// See docs in <see cref="SoomlaProfile.UploadImage"/>
-		/// </summary>
-		/// <param name="tex2D">Texture2D for image.</param>
-		/// <param name="fileName">Name of image file.</param>
+			FB.Feed(
+				link: link,
+				linkName: name,
+				linkCaption: caption,
+				picture: picture,
+				callback: (FBResult result) => {
+				
+					if (result.Error != null) {
+						fail(result.Error);
+					}
+					else {
+						SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Text]:"+result.Text);
+						SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Texture]:"+result.Texture);
+						var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
+						object obj = 0;
+						if (responseObject.TryGetValue("cancelled", out obj)) {
+							cancel();
+						}
+						else {
+							success();
+						}
+					}
+				});
+			}
+			
+			/// <summary>
+			/// See docs in <see cref="SoomlaProfile.UploadImage"/>
+			/// </summary>
+			/// <param name="tex2D">Texture2D for image.</param>
+			/// <param name="fileName">Name of image file.</param>
 		/// <param name="message">Message to post with the image.</param>
 		/// <param name="success">Callback function that is called if the image upload was successful.</param>
 		/// <param name="fail">Callback function that is called if the image upload failed.</param>
