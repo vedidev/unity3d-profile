@@ -439,7 +439,7 @@ namespace Soomla.Profile
 			{
 				// TODO: Support showConfirmation
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
-				targetProvider.UpdateStory(message, name, caption, link, pictureUrl,
+				targetProvider.UpdateStory(message, name, caption, description, link, pictureUrl,
 				                           /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
@@ -481,7 +481,7 @@ namespace Soomla.Profile
 			else
 			{
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
-				targetProvider.UpdateStoryDialog(name, caption, link, picture,
+				targetProvider.UpdateStoryDialog(name, caption, description, link, picture,
 				() => { 
 					if (reward != null) {
 						reward.Give();
