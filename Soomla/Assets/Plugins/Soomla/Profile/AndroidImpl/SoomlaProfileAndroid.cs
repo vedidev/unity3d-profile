@@ -140,6 +140,14 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
+		protected override void _invite(Provider provider, string inviteMessage, string dialogTitle, string payload) {
+			AndroidJNI.PushLocalFrame(100);
+			using(AndroidJavaClass jniSoomlaProfile = new AndroidJavaClass("com.soomla.profile.unity.UnitySoomlaProfile")) {
+				ProfileJNIHandler.CallStaticVoid(jniSoomlaProfile, "invite", provider.ToString(), inviteMessage, dialogTitle, payload);
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
+
 		protected override UserProfile _getStoredUserProfile(Provider provider) {
 			JSONObject upObj = null;
 			AndroidJNI.PushLocalFrame(100);

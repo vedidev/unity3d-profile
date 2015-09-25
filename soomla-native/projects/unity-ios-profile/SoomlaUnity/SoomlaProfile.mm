@@ -135,6 +135,19 @@ extern "C"{
                                                andReward:nil];
     }
     
+    void soomlaProfile_Invite(const char *sProvider, const char *inviteMessage, const char *dialogTitle, const char *payload) {
+        NSString *providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString *inviteMessageS = [NSString stringWithUTF8String:inviteMessage];
+        NSString *dialogTitleS = [NSString stringWithUTF8String:dialogTitle];
+        NSString *payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] inviteWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                          inviteMessage:inviteMessageS
+                                            dialogTitle:dialogTitleS
+                                                payload:payloadS
+                                              andReward:nil];
+    }
+    
 	int soomlaProfile_GetStoredUserProfile(const char* sProvider, char** json) {
         NSLog(@"SOOMLA/UNITY soomlaProfile_GetStoredUserProfile");
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];

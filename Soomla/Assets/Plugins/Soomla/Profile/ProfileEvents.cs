@@ -466,6 +466,99 @@ namespace Soomla.Profile {
 			ProfileEvents.OnGetFeedFailed (provider, errorMessage);
 		}
 
+		/// <summary>
+		/// Handles an <c>onInviteStarted</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c> 
+		/// numeric representation of <c>SocialActionType</c> and payload</param>
+		public void onInviteStarted(String message)
+		{
+			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onInviteStarted");
+			
+			JSONObject eventJson = new JSONObject(message);
+			
+			Provider provider = Provider.fromInt ((int)(eventJson["provider"].n));
+			
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			
+			ProfileEvents.OnInviteStarted (provider, ProfilePayload.GetUserPayload(payloadJSON));
+		}
+		
+		/// <summary>
+		/// Handles an <c>onInviteFinished</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c> 
+		/// numeric representation of <c>SocialActionType</c>
+		/// id of given request, list of invite recipients
+		/// and payload</param>
+		public void onInviteFinished(String message)
+		{
+			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onInviteFinished");
+			
+			JSONObject eventJson = new JSONObject(message);
+			
+			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
+
+			String requestId = eventJson["requestId"].str;
+			JSONObject recipientsJson = eventJson ["invitedIds"];
+			List<String> recipients = new List<String>();
+			foreach (JSONObject recipientVal in recipientsJson.list) {
+				//iterate "feed" keys
+				recipients.Add(recipientVal.str);
+			}
+
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			
+			//give a reward
+			Reward reward = Reward.GetReward(ProfilePayload.GetRewardId(payloadJSON));
+			if (reward != null)
+				reward.Give();
+			
+			ProfileEvents.OnInviteFinished (provider, requestId, recipients, ProfilePayload.GetUserPayload(payloadJSON));
+		}
+		
+		/// <summary>
+		/// Handles an <c>onInviteCancelled</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c> 
+		/// numeric representation of <c>SocialActionType</c> and payload</param>
+		public void onInviteCancelled(String message)
+		{
+			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onInviteCancelled");
+			
+			JSONObject eventJson = new JSONObject(message);
+			
+			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
+			
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			
+			ProfileEvents.OnInviteCancelled (provider, ProfilePayload.GetUserPayload(payloadJSON));
+		}
+		
+		/// <summary>
+		/// Handles an <c>onInviteFailed</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c> 
+		/// numeric representation of <c>SocialActionType</c>, 
+		/// error message and payload</param>
+		public void onInviteFailed(String message)
+		{
+			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onInviteFailed");
+			
+			JSONObject eventJson = new JSONObject(message);
+			
+			Provider provider = Provider.fromInt ((int)eventJson["provider"].n);
+			String errorMessage = eventJson["message"].str;
+			
+			JSONObject payloadJSON = new JSONObject(eventJson ["payload"].str);
+			
+			ProfileEvents.OnInviteFailed (provider, errorMessage, ProfilePayload.GetUserPayload(payloadJSON));
+		}
+
 		public delegate void Action();
 
 		public static Action OnSoomlaProfileInitialized = delegate {};

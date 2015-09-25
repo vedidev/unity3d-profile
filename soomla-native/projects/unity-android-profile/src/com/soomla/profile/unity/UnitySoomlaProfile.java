@@ -115,6 +115,11 @@ public class UnitySoomlaProfile {
         SoomlaProfile.getInstance().getFeed(provider, fromStart, payload, null);
     }
 
+    public static void invite(String providerStr, String inviteMessage, String dialogTitle, String payload) throws ProviderNotFoundException {
+        Provider provider = Provider.getEnum(providerStr);
+        SoomlaProfile.getInstance().invite(UnityPlayer.currentActivity, provider, inviteMessage, dialogTitle, payload, null);
+    }
+
     public static String getStoredUserProfile(String providerStr) throws ProviderNotFoundException, UserProfileNotFoundException {
         Provider provider = Provider.getEnum(providerStr);
         UserProfile userProfile = SoomlaProfile.getInstance().getStoredUserProfile(provider);
