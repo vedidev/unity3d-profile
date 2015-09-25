@@ -467,8 +467,9 @@ namespace Soomla.Profile
 		public static void UpdateStoryDialog(Provider provider, string name, string caption, string description, string link, string picture, string payload, Reward reward = null) {
 			SocialProvider targetProvider = GetSocialProvider(provider);
 			string userPayload = (payload == null) ? "" : payload;
-			if (targetProvider == null)
+			if (targetProvider == null) {
 				return;
+			}
 			
 			if (targetProvider.IsNativelyImplemented())
 			{
