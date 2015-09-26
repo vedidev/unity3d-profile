@@ -60,6 +60,14 @@ extern "C"{
                                                     andStatus:statusS andPayload:payloadS andReward:nil andConfirmation:showConfirmation andCustomMessage:customMessageS];
     }
     
+    void soomlaProfile_UpdateStatusDialog(const char* sProvider, const char* link, const char* payload) {
+        NSString *providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString *linkS = [NSString stringWithUTF8String:link];
+        NSString *payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] updateStatusWithProviderDialog:[UserProfileUtils providerStringToEnum:providerIdS] andLink:linkS andPayload:payloadS andReward:nil];
+    }
+    
     void soomlaProfile_UpdateStory(const char* sProvider, const char* message, const char* name,
                                    const char* caption, const char* description,
                                    const char* link, const char* pictureUrl, const char* payload, bool showConfirmation, const char* customMessage) {
@@ -78,6 +86,20 @@ extern "C"{
                                               andDescription:descriptionS andLink:linkS andPicture:pictureUrlS
                                                   andPayload:payloadS andReward:nil
                                          andShowConfirmation:showConfirmation andCustomMessage:customMessageS];
+    }
+    
+    void soomlaProfile_UpdateStoryDialog(const char* sProvider, const char* name,
+                                         const char* caption, const char* description,
+                                         const char* link, const char* picture, const char* payload) {
+        NSString *providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString *nameS = [NSString stringWithUTF8String:name];
+        NSString *captionS = [NSString stringWithUTF8String:caption];
+        NSString *descriptionS = [NSString stringWithUTF8String:description];
+        NSString *linkS = [NSString stringWithUTF8String:link];
+        NSString *pictureS = [NSString stringWithUTF8String:picture];
+        NSString *payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] updateStoryWithProviderDialog:[UserProfileUtils providerStringToEnum:providerIdS] andName:nameS andCaption:captionS andDescription:descriptionS andLink:linkS andPicture:pictureS andPayload:payloadS andReward:nil];
     }
     
     void soomlaProfile_UploadImage(const char* sProvider, const char* message, const char* fileName, const char *imageBase64Str, const char* payload, bool showConfirmation, const char* customMessage) {
@@ -111,6 +133,19 @@ extern "C"{
                                             andFromStart:fromStart
                                               andPayload:payloadS
                                                andReward:nil];
+    }
+    
+    void soomlaProfile_Invite(const char *sProvider, const char *inviteMessage, const char *dialogTitle, const char *payload) {
+        NSString *providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString *inviteMessageS = [NSString stringWithUTF8String:inviteMessage];
+        NSString *dialogTitleS = [NSString stringWithUTF8String:dialogTitle];
+        NSString *payloadS = [NSString stringWithUTF8String:payload];
+        
+        [[SoomlaProfile getInstance] inviteWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                          inviteMessage:inviteMessageS
+                                            dialogTitle:dialogTitleS
+                                                payload:payloadS
+                                              andReward:nil];
     }
     
 	int soomlaProfile_GetStoredUserProfile(const char* sProvider, char** json) {

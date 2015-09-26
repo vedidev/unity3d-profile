@@ -14,16 +14,7 @@ import com.soomla.profile.events.auth.LoginStartedEvent;
 import com.soomla.profile.events.auth.LogoutFailedEvent;
 import com.soomla.profile.events.auth.LogoutFinishedEvent;
 import com.soomla.profile.events.auth.LogoutStartedEvent;
-import com.soomla.profile.events.social.GetContactsFailedEvent;
-import com.soomla.profile.events.social.GetContactsFinishedEvent;
-import com.soomla.profile.events.social.GetContactsStartedEvent;
-import com.soomla.profile.events.social.GetFeedFailedEvent;
-import com.soomla.profile.events.social.GetFeedFinishedEvent;
-import com.soomla.profile.events.social.GetFeedStartedEvent;
-import com.soomla.profile.events.social.SocialActionCancelledEvent;
-import com.soomla.profile.events.social.SocialActionFailedEvent;
-import com.soomla.profile.events.social.SocialActionFinishedEvent;
-import com.soomla.profile.events.social.SocialActionStartedEvent;
+import com.soomla.profile.events.social.*;
 import com.soomla.profile.social.ISocialProvider;
 import com.squareup.otto.Subscribe;
 import com.unity3d.player.UnityPlayer;
@@ -352,6 +343,76 @@ public class ProfileEventHandler {
         }
     }
 
+    @Subscribe
+    public void onInviteStarted(final InviteStartedEvent inviteStartedEvent){
+        IProvider.Provider provider = inviteStartedEvent.Provider;
+        ISocialProvider.SocialActionType socialActionType = inviteStartedEvent.SocialActionType;
+        String payload = inviteStartedEvent.Payload;
+        JSONObject eventJSON = new JSONObject();
+        try {
+            eventJSON.put("provider", provider.getValue());
+            eventJSON.put("socialActionType", socialActionType.getValue());
+            eventJSON.put("payload", payload);
+            UnitySendFilteredMessage(eventJSON.toString(), "onInviteStarted", provider.getValue());
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Subscribe
+    public void onInviteFinished(final InviteFinishedEvent inviteFinishedEvent){
+        IProvider.Provider provider = inviteFinishedEvent.Provider;
+        ISocialProvider.SocialActionType socialActionType = inviteFinishedEvent.SocialActionType;
+        String requestId = inviteFinishedEvent.RequestId;
+        JSONArray invitedJson = new JSONArray(inviteFinishedEvent.InvitedIds);
+        String payload = inviteFinishedEvent.Payload;
+        JSONObject eventJSON = new JSONObject();
+        try {
+            eventJSON.put("provider", provider.getValue());
+            eventJSON.put("socialActionType", socialActionType.getValue());
+            eventJSON.put("requestId", requestId);
+            eventJSON.put("invitedIds", invitedJson);
+            eventJSON.put("payload", payload);
+            UnitySendFilteredMessage(eventJSON.toString(), "onInviteFinished", provider.getValue());
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Subscribe
+    public void onInviteCancelled(final InviteCancelledEvent inviteCancelledEvent){
+        IProvider.Provider provider = inviteCancelledEvent.Provider;
+        ISocialProvider.SocialActionType socialActionType = inviteCancelledEvent.SocialActionType;
+        String payload = inviteCancelledEvent.Payload;
+        JSONObject eventJSON = new JSONObject();
+        try {
+            eventJSON.put("provider", provider.getValue());
+            eventJSON.put("socialActionType", socialActionType.getValue());
+            eventJSON.put("payload", payload);
+            UnitySendFilteredMessage(eventJSON.toString(), "onInviteCancelled", provider.getValue());
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Subscribe
+    public void onInviteFailed(final InviteFailedEvent inviteFailedEvent){
+        IProvider.Provider provider = inviteFailedEvent.Provider;
+        ISocialProvider.SocialActionType socialActionType = inviteFailedEvent.SocialActionType;
+        String message = inviteFailedEvent.ErrorDescription;
+        String payload = inviteFailedEvent.Payload;
+        JSONObject eventJSON = new JSONObject();
+        try {
+            eventJSON.put("provider", provider.getValue());
+            eventJSON.put("socialActionType", socialActionType.getValue());
+            eventJSON.put("message", message);
+            eventJSON.put("payload", payload);
+            UnitySendFilteredMessage(eventJSON.toString(), "onInviteFailed", provider.getValue());
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     private static void UnitySendFilteredMessage(String message, String recipient, int provider) {
         //don't send to facebook!
         if (provider == 0)
@@ -450,5 +511,39 @@ public class ProfileEventHandler {
     public static void pushEventGetContactsFailed(String providerStr, String message, Boolean fromStart, String payload) {
         IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
         BusProvider.getInstance().post(new GetContactsFailedEvent(provider, ISocialProvider.SocialActionType.GET_CONTACTS, message, fromStart, payload));
+    }
+
+    public static void pushEventInviteStarted(String providerStr, String actionTypeStr, String payload) {
+        IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
+        ISocialProvider.SocialActionType socialActionType = ISocialProvider.SocialActionType.getEnum(actionTypeStr);
+        BusProvider.getInstance().post(new InviteStartedEvent(provider, socialActionType, payload));
+    }
+
+    public static void pushEventInviteFinished(String providerStr, String actionTypeStr, String requestId, String invitedIdsStr, String payload) {
+        IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
+        ISocialProvider.SocialActionType socialActionType = ISocialProvider.SocialActionType.getEnum(actionTypeStr);
+        List<String> invitedIds = new ArrayList<String> ();
+        try {
+            JSONArray jsonInvited = new JSONArray(invitedIdsStr);
+            for (int i = 0; i < jsonInvited.length(); i++) {
+                invitedIds.add(jsonInvited.getString(i));
+            }
+        } catch (JSONException e) {
+            SoomlaUtils.LogError(TAG, "(pushEventGetContactsFinished) Unable to parse user profiles from Unity " + invitedIdsStr +
+                    "reason: " + e.getLocalizedMessage());
+        }
+        BusProvider.getInstance().post(new InviteFinishedEvent(provider, socialActionType, requestId, invitedIds, payload));
+    }
+
+    public static void pushEventInviteCancelled(String providerStr, String actionTypeStr, String payload) {
+        IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
+        ISocialProvider.SocialActionType socialActionType = ISocialProvider.SocialActionType.getEnum(actionTypeStr);
+        BusProvider.getInstance().post(new InviteCancelledEvent(provider, socialActionType, payload));
+    }
+
+    public static void pushEventInviteFailed(String providerStr, String actionTypeStr, String message, String payload) {
+        IProvider.Provider provider = IProvider.Provider.getEnum(providerStr);
+        ISocialProvider.SocialActionType socialActionType = ISocialProvider.SocialActionType.getEnum(actionTypeStr);
+        BusProvider.getInstance().post(new InviteFailedEvent(provider, socialActionType, message, payload));
     }
 }

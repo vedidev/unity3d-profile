@@ -150,7 +150,32 @@ namespace Soomla.Profile
             });
         }
         
-        /// <summary>
+
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.UpdateStatus"/>
+		/// </summary>
+		/// <param name="link">Link to post.</param>
+		/// <param name="success">Callback function that is called if the status update was successful.</param>
+		/// <param name="fail">Callback function that is called if the status update failed.</param>
+		public override void UpdateStatusDialog(string link, SocialActionSuccess success, SocialActionFailed fail) {
+			FB.Feed(
+				link: link,
+				callback: (FBResult result) => {
+				
+				if (result.Error != null) {
+					fail(result.Error);
+				}
+				else {
+					SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Text]:"+result.Text);
+					SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Texture]:"+result.Texture);
+					var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
+					object obj = 0;
+					success();						
+				}				
+			});
+		}
+		
+		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.UpdateStory"/>
 		/// </summary>
 		/// <param name="message">A message that will be shown along with the story.</param>
@@ -161,18 +186,55 @@ namespace Soomla.Profile
 		/// <param name="success">Callback function that is called if the story update was successful.</param>
 		/// <param name="fail">Callback function that is called if the story update failed.</param>
 		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
-		public override void UpdateStory(string message, string name, string caption,
+		public override void UpdateStory(string message, string name, string caption, string description,
 		                                 string link, string pictureUrl, SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
-
-//			checkPermission("publish_actions", ()=> {
-				FB.Feed(
-					link: link,
-					linkName: name,
-					linkCaption: caption,
-					linkDescription: message,
-					picture: pictureUrl,
-					callback: (FBResult result) => {
+			checkPermission("publish_actions", ()=> {
+				var formData = new Dictionary<string, string>
+				{
+					{ "message", message },
+					{ "name", name },
+					{ "caption", caption },
+					{ "description", description },
+					{ "link", link },
+					{ "picture", pictureUrl }
+				};
+				FB.API ("/me/feed", Facebook.HttpMethod.POST, 
+				        (FBResult postFeedResult) => {
 					
+					if (postFeedResult.Error != null) {
+						SoomlaUtils.LogDebug(TAG, "UpdateStatusCallback[result.Error]:"+postFeedResult.Error);
+						fail(postFeedResult.Error);
+					} else {
+						SoomlaUtils.LogDebug(TAG, "UpdateStatusCallback[result.Text]:"+postFeedResult.Text);
+						SoomlaUtils.LogDebug(TAG, "UpdateStatusCallback[result.Texture]:"+postFeedResult.Texture);
+						success();
+					}
+				}, formData);
+			}, (string errorMessage)=>{
+				fail(errorMessage);
+			});
+		}
+		
+		/// <summary>
+		/// See docs in <see cref="SoomlaProfile.UpdateStoryDialog"/>
+		/// </summary>
+		/// <param name="name">The name (title) of the story.</param>
+		/// <param name="caption">A caption.</param>
+		/// <param name="link">A link to a web page.</param>
+		/// <param name="pictureUrl">A link to an image on the web.</param>
+		/// <param name="success">Callback function that is called if the story update was successful.</param>
+		/// <param name="fail">Callback function that is called if the story update failed.</param>
+		/// <param name="cancel">Callback function that is called if the story update was cancelled.</param>
+		public override void UpdateStoryDialog(string name, string caption, string description, string link, string picture, 
+		                                       SocialActionSuccess success, SocialActionFailed fail, SocialActionCancel cancel) {
+			FB.Feed(
+				link: link,
+				linkName: name,
+				linkCaption: caption,
+				linkDescription: description,
+				picture: picture,
+				callback: (FBResult result) => {
+				
 					if (result.Error != null) {
 						fail(result.Error);
 					}
@@ -180,26 +242,22 @@ namespace Soomla.Profile
 						SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Text]:"+result.Text);
 						SoomlaUtils.LogDebug(TAG, "FeedCallback[result.Texture]:"+result.Texture);
 						var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
-                        object obj = 0;
-                        if (responseObject.TryGetValue("cancelled", out obj)) {
-                            cancel();
-                        }
-                        else /*if (responseObject.TryGetValue ("id", out obj))*/ {
-                            success();
-                        }
-                    }
-                    
-                });
-//			}, (string errorMessage)=>{
-//				fail(message);
-//            });
-        }
-
-		/// <summary>
-		/// See docs in <see cref="SoomlaProfile.UploadImage"/>
-		/// </summary>
-		/// <param name="tex2D">Texture2D for image.</param>
-		/// <param name="fileName">Name of image file.</param>
+						object obj = 0;
+						if (responseObject.TryGetValue("cancelled", out obj)) {
+							cancel();
+						}
+						else {
+							success();
+						}
+					}
+				});
+			}
+			
+			/// <summary>
+			/// See docs in <see cref="SoomlaProfile.UploadImage"/>
+			/// </summary>
+			/// <param name="tex2D">Texture2D for image.</param>
+			/// <param name="fileName">Name of image file.</param>
 		/// <param name="message">Message to post with the image.</param>
 		/// <param name="success">Callback function that is called if the image upload was successful.</param>
 		/// <param name="fail">Callback function that is called if the image upload failed.</param>
