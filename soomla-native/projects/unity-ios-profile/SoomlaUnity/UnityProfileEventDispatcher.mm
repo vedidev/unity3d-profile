@@ -146,6 +146,48 @@ extern "C"{
         NSString *payloadS = [NSString stringWithUTF8String:payload];
         [ProfileEventHandling postGetFeedFailed:provider withType:socialActionType withMessage:message withFromStart:fromStart withPayload:payloadS];
     }
+    
+    void soomlaProfile_PushEventInviteStarted(const char* sProvider, const char* sActionType, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* actionType = [NSString stringWithUTF8String:sActionType];
+        SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postInviteStarted:provider withType:socialActionType withPayload:payloadS];
+    }
+    void soomlaProfile_PushEventInviteFinished(const char* sProvider, const char* sActionType, const char* requestId, const char *invitedIdsJson, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* actionType = [NSString stringWithUTF8String:sActionType];
+        NSString *requestIdS = [NSString stringWithUTF8String:requestId];
+        SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        NSMutableArray *invitedIds = [NSMutableArray array];
+        NSMutableArray *idsDictArray = [SoomlaUtils jsonStringToArray:[NSString stringWithUTF8String:invitedIdsJson]];
+        if (idsDictArray) {
+            for (NSString *feedEntry in idsDictArray) {
+                [invitedIds addObject:feedEntry];
+            }
+        }
+        [ProfileEventHandling postInviteFinished:provider withType:socialActionType requestId:requestIdS invitedIds:invitedIds withPayload:payloadS];
+    }
+    void soomlaProfile_PushEventInviteCancelled(const char* sProvider, const char* sActionType, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* actionType = [NSString stringWithUTF8String:sActionType];
+        SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postInviteCancelled:provider withType:socialActionType withPayload:payloadS];
+    }
+    void soomlaProfile_PushEventInviteFailed(const char* sProvider, const char* sActionType,  const char* sMessage, const char* payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* actionType = [NSString stringWithUTF8String:sActionType];
+        NSString *message = [NSString stringWithUTF8String:sMessage];
+        SocialActionType socialActionType = [SocialActionUtils actionStringToEnum:actionType];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postInviteFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
+    }
 
 }
 
@@ -428,6 +470,61 @@ extern "C"{
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onGetFeedFailed"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_INVITE_STARTED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onInviteStarted"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_INVITE_FINISHED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
+                                                            @"requestId": [userInfo valueForKey:DICT_ELEMENT_REQUEST_ID],
+                                                            @"invitedIds": [userInfo valueForKey:DICT_ELEMENT_INVITED_LIST],
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onInviteFinished"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_INVITE_FAILED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
+                                                            @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
+                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onInviteFailed"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_INVITE_CANCELLED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"socialActionType": [userInfo valueForKey:DICT_ELEMENT_SOCIAL_ACTION_TYPE],
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onInviteCancelled"
                                       withFilter:provider];
     }
 }
