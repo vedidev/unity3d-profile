@@ -32,7 +32,7 @@ namespace Soomla.Profile
 		private static string TAG = "SOOMLA FBSocialProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
 		private static int DEFAULT_FEED_PAGE_SIZE = 25;
-		private static string DEFAULT_LOGIN_PERMISSIONS = "email,user_birthday,user_photos,user_friends,read_stream";
+		private static string DEFAULT_LOGIN_PERMISSIONS = "email,user_birthday,user_photos,user_friends,user_posts";
 
 		private int lastPageNumber = 0;
 
@@ -345,7 +345,7 @@ namespace Soomla.Profile
         }
 
 		public override void GetFeed(bool fromStart, FeedSuccess success, FeedFailed fail) {
-			checkPermission("read_stream", () => {
+			checkPermission("user_posts", () => {
 				int pageNumber;
 				if (fromStart || this.lastPageNumber == 0) {
 					pageNumber = 1;
