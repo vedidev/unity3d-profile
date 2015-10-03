@@ -42,12 +42,16 @@ weak_frameworks = [
 
 ]
 
+itunes_app_id = ""
 using_google_sdk = False
 google_bundle_id = ""
 using_twitter_sdk = False
 twitter_consumer_key = ""
 
-social_platform_data = meta_data.split(';')
+parsed_metadata = meta_data.split('~')
+itunes_app_id = parsed_metadata[0]
+
+social_platform_data = parsed_metadata[1]
 for social_platform in social_platform_data:
     parsed_social_platform = social_platform.split('^')
     if parsed_social_platform[0] == "twitter":
@@ -93,6 +97,9 @@ pbx_object.add_other_ldflags('-ObjC')
 pbx_object.save()
 
 plist_data = plistlib.readPlist(os.path.join(build_path, 'Info.plist'))
+
+plist_data["iTunesAppID"] = itunes_app_id
+
 plist_types_arr = plist_data.get("CFBundleURLTypes")
 if plist_types_arr == None:
     plist_types_arr = []

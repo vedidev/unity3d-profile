@@ -56,6 +56,8 @@ namespace Soomla.Profile
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
 
+		GUIContent soomlaSecLabel = new GUIContent("iTunes App ID [?]:", "iOS App ID given from iTunes Connect (required ).");
+
 		GUIContent autoLoginContent = new GUIContent ("Auto Login [?]", "Should Soomla try to log in automatically on start, if user already was logged in in the previous sessions.");
 
 		//		GUIContent fbAppId = new GUIContent("FB app Id:");
@@ -137,6 +139,18 @@ namespace Soomla.Profile
 		}
 
 		public void OnSoomlaGUI() {
+			if (EditorUserBuildSettings.activeBuildTarget ==
+#if UNITY_5
+			    BuildTarget.iOS
+#else
+			    BuildTarget.iPhone
+#endif
+			    ) {
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField(soomlaSecLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+				iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
+				EditorGUILayout.EndHorizontal();
+			}
 		}
 
 		void IntegrationGUI()
@@ -406,6 +420,25 @@ namespace Soomla.Profile
 			}
 		}
 
+		/** Platform-dependent and SN-independent **/
+
+		public static string ITUNESS_APP_ID = "ITUNES APP ID";
+
+		public static string iTunesAppId {
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("iTunesAppId", out value) ? value : ITUNESS_APP_ID;
+			}
+			set {
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("iTunesAppId", out v);
+				if (v != value) {
+					SoomlaEditorScript.Instance.setSettingsValue("iTunesAppId", value);
+					SoomlaEditorScript.DirtyEditor();
+				}
+			}
+		}
+
 		/** FACEBOOK **/
 
 		public static string FB_APP_ID_DEFAULT = "YOUR FB APP ID";
@@ -488,7 +521,7 @@ namespace Soomla.Profile
 		}
 
 		private static bool validateFacebookPermissionsString(string permissionString) {
-			return permissionString.Length > 0 && 
+			return permissionString.Length > 0 &&
 				((new System.Text.RegularExpressions.Regex(FB_PERMISSIONS_STRING_REGEXP)).Match(permissionString).Length == permissionString.Length);
 		}
 
