@@ -51,7 +51,7 @@ twitter_consumer_key = ""
 parsed_metadata = meta_data.split('~')
 itunes_app_id = parsed_metadata[0]
 
-social_platform_data = parsed_metadata[1]
+social_platform_data = parsed_metadata[1].split(';')
 for social_platform in social_platform_data:
     parsed_social_platform = social_platform.split('^')
     if parsed_social_platform[0] == "twitter":
