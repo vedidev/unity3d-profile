@@ -150,6 +150,10 @@ namespace Soomla.Profile
 				EditorGUILayout.LabelField(soomlaSecLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
 				iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
+
+				if (!iTunesAppId.All(Char.IsDigit)) {
+					EditorGUILayout.HelpBox("iTunes App ID should be a number!", MessageType.Error);
+				}
 			}
 		}
 
