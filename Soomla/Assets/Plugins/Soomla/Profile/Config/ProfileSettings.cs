@@ -56,7 +56,7 @@ namespace Soomla.Profile
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
 
-		GUIContent soomlaSecLabel = new GUIContent("iTunes App ID [?]:", "iOS App ID given from iTunes Connect (required ).");
+		GUIContent iTunesKeyLabel = new GUIContent("iTunes App ID [?]:", "iOS App ID given from iTunes Connect (required to use OpenAppRatingPage method).");
 
 		GUIContent autoLoginContent = new GUIContent ("Auto Login [?]", "Should Soomla try to log in automatically on start, if user already was logged in in the previous sessions.");
 
@@ -70,7 +70,7 @@ namespace Soomla.Profile
 		GUIContent twCustKey = new GUIContent ("Consumer Key [?]", "Consumer key of your twitter app");
 		GUIContent twCustSecret = new GUIContent ("Consumer Secret [?]", "Consumer secret of your twitter app");
 
-		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version. ");
+		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version.");
 		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
 
 		private ProfileSettings()
@@ -147,7 +147,7 @@ namespace Soomla.Profile
 #endif
 			    ) {
 				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField(soomlaSecLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+				EditorGUILayout.LabelField(iTunesKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
 				iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
 				EditorGUILayout.EndHorizontal();
 
