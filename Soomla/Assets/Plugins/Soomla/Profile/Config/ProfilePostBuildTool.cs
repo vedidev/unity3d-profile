@@ -41,6 +41,8 @@ namespace Soomla.Profile
 			string result = "";
 			Dictionary<string, bool?> state = ProfileSettings.IntegrationState;
 
+			result += ProfileSettings.iTunesAppId + "~";
+
 			foreach (var entry in state) {
 				Provider targetProvider = Provider.fromString(entry.Key);
 				if (entry.Value.HasValue && entry.Value.Value) {

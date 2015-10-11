@@ -56,6 +56,8 @@ namespace Soomla.Profile
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
 
+		GUIContent iTunesKeyLabel = new GUIContent("iTunes App ID [?]:", "iOS App ID given from iTunes Connect (required to use OpenAppRatingPage method).");
+
 		GUIContent autoLoginContent = new GUIContent ("Auto Login [?]", "Should Soomla try to log in automatically on start, if user already was logged in in the previous sessions.");
 
 		//		GUIContent fbAppId = new GUIContent("FB app Id:");
@@ -68,7 +70,7 @@ namespace Soomla.Profile
 		GUIContent twCustKey = new GUIContent ("Consumer Key [?]", "Consumer key of your twitter app");
 		GUIContent twCustSecret = new GUIContent ("Consumer Secret [?]", "Consumer secret of your twitter app");
 
-		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version. ");
+		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version.");
 		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
 
 		private ProfileSettings()
@@ -137,6 +139,22 @@ namespace Soomla.Profile
 		}
 
 		public void OnSoomlaGUI() {
+			if (EditorUserBuildSettings.activeBuildTarget ==
+#if UNITY_5
+			    BuildTarget.iOS
+#else
+			    BuildTarget.iPhone
+#endif
+			    ) {
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField(iTunesKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+				iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
+				EditorGUILayout.EndHorizontal();
+
+				if (!iTunesAppId.All(Char.IsDigit)) {
+					EditorGUILayout.HelpBox("iTunes App ID should be a number!", MessageType.Error);
+				}
+			}
 		}
 
 		void IntegrationGUI()
@@ -406,6 +424,25 @@ namespace Soomla.Profile
 			}
 		}
 
+		/** Platform-dependent and SN-independent **/
+
+		public static string ITUNESS_APP_ID = "ITUNES APP ID";
+
+		public static string iTunesAppId {
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("iTunesAppId", out value) ? value : ITUNESS_APP_ID;
+			}
+			set {
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("iTunesAppId", out v);
+				if (v != value) {
+					SoomlaEditorScript.Instance.setSettingsValue("iTunesAppId", value);
+					SoomlaEditorScript.DirtyEditor();
+				}
+			}
+		}
+
 		/** FACEBOOK **/
 
 		public static string FB_APP_ID_DEFAULT = "YOUR FB APP ID";
@@ -448,7 +485,7 @@ namespace Soomla.Profile
 			}
 		}
 
-		public static string FB_PERMISSIONS_DEFAULT = "email,user_birthday,user_photos,user_friends,read_stream";
+		public static string FB_PERMISSIONS_DEFAULT = "email,user_birthday,user_photos,user_friends,user_posts";
 		private static string FB_PERMISSIONS_STRING_REGEXP = "([a-z]+(_[a-z]+)*)+(,([a-z]+(_[a-z]+)*)+)*";
 
 		public static string FBPermissions
@@ -488,7 +525,7 @@ namespace Soomla.Profile
 		}
 
 		private static bool validateFacebookPermissionsString(string permissionString) {
-			return permissionString.Length > 0 && 
+			return permissionString.Length > 0 &&
 				((new System.Text.RegularExpressions.Regex(FB_PERMISSIONS_STRING_REGEXP)).Match(permissionString).Length == permissionString.Length);
 		}
 
