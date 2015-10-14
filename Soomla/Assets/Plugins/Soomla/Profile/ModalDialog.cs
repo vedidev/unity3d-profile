@@ -7,17 +7,17 @@ namespace Soomla.Profile
 {
 	public static class ModalDialog
 	{
-		public static void Initialize (UnityEngine.Events.UnityAction call)
+		public static void CreateModalWindow (string dscrpText, UnityEngine.Events.UnityAction call)
 		{
 			bool myEventSystem = false;
 			if (EventSystem.current == null) {
-				GameObject es = new GameObject ("EventSystem");
-				es.AddComponent<TouchInputModule> ();
-				es.AddComponent<StandaloneInputModule> ();
+				GameObject eventSystem = new GameObject ("EventSystem");
+				eventSystem.AddComponent<TouchInputModule> ();
+				eventSystem.AddComponent<StandaloneInputModule> ();
 				myEventSystem = true;
 			}
 
-			GameObject canvasGO = new GameObject ("FBModalWindow");
+			GameObject canvasGO = new GameObject ("ModalWindow");
 			RectTransform canvasRT = canvasGO.AddComponent<RectTransform> ();
 			Canvas canvasCv = canvasGO.AddComponent<Canvas> ();
 			canvasCv.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -74,7 +74,7 @@ namespace Soomla.Profile
 			descriptionRT.offsetMax = new Vector2 (0, 0);
 			descriptionRT.offsetMin = new Vector2 (0, 0);
 			Text descriptionText = description.AddComponent<Text> ();
-			descriptionText.text = "Are You Sure ?";
+			descriptionText.text = dscrptText;
 			descriptionText.color = Color.black;
 			descriptionText.fontSize = 8;
 			descriptionText.resizeTextForBestFit = true;
