@@ -31,10 +31,15 @@ unity3d-profile easily connects to SOOMLA's virtual economy model (unity3d-store
 
 ## Download
 
-####Pre baked unitypackage:
+#### Pre baked unitypackage:
 
-[soomla-unity3d-core v1.0.10](http://library.soom.la/fetch/unity3d-core/1.0.10?cf=github)  
-[unity3d-profile v2.1.6](http://library.soom.la/fetch/unity3d-profile/2.1.6?cf=github)  
+ - The latest [soomla-unity3d-core](http://library.soom.la/fetch/unity3d-core/latest?cf=github) release
+ - The latest [unity3d-profile](http://library.soom.la/fetch/unity3d-profile/latest?cf=github) release
+
+#### From sources:
+ - Clone this repository;
+ - Run `./build_all` from project directory;
+ - Take created binaries from `build` directory and use it!
 
 ## Debugging
 

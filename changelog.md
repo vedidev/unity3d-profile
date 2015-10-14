@@ -1,3 +1,14 @@
+### v2.1.7 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.6...v2.1.7)
+
+* Fixes
+  * Validate FB permissions in Unity3d
+  * UserProfile fields now support Unicode symbols
+
+### v2.1.6 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.5...v2.1.6)
+
+* Changes
+  * Removed binaries and improved build scripts
+
 ### v2.1.6 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.5...v2.1.6)
 
 * Changes
