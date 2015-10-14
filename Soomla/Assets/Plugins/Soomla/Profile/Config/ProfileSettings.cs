@@ -24,7 +24,7 @@ using UnityEditor;
 
 namespace Soomla.Profile
 {
-
+	
 	#if UNITY_EDITOR
 	[InitializeOnLoad]
 	#endif
@@ -33,46 +33,51 @@ namespace Soomla.Profile
 	/// </summary>
 	public class ProfileSettings : ISoomlaSettings
 	{
-
+		
 		#if UNITY_EDITOR
-
+		
 		static ProfileSettings instance = new ProfileSettings();
 		static ProfileSettings()
 		{
 			SoomlaEditorScript.addSettings(instance);
 		}
-
-#if UNITY_4_5 || UNITY_4_6
-		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iPhone,
-			BuildTargetGroup.WebPlayer, BuildTargetGroup.Standalone};
-#else
-		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iOS,
-			BuildTargetGroup.WebPlayer, BuildTargetGroup.Standalone};
-#endif
-
-//		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
-//		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
-
+		
+		private BuildTargetGroup[] supportedPlatforms =
+		{
+			BuildTargetGroup.Android,
+			#if UNITY_5
+			BuildTargetGroup.iOS,
+			#else
+			BuildTargetGroup.iPhone,
+			#endif
+			BuildTargetGroup.WebPlayer,
+			BuildTargetGroup.Standalone
+		};
+		
+		//		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
+		//		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
+		
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
 
 		GUIContent iTunesKeyLabel = new GUIContent("iTunes App ID [?]:", "iOS App ID given from iTunes Connect (required to use OpenAppRatingPage method).");
 
+		
 		GUIContent autoLoginContent = new GUIContent ("Auto Login [?]", "Should Soomla try to log in automatically on start, if user already was logged in in the previous sessions.");
-
+		
 		//		GUIContent fbAppId = new GUIContent("FB app Id:");
-//		GUIContent fbAppNS = new GUIContent("FB app namespace:");
-
+		//		GUIContent fbAppNS = new GUIContent("FB app namespace:");
+		
 		GUIContent fbPermissionsContent = new GUIContent ("Login Permissions [?]", "Permissions your app will request from users on login");
-
+		
 		GUIContent gpClientId = new GUIContent ("Client ID [?]", "Client id of your google+ app (iOS only)");
-
+		
 		GUIContent twCustKey = new GUIContent ("Consumer Key [?]", "Consumer key of your twitter app");
 		GUIContent twCustSecret = new GUIContent ("Consumer Secret [?]", "Consumer secret of your twitter app");
 
 		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version.");
 		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
-
+		
 		private ProfileSettings()
 		{
 			ApplyCurrentSupportedProviders(socialIntegrationState);

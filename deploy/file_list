@@ -4,7 +4,6 @@ Assets/Plugins/iOS/libSoomlaiOSProfile.a
 Assets/Plugins/iOS/libUnityiOSProfile.a
 Assets/Plugins/Soomla/Profile
 Assets/Soomla/Editor/build-tools/Soomla_ProfileRunner.py
-Assets/Soomla/Prefabs/ProfileEvents.prefab
 Assets/WebPlayerTemplates/SoomlaConfig/android/android-profile-google
 Assets/WebPlayerTemplates/SoomlaConfig/android/android-profile-twitter
 Assets/WebPlayerTemplates/SoomlaConfig/ios/ios-profile-google
