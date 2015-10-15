@@ -299,9 +299,8 @@ namespace Soomla.Profile
 
 			else 
 			{
-				// TODO: Support showConfirmation
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
-				ModalDialog.CreateModalWindow("You sure, you want to post it ?",
+				ModalDialog.CreateModalWindow("Are you sure you want to update status?",
 				() => targetProvider.UpdateStatus(status,
 				    /* success */	() => {
 					if (reward != null) {
@@ -438,9 +437,8 @@ namespace Soomla.Profile
 			
 			else
 			{
-				// TODO: Support showConfirmation
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
-				ModalDialog.CreateModalWindow("Are you sure, you want to post this?",
+				ModalDialog.CreateModalWindow("Are you sure you want to update story?",
 				() => targetProvider.UpdateStory(message, name, caption, description, link, pictureUrl,
 				                           /* success */	() => { 
 					if (reward != null) {
@@ -593,9 +591,8 @@ namespace Soomla.Profile
 			
 			else 
 			{
-				// TODO: Support showConfirmation
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
-				ModalDialog.CreateModalWindow("Are you sure, you want to upload image?",
+				ModalDialog.CreateModalWindow("Are you sure you want to upload image?",
 				() => targetProvider.UploadImage(imageBytes, fileName, message,
 				                           /* success */	() => { 
 					if (reward != null) {

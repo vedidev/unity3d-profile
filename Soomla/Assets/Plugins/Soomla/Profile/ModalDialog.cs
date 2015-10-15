@@ -38,7 +38,6 @@ namespace Soomla.Profile
 			modalWindowRT.localPosition = Vector3.zero; 
 			modalWindowRT.sizeDelta = new Vector2 (canvasRT.sizeDelta.x / 3, canvasRT.sizeDelta.y / 5);
 			Image modalWindowIm = modalWindow.AddComponent<Image> ();
-			modalWindowIm.sprite = Resources.GetBuiltinResource (typeof(Sprite), "Background") as Sprite;
 			modalWindowIm.color = new Color(1.0f,1.0f,1.0f,1.0f);
 
 			GameObject titlePanel = new GameObject ("TitlePanel");
@@ -49,7 +48,7 @@ namespace Soomla.Profile
 			titlePanelRT.offsetMax = new Vector2 (0, 0);
 			titlePanelRT.offsetMin = new Vector2 (0, 0);
 			Image titlePanelIm = titlePanel.AddComponent<Image> ();
-			titlePanelIm.color = new Color(0.8f,0.9f,1.0f,1.0f);
+			titlePanelIm.color = new Color(0.7f,0.7f,0.7f,1.0f);
 
 			GameObject title = new GameObject ("Title");
 			title.transform.SetParent (titlePanel.transform);
@@ -74,7 +73,7 @@ namespace Soomla.Profile
 			descriptionRT.offsetMax = new Vector2 (0, 0);
 			descriptionRT.offsetMin = new Vector2 (0, 0);
 			Text descriptionText = description.AddComponent<Text> ();
-			descriptionText.text = dscrptText;
+			descriptionText.text = dscrpText;
 			descriptionText.color = Color.black;
 			descriptionText.fontSize = 8;
 			descriptionText.resizeTextForBestFit = true;
@@ -84,12 +83,12 @@ namespace Soomla.Profile
 			GameObject yes = new GameObject ("YesButton");
 			yes.transform.SetParent (modalWindow.transform);
 			RectTransform yesRT = yes.AddComponent<RectTransform> ();
-			yesRT.anchorMax = new Vector2 (1.0f, 0.4f);
-			yesRT.anchorMin = new Vector2 (0.5f, 0.1f);
+			yesRT.anchorMax = new Vector2 (1.0f, 0.3f);
+			yesRT.anchorMin = new Vector2 (0.51f, 0.0f);
 			yesRT.offsetMax = new Vector2 (0, 0);
 			yesRT.offsetMin = new Vector2 (0, 0);
 			Image yesIm = yes.AddComponent<Image> ();
-			yesIm.color = new Color(0.8f,0.9f,1.0f,1.0f);
+			yesIm.color = new Color(0.6f,0.6f,0.6f,1.0f);
 			Button yesBtn = yes.AddComponent<Button> ();
 			yesBtn.onClick.AddListener (call);
 			yesBtn.onClick.AddListener (() => GameObject.Destroy (canvasGO));
@@ -112,12 +111,12 @@ namespace Soomla.Profile
 			GameObject no = new GameObject ("NoButton");
 			no.transform.SetParent (modalWindow.transform);
 			RectTransform noRT = no.AddComponent<RectTransform> ();
-			noRT.anchorMax = new Vector2 (0.5f, 0.4f);
-			noRT.anchorMin = new Vector2 (0.0f, 0.1f);
+			noRT.anchorMax = new Vector2 (0.49f, 0.3f);
+			noRT.anchorMin = new Vector2 (0.0f, 0.0f);
 			noRT.offsetMax = new Vector2 (0, 0);
 			noRT.offsetMin = new Vector2 (0, 0);
 			Image noIm = no.AddComponent<Image> ();
-			noIm.color = new Color(0.8f,0.9f,1.0f,1.0f);
+			noIm.color = new Color(0.6f,0.6f,0.6f,1.0f);
 			Button noBtn = no.AddComponent<Button> ();
 			noBtn.onClick.AddListener (() => GameObject.Destroy (canvasGO));
 			if (myEventSystem)
