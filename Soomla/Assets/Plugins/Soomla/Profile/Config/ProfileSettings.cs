@@ -85,15 +85,15 @@ namespace Soomla.Profile
 			Dictionary<string, string> twitterPaths = new Dictionary<string, string>();
 			twitterPaths.Add("/ios/ios-profile-twitter/libSTTwitter.a", "/iOS/SOOMLA/libSTTwitter.a");
 			twitterPaths.Add("/ios/ios-profile-twitter/libSoomlaiOSProfileTwitter.a", "/iOS/SOOMLA/libSoomlaiOSProfileTwitter.a");
-			twitterPaths.Add("/android/android-profile-twitter/AndroidProfileTwitter.jar", "/Android/AndroidProfileTwitter.jar");
-			twitterPaths.Add("/android/android-profile-twitter/twitter4j-asyc-4.0.2.jar", "/Android/twitter4j-asyc-4.0.2.jar");
-			twitterPaths.Add("/android/android-profile-twitter/twitter4j-core-4.0.2.jar", "/Android/twitter4j-core-4.0.2.jar");
+			twitterPaths.Add("/android/android-profile-twitter/AndroidProfileTwitter.jar", "/Android/SOOMLA/libs/AndroidProfileTwitter.jar");
+			twitterPaths.Add("/android/android-profile-twitter/twitter4j-asyc-4.0.2.jar", "/Android/SOOMLA/libs/twitter4j-asyc-4.0.2.jar");
+			twitterPaths.Add("/android/android-profile-twitter/twitter4j-core-4.0.2.jar", "/Android/SOOMLA/libs/twitter4j-core-4.0.2.jar");
 			socialLibPaths.Add(Provider.TWITTER.ToString(), twitterPaths);
 
 			Dictionary<string, string> googlePaths = new Dictionary<string, string>();
 			googlePaths.Add("/ios/ios-profile-google/libSoomlaiOSProfileGoogle.a", "/iOS/SOOMLA/libSoomlaiOSProfileGoogle.a");
-			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/AndroidProfileGoogle.jar");
-			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/google-play-services_lib");
+			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/SOOMLA/libs/AndroidProfileGoogle.jar");
+			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/SOOMLA/libs/google-play-services_lib");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
         }
 
