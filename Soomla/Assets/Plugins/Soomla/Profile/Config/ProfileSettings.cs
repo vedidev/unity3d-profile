@@ -76,7 +76,6 @@ namespace Soomla.Profile
 		GUIContent twCustSecret = new GUIContent ("Consumer Secret [?]", "Consumer secret of your twitter app");
 
 		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version.");
-		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
 		
 		private ProfileSettings()
 		{
@@ -139,7 +138,7 @@ namespace Soomla.Profile
 
 		public void OnInfoGUI() {
 			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.1.7");
-			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
+			SoomlaEditorScript.LatestVersionField ("unity3d-profile", "2.1.7");
 			EditorGUILayout.Space();
 		}
 
