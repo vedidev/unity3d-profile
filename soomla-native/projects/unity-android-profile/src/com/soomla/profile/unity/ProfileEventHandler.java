@@ -239,10 +239,12 @@ public class ProfileEventHandler {
     public void onGetContactsStarted(final GetContactsStartedEvent getContactsStartedEvent){
         IProvider.Provider provider = getContactsStartedEvent.Provider;
         String payload = getContactsStartedEvent.Payload;
+		boolean fromStart = getContactsStartedEvent.FromStart;
         JSONObject eventJSON = new JSONObject();
         try {
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("payload", payload);
+			eventJSON.put("fromStart", fromStart);
             UnitySendFilteredMessage(eventJSON.toString(), "onGetContactsStarted", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
@@ -293,10 +295,12 @@ public class ProfileEventHandler {
     public void onGetFeedStarted(final GetFeedStartedEvent getFeedStartedEvent){
         IProvider.Provider provider = getFeedStartedEvent.Provider;
         String payload = getFeedStartedEvent.Payload;
+        boolean fromStart = getFeedStartedEvent.FromStart;
         JSONObject eventJSON = new JSONObject();
         try {
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("payload", payload);
+            eventJSON.put("fromStart", fromStart);
             UnitySendFilteredMessage(eventJSON.toString(), "onGetFeedStarted", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
