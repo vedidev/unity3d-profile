@@ -1,3 +1,11 @@
+### v2.1.8 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.7...v2.1.8)
+
+* Fixes
+  * OpenAppRatingPage can’t open app page in iOS AppStore
+
+* Changes
+  * Replaced deprecated read_stream permission with user_posts
+
 ### v2.1.7 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.6...v2.1.7)
 
 * Fixes
