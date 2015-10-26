@@ -61,10 +61,9 @@ namespace Soomla.Profile
 		/// NOTE: This function must be called before any of the class methods can be used.
 		/// </summary>
 		public static void Initialize() {
+			ProfileEvents.Initialize();
 			Dictionary<Provider, Dictionary<string, string>> customParams = GetCustomParamsDict();
 
-			//initialize Events Singleton
-			ProfileEvents initInstance = ProfileEvents.Instance;
 			instance._initialize(GetCustomParamsJson(customParams)); //add parameters
 
 #if SOOMLA_FACEBOOK
