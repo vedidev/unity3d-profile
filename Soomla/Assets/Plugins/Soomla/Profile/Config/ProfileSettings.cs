@@ -138,7 +138,7 @@ namespace Soomla.Profile
 
 		public void OnInfoGUI() {
 			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.1.7");
-			SoomlaEditorScript.LatestVersionField ("unity3d-profile", "2.1.7");
+			SoomlaEditorScript.LatestVersionField ("unity3d-profile", "2.1.7", "New Profile version available!", "http://library.soom.la/fetch/unity3d-profile/latest?cf=unity");
 			EditorGUILayout.Space();
 		}
 
