@@ -62,6 +62,9 @@ namespace Soomla.Profile
 		/// </summary>
 		public static void Initialize() {
 			Dictionary<Provider, Dictionary<string, string>> customParams = GetCustomParamsDict();
+
+			//initialize Events Singleton
+			ProfileEvents initInstance = ProfileEvents.Instance;
 			instance._initialize(GetCustomParamsJson(customParams)); //add parameters
 
 #if SOOMLA_FACEBOOK
