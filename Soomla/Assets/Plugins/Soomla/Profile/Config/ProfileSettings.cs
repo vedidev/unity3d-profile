@@ -37,6 +37,9 @@ namespace Soomla.Profile
 		#if UNITY_EDITOR
 		
 		static ProfileSettings instance = new ProfileSettings();
+
+		static string currentModuleVersion = "2.1.7";
+
 		static ProfileSettings()
 		{
 			SoomlaEditorScript.addSettings(instance);
@@ -137,8 +140,8 @@ namespace Soomla.Profile
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.1.7");
-			SoomlaEditorScript.LatestVersionField ("unity3d-profile", "2.1.7", "New Profile version available!", "http://library.soom.la/fetch/unity3d-profile/latest?cf=unity");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, currentModuleVersion);
+			SoomlaEditorScript.LatestVersionField ("unity3d-profile", currentModuleVersion, "New Profile version available!", "http://library.soom.la/fetch/unity3d-profile/latest?cf=unity");
 			EditorGUILayout.Space();
 		}
 
