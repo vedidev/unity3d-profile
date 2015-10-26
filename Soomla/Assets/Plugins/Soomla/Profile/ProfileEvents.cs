@@ -85,6 +85,8 @@ namespace Soomla.Profile {
 //		}
 
 		public static void Initialize() {
+			//instantiate core events singleton
+			CoreEvents.Initialize();
 			SoomlaUtils.LogDebug (TAG, "Initializing ProfileEvents ...");
 			#if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJNI.PushLocalFrame(100);
