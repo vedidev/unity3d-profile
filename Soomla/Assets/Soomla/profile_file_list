@@ -1,7 +1,7 @@
-Assets/Plugins/Android/SOOMLA/libs/AndroidProfile.jar
-Assets/Plugins/Android/SOOMLA/libs/UnityAndroidProfile.jar
-Assets/Plugins/iOS/SOOMLA/libSoomlaiOSProfile.a
-Assets/Plugins/iOS/SOOMLA/libUnityiOSProfile.a
+Assets/Plugins/Android/Soomla/libs/AndroidProfile.jar
+Assets/Plugins/Android/Soomla/libs/UnityAndroidProfile.jar
+Assets/Plugins/iOS/Soomla/libSoomlaiOSProfile.a
+Assets/Plugins/iOS/Soomla/libUnityiOSProfile.a
 Assets/Plugins/Soomla/Profile
 Assets/Soomla/Editor/build-tools/Soomla_ProfileRunner.py
 Assets/WebPlayerTemplates/SoomlaConfig/android/android-profile-google
