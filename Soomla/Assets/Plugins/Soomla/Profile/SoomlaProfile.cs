@@ -61,7 +61,9 @@ namespace Soomla.Profile
 		/// NOTE: This function must be called before any of the class methods can be used.
 		/// </summary>
 		public static void Initialize() {
+			ProfileEvents.Initialize();
 			Dictionary<Provider, Dictionary<string, string>> customParams = GetCustomParamsDict();
+
 			instance._initialize(GetCustomParamsJson(customParams)); //add parameters
 
 #if SOOMLA_FACEBOOK
@@ -299,9 +301,9 @@ namespace Soomla.Profile
 
 			else 
 			{
-				// TODO: Support showConfirmation
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
-				targetProvider.UpdateStatus(status,
+				ModalDialog.CreateModalWindow("Are you sure you want to update status?",
+				() => targetProvider.UpdateStatus(status,
 				    /* success */	() => {
 					if (reward != null) {
 						reward.Give();
@@ -309,7 +311,7 @@ namespace Soomla.Profile
 					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
 				},
 					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, userPayload); }
-				);
+				) );
 			}
 		}
 
@@ -437,9 +439,9 @@ namespace Soomla.Profile
 			
 			else
 			{
-				// TODO: Support showConfirmation
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
-				targetProvider.UpdateStory(message, name, caption, description, link, pictureUrl,
+				ModalDialog.CreateModalWindow("Are you sure you want to update story?",
+				() => targetProvider.UpdateStory(message, name, caption, description, link, pictureUrl,
 				                           /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
@@ -448,7 +450,7 @@ namespace Soomla.Profile
 				},
 				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, userPayload); },
 				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, userPayload); }
-				);
+				) );
 			}
 		}
 
@@ -591,9 +593,9 @@ namespace Soomla.Profile
 			
 			else 
 			{
-				// TODO: Support showConfirmation
 				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
-				targetProvider.UploadImage(imageBytes, fileName, message,
+				ModalDialog.CreateModalWindow("Are you sure you want to upload image?",
+				() => targetProvider.UploadImage(imageBytes, fileName, message,
 				                           /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
@@ -602,7 +604,7 @@ namespace Soomla.Profile
 				},
 				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload); },
 				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, userPayload); }
-				);
+				) );
 			}
 		}
 		

@@ -16,6 +16,7 @@ using UnityEngine;
 using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Soomla.Singletons;
 
 namespace Soomla.Profile {
 
@@ -23,50 +24,55 @@ namespace Soomla.Profile {
 	/// This class provides functions for event handling. To handle various events, just add your 
 	/// game-specific behavior to the delegates below.
 	/// </summary>
-	public class ProfileEvents : MonoBehaviour {
+	public class ProfileEvents : CodeGeneratedSingleton {
 
 		private const string TAG = "SOOMLA ProfileEvents";
 
-		private static ProfileEvents instance = null;
-		#pragma warning disable 414
-		private static ProfileEventPusher pep = null;
+		public static ProfileEvents Instance = null;        
+
+        protected override bool DontDestroySingleton
+        {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// Initializes the game state before the game starts.
+        /// </summary>
+        protected override void InitAfterRegisteringAsSingleInstance()
+        {
+            base.InitAfterRegisteringAsSingleInstance();
+
+            // now we initialize the event pusher
+#if UNITY_ANDROID && !UNITY_EDITOR
+			pep = new ProfileEventPusherAndroid();
+#elif UNITY_IOS && !UNITY_EDITOR
+			pep = new ProfileEventPusherIOS();
+#endif
+        }
+
+        //		private static ProfileEvents instance = null;
+#pragma warning disable 414
+        private static ProfileEventPusher pep = null;
 		#pragma warning restore 414
 
-		/// <summary>
-		/// Initializes the game state before the game starts.
-		/// </summary>
-		void Awake(){
-			if(instance == null){ 	// making sure we only initialize one instance.
-				SoomlaUtils.LogDebug(TAG, "Initializing ProfileEvents (Awake)");
-
-				instance = this;
-                gameObject.name = "ProfileEvents";
-				GameObject.DontDestroyOnLoad(this.gameObject);
-				Initialize();
-				// now we initialize the event pusher
-				#if UNITY_ANDROID && !UNITY_EDITOR
-				pep = new ProfileEventPusherAndroid();
-				#elif UNITY_IOS && !UNITY_EDITOR
-				pep = new ProfileEventPusherIOS();
-				#endif
-
-			} else {				// Destroying unused instances.
-				GameObject.Destroy(this.gameObject);
-			}
-		}
 
 		public static void Initialize() {
-			SoomlaUtils.LogDebug (TAG, "Initializing ProfileEvents ...");
-			#if UNITY_ANDROID && !UNITY_EDITOR
-			AndroidJNI.PushLocalFrame(100);
-			//init ProfileEventHandler
-			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
-				jniEventHandler.CallStatic("initialize");
+			if (Instance == null) {
+				CoreEvents.Initialize();
+				Instance = GetSynchronousCodeGeneratedInstance<ProfileEvents>();
+				
+				SoomlaUtils.LogDebug (TAG, "Initializing ProfileEvents ...");
+#if UNITY_ANDROID && !UNITY_EDITOR
+				AndroidJNI.PushLocalFrame(100);
+				//init ProfileEventHandler
+				using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.profile.unity.ProfileEventHandler")) {
+					jniEventHandler.CallStatic("initialize");
+				}
+				AndroidJNI.PopLocalFrame(IntPtr.Zero);
+#elif UNITY_IOS && !UNITY_EDITOR
+				// On iOS, this is initialized inside the bridge library when we call "soomlaProfile_Initialize" in SoomlaProfileIOS
+#endif
 			}
-			AndroidJNI.PopLocalFrame(IntPtr.Zero);
-			#elif UNITY_IOS && !UNITY_EDITOR
-			// On iOS, this is initialized inside the bridge library when we call "soomlaProfile_Initialize" in SoomlaProfileIOS
-			#endif
 		}
 
 		/// <summary>

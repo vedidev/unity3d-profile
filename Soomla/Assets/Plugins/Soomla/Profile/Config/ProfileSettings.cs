@@ -24,7 +24,7 @@ using UnityEditor;
 
 namespace Soomla.Profile
 {
-
+	
 	#if UNITY_EDITOR
 	[InitializeOnLoad]
 	#endif
@@ -33,62 +33,69 @@ namespace Soomla.Profile
 	/// </summary>
 	public class ProfileSettings : ISoomlaSettings
 	{
-
+		
 		#if UNITY_EDITOR
-
+		
 		static ProfileSettings instance = new ProfileSettings();
+
+		static string currentModuleVersion = "2.1.8";
+
 		static ProfileSettings()
 		{
 			SoomlaEditorScript.addSettings(instance);
 		}
-
-#if UNITY_4_5 || UNITY_4_6
-		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iPhone,
-			BuildTargetGroup.WebPlayer, BuildTargetGroup.Standalone};
-#else
-		BuildTargetGroup[] supportedPlatforms = { BuildTargetGroup.Android, BuildTargetGroup.iOS,
-			BuildTargetGroup.WebPlayer, BuildTargetGroup.Standalone};
-#endif
-
-//		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
-//		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
-
+		
+		private BuildTargetGroup[] supportedPlatforms =
+		{
+			BuildTargetGroup.Android,
+			#if UNITY_5
+			BuildTargetGroup.iOS,
+			#else
+			BuildTargetGroup.iPhone,
+			#endif
+			BuildTargetGroup.WebPlayer,
+			BuildTargetGroup.Standalone
+		};
+		
+		//		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
+		//		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
+		
 		Dictionary<string, bool?> socialIntegrationState = new Dictionary<string, bool?>();
 		Dictionary<string, Dictionary<string, string>> socialLibPaths = new Dictionary<string, Dictionary<string, string>>();
 
 		GUIContent iTunesKeyLabel = new GUIContent("iTunes App ID [?]:", "iOS App ID given from iTunes Connect (required to use OpenAppRatingPage method).");
 
+		
 		GUIContent autoLoginContent = new GUIContent ("Auto Login [?]", "Should Soomla try to log in automatically on start, if user already was logged in in the previous sessions.");
-
+		
 		//		GUIContent fbAppId = new GUIContent("FB app Id:");
-//		GUIContent fbAppNS = new GUIContent("FB app namespace:");
-
+		//		GUIContent fbAppNS = new GUIContent("FB app namespace:");
+		
 		GUIContent fbPermissionsContent = new GUIContent ("Login Permissions [?]", "Permissions your app will request from users on login");
-
+		
 		GUIContent gpClientId = new GUIContent ("Client ID [?]", "Client id of your google+ app (iOS only)");
-
+		
 		GUIContent twCustKey = new GUIContent ("Consumer Key [?]", "Consumer key of your twitter app");
 		GUIContent twCustSecret = new GUIContent ("Consumer Secret [?]", "Consumer secret of your twitter app");
 
 		GUIContent profileVersion = new GUIContent("Profile Version [?]", "The SOOMLA Profile version.");
-		GUIContent profileBuildVersion = new GUIContent("Profile Build [?]", "The SOOMLA Profile build.");
-
+		
 		private ProfileSettings()
 		{
 			ApplyCurrentSupportedProviders(socialIntegrationState);
 
 			Dictionary<string, string> twitterPaths = new Dictionary<string, string>();
-			twitterPaths.Add("/ios/ios-profile-twitter/libSTTwitter.a", "/iOS/libSTTwitter.a");
-			twitterPaths.Add("/ios/ios-profile-twitter/libSoomlaiOSProfileTwitter.a", "/iOS/libSoomlaiOSProfileTwitter.a");
-			twitterPaths.Add("/android/android-profile-twitter/AndroidProfileTwitter.jar", "/Android/AndroidProfileTwitter.jar");
-			twitterPaths.Add("/android/android-profile-twitter/twitter4j-asyc-4.0.2.jar", "/Android/twitter4j-asyc-4.0.2.jar");
-			twitterPaths.Add("/android/android-profile-twitter/twitter4j-core-4.0.2.jar", "/Android/twitter4j-core-4.0.2.jar");
+			twitterPaths.Add("/ios/ios-profile-twitter/libSTTwitter.a", "/iOS/Soomla/libSTTwitter.a");
+			twitterPaths.Add("/ios/ios-profile-twitter/libSoomlaiOSProfileTwitter.a", "/iOS/Soomla/libSoomlaiOSProfileTwitter.a");
+			twitterPaths.Add("/android/android-profile-twitter/AndroidProfileTwitter.jar", "/Android/Soomla/libs/AndroidProfileTwitter.jar");
+			twitterPaths.Add("/android/android-profile-twitter/twitter4j-asyc-4.0.2.jar", "/Android/Soomla/libs/twitter4j-asyc-4.0.2.jar");
+			twitterPaths.Add("/android/android-profile-twitter/twitter4j-core-4.0.2.jar", "/Android/Soomla/libs/twitter4j-core-4.0.2.jar");
 			socialLibPaths.Add(Provider.TWITTER.ToString(), twitterPaths);
 
 			Dictionary<string, string> googlePaths = new Dictionary<string, string>();
-			googlePaths.Add("/ios/ios-profile-google/libSoomlaiOSProfileGoogle.a", "/iOS/libSoomlaiOSProfileGoogle.a");
-			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/AndroidProfileGoogle.jar");
-			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/google-play-services_lib");
+			googlePaths.Add("/ios/ios-profile-google/libSoomlaiOSProfileGoogle.a", "/iOS/Soomla/libSoomlaiOSProfileGoogle.a");
+			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/Soomla/libs/AndroidProfileGoogle.jar");
+			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/Soomla/libs/google-play-services_lib");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
         }
 
@@ -133,8 +140,8 @@ namespace Soomla.Profile
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, "2.1.8");
-			SoomlaEditorScript.SelectableLabelField(profileBuildVersion, "1");
+			SoomlaEditorScript.SelectableLabelField(profileVersion, currentModuleVersion);
+			SoomlaEditorScript.LatestVersionField ("unity3d-profile", currentModuleVersion, "New Profile version available!", "http://library.soom.la/fetch/unity3d-profile/latest?cf=unity");
 			EditorGUILayout.Space();
 		}
 
