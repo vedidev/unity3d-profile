@@ -215,8 +215,8 @@ namespace Soomla.Profile
 		///
 		/// </summary>
 		public static void LogoutFromAllProviders() {
-			foreach (Provider provider in Enum.GetValues(typeof(Provider))) {
-				Logout(provider);
+			for (int providerInt = 0; providerInt < Provider.NUM_OF_PROVIDERS; providerInt++) {
+				Logout(Provider.fromInt(providerInt));
 			}
 		}
 
