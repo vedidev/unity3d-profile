@@ -173,7 +173,6 @@ namespace Soomla.Profile
 			}
 		}
 
-
 		/// <summary>
 		/// Logs the user out of the given provider.
 		/// Supported platforms: Facebook, Twitter, Google+
@@ -197,6 +196,7 @@ namespace Soomla.Profile
 			else
 			{
 				ProfileEvents.OnLogoutStarted(provider);
+
 				targetProvider.Logout(
 					/* success */	() => {
 					UserProfile userProfile = GetStoredUserProfile(provider);
@@ -207,6 +207,19 @@ namespace Soomla.Profile
 				},
 					/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
 				);
+			}
+		}
+
+		/// <summary>
+		/// Logs the user out of all available providers.
+		///
+		/// </summary>
+		public static void LogoutFromAllProviders() {
+			for (int providerInt = 0; providerInt < Provider.NUM_OF_PROVIDERS; providerInt++) {
+				Provider provider = Provider.fromInt(providerInt);
+				if (provider != null) {
+					Logout(provider);
+				}
 			}
 		}
 
