@@ -216,7 +216,10 @@ namespace Soomla.Profile
 		/// </summary>
 		public static void LogoutFromAllProviders() {
 			for (int providerInt = 0; providerInt < Provider.NUM_OF_PROVIDERS; providerInt++) {
-				Logout(Provider.fromInt(providerInt));
+				Provider provider = Provider.fromInt(providerInt);
+				if (provider != null) {
+					Logout(provider);
+				}
 			}
 		}
 
