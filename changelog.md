@@ -1,3 +1,18 @@
+### v2.2.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.8...v2.2.0)
+
+* Features
+  * Added `logoutFromAllProviders` method to `SoomlaProfile`
+  * Added Modal Dialog for FB
+  * Added checking for latest version in Soomla Settings panel
+  * Added "Remove Soomla" to Soomla menu
+  * Added a new way of event handling without prefabs
+
+* Changes
+  * Moved all SOOMLA plugins into 'Soomla' folders
+
+* Fixes
+  * Minor bugfixes
+
 ### v2.1.8 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.7...v2.1.8)
 
 * Fixes
