@@ -23,7 +23,7 @@ namespace Soomla.Profile
 			canvasCv.renderMode = RenderMode.ScreenSpaceOverlay;
 			canvasGO.AddComponent<UnityEngine.UI.CanvasScaler> ();
 			canvasGO.AddComponent<UnityEngine.UI.GraphicRaycaster> ();
-		
+
 			GameObject bgRaycastBlocker = new GameObject ("Panel");
 			bgRaycastBlocker.transform.SetParent (canvasGO.transform);
 			RectTransform bgRaycastBlockerRT = bgRaycastBlocker.AddComponent<RectTransform> ();
@@ -31,11 +31,11 @@ namespace Soomla.Profile
 			bgRaycastBlockerRT.sizeDelta = canvasRT.sizeDelta;
 			Image bgRaycastBlockerIm = bgRaycastBlocker.AddComponent<Image> ();
 			bgRaycastBlockerIm.color = new Color(0.2f,0.2f,0.2f,0.3f);
-		
+
 			GameObject modalWindow = new GameObject ("ModalWindow");
 			modalWindow.transform.SetParent (bgRaycastBlocker.transform);
 			RectTransform modalWindowRT = modalWindow.AddComponent<RectTransform> ();
-			modalWindowRT.localPosition = Vector3.zero; 
+			modalWindowRT.localPosition = Vector3.zero;
 			modalWindowRT.sizeDelta = new Vector2 (canvasRT.sizeDelta.x / 3, canvasRT.sizeDelta.y / 5);
 			Image modalWindowIm = modalWindow.AddComponent<Image> ();
 			modalWindowIm.color = new Color(1.0f,1.0f,1.0f,1.0f);
@@ -92,7 +92,7 @@ namespace Soomla.Profile
 			Button yesBtn = yes.AddComponent<Button> ();
 			yesBtn.onClick.AddListener (call);
 			yesBtn.onClick.AddListener (() => GameObject.Destroy (canvasGO));
-		
+
 			GameObject yesText = new GameObject ("YesText");
 			yesText.transform.SetParent (yes.transform);
 			RectTransform yesTextRT = yesText.AddComponent<RectTransform> ();
@@ -101,13 +101,13 @@ namespace Soomla.Profile
 			yesTextRT.offsetMax = new Vector2 (0, 0);
 			yesTextRT.offsetMin = new Vector2 (0, 0);
 			Text yesTextT = yesText.AddComponent<Text> ();
-			yesTextT.text = "Yes";
+			yesTextT.text = "Post";
 			yesTextT.fontSize = 12;
 			yesTextT.resizeTextForBestFit = true;
 			yesTextT.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
 			yesTextT.alignment = TextAnchor.MiddleCenter;
 			yesTextT.color = new Color(0.0f,0.2f,0.4f,1.0f);
-		
+
 			GameObject no = new GameObject ("NoButton");
 			no.transform.SetParent (modalWindow.transform);
 			RectTransform noRT = no.AddComponent<RectTransform> ();
@@ -130,7 +130,7 @@ namespace Soomla.Profile
 			noTextRT.offsetMax = new Vector2 (0, 0);
 			noTextRT.offsetMin = new Vector2 (0, 0);
 			Text noTextT = noText.AddComponent<Text> ();
-			noTextT.text = "No";
+			noTextT.text = "Cancel";
 			noTextT.fontSize = 12;
 			noTextT.resizeTextForBestFit = true;
 			noTextT.font = Resources.GetBuiltinResource (typeof(Font), "Arial.ttf") as Font;
