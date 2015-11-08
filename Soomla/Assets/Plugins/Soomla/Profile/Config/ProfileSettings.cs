@@ -43,6 +43,19 @@ namespace Soomla.Profile
 		static ProfileSettings()
 		{
 			SoomlaEditorScript.addSettings(instance);
+
+			List<string> additionalDependFiles = new List<string>(); //Add files that not tracked in file_list
+			additionalDependFiles.Add("Assets/Plugins/Android/bolts.jar");
+			additionalDependFiles.Add("Assets/Plugins/Android/android-support-v4.jar");
+			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSTTwitter.a");
+			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSoomlaiOSProfileTwitter.a");
+			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/AndroidProfileTwitter.jar");
+			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/twitter4j-asyc-4.0.2.jar");
+			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/twitter4j-core-4.0.2.jar");
+			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSoomlaiOSProfileGoogle.a");
+			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/AndroidProfileGoogle.jar");
+			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/google-play-services_lib");
+			SoomlaEditorScript.addFileList("Profile", "Assets/Soomla/profile_file_list", additionalDependFiles.ToArray());
 		}
 		
 		private BuildTargetGroup[] supportedPlatforms =
@@ -140,7 +153,7 @@ namespace Soomla.Profile
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(profileVersion, currentModuleVersion);
+			SoomlaEditorScript.RemoveSoomlaModuleButton(profileVersion, currentModuleVersion, "Profile");
 			SoomlaEditorScript.LatestVersionField ("unity3d-profile", currentModuleVersion, "New Profile version available!", "http://library.soom.la/fetch/unity3d-profile/latest?cf=unity");
 			EditorGUILayout.Space();
 		}
