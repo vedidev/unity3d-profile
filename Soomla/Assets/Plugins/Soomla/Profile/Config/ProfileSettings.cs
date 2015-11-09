@@ -45,8 +45,6 @@ namespace Soomla.Profile
 			SoomlaEditorScript.addSettings(instance);
 
 			List<string> additionalDependFiles = new List<string>(); //Add files that not tracked in file_list
-			additionalDependFiles.Add("Assets/Plugins/Android/bolts.jar");
-			additionalDependFiles.Add("Assets/Plugins/Android/android-support-v4.jar");
 			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSTTwitter.a");
 			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSoomlaiOSProfileTwitter.a");
 			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/AndroidProfileTwitter.jar");
