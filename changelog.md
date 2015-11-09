@@ -1,3 +1,8 @@
+### v2.2.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.2.0...v2.2.1)
+
+* Changes
+  * Minor improvements in Editor script
+
 ### v2.2.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.1.8...v2.2.0)
 
 * Features
