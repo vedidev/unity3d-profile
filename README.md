@@ -59,6 +59,7 @@ $ git clone --recursive git@github.com:soomla/unity3d-profile.git
 2. ~~Drag the `CoreEvents` and `ProfileEvents` Prefabs from `Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-profile to work properly!]~~
 
 >This step is no longer required starting from Profile v2.2.0
+
 3. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret".
     - _Soomla Secret_ - is an encryption secret you provide that will be used to secure your data. (If you used versions before v1.5.2 this secret MUST be the same as Custom Secret)  
     **Choose the secret wisely. You can't change them after you launch your game!**
