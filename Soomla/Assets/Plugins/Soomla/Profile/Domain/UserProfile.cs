@@ -80,48 +80,48 @@ namespace Soomla.Profile {
 			this.Username = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_USERNAME].str);
 			this.ProfileId = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_PROFILEID].str);
 
-			if (jsonUP[PJSONConsts.UP_FIRSTNAME]) {
+			if (jsonUP[PJSONConsts.UP_FIRSTNAME].type != JSONObject.Type.NULL) {
 				this.FirstName = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_FIRSTNAME].str);
 			} else {
 				this.FirstName = "";
 			}
-			if (jsonUP[PJSONConsts.UP_LASTNAME]) {
+			if (jsonUP[PJSONConsts.UP_LASTNAME].type != JSONObject.Type.NULL) {
 				this.LastName = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_LASTNAME].str);
 			} else {
 				this.LastName = "";
 			}
-			if (jsonUP[PJSONConsts.UP_EMAIL]) {
+			if (jsonUP[PJSONConsts.UP_EMAIL].type != JSONObject.Type.NULL) {
 				this.Email = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_EMAIL].str);
 			} else {
 				this.Email = "";
 			}
-			if (jsonUP[PJSONConsts.UP_AVATAR]) {
+			if (jsonUP[PJSONConsts.UP_AVATAR].type != JSONObject.Type.NULL) {
 				this.AvatarLink = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_AVATAR].str);
 			} else {
 				this.AvatarLink = "";
 			}
-			if (jsonUP[PJSONConsts.UP_LOCATION]) {
+			if (jsonUP[PJSONConsts.UP_LOCATION].type != JSONObject.Type.NULL) {
 				this.Location = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_LOCATION].str);
 			} else {
 				this.Location = "";
 			}
-			if (jsonUP[PJSONConsts.UP_GENDER]) {
+			if (jsonUP[PJSONConsts.UP_GENDER].type != JSONObject.Type.NULL) {
 				this.Gender = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_GENDER].str);
 			} else {
 				this.Gender = "";
 			}
-			if (jsonUP[PJSONConsts.UP_LANGUAGE]) {
+			if (jsonUP[PJSONConsts.UP_LANGUAGE].type != JSONObject.Type.NULL) {
 				this.Language = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_LANGUAGE].str);
 			} else {
 				this.Language = "";
 			}
-			if (jsonUP[PJSONConsts.UP_BIRTHDAY]) {
+			if (jsonUP[PJSONConsts.UP_BIRTHDAY].type != JSONObject.Type.NULL) {
 				this.Birthday = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_BIRTHDAY].str);
 			} else {
 				this.Birthday = "";
 			}
 			this.Extra = new Dictionary<String, JSONObject>();
-			if (jsonUP[PJSONConsts.UP_EXTRA]) {
+			if (jsonUP[PJSONConsts.UP_EXTRA].type != JSONObject.Type.NULL) {
 				foreach (String key in jsonUP[PJSONConsts.UP_EXTRA].keys) {
 					this.Extra.Add(key, jsonUP[PJSONConsts.UP_EXTRA][key]);
 				}
