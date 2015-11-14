@@ -19,7 +19,6 @@ namespace Soomla.Profile
 {
 	public class GameCenterSocialProvider : SocialProvider
 	{
-		private static string TAG = "SOOMLA GameCenterSocialProvider";
 		
 		public GameCenterSocialProvider () {
 			SoomlaProfile.ProviderBecameReady(this);
