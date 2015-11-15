@@ -53,7 +53,6 @@ namespace Soomla.Profile
 			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSoomlaiOSProfileGoogle.a");
 			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/AndroidProfileGoogle.jar");
 			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/google-play-services_lib");
-			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSoomlaiOSProfileGameCenter.a");
 			SoomlaEditorScript.addFileList("Profile", "Assets/Soomla/profile_file_list", additionalDependFiles.ToArray());
 		}
 		
@@ -109,12 +108,6 @@ namespace Soomla.Profile
 			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/Soomla/libs/AndroidProfileGoogle.jar");
 			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/Soomla/libs/google-play-services_lib");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
-
-#if UNITY_IOS
-			Dictionary<string, string> gameCenterPaths = new Dictionary<string, string>();
-			gameCenterPaths.Add("/ios/ios-profile-gamecenter/libSoomlaiOSProfileGameCenter.a", "/iOS/Soomla/libSoomlaiOSProfileGameCenter.a");
-			socialLibPaths.Add(Provider.GAME_CENTER.ToString(), gameCenterPaths);
-#endif
         }
 
 		//Look for google-play-services_lib in the developers Android Sdk.
@@ -378,18 +371,6 @@ namespace Soomla.Profile
 
 				EditorGUI.EndDisabledGroup();
 				break;
-			case "gameCenter":
-#if UNITY_IOS
-					EditorGUI.BeginDisabledGroup(isDisabled);
-					
-					EditorGUILayout.BeginHorizontal();
-					EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
-					GameCenterAutoLogin = EditorGUILayout.Toggle(autoLoginContent, GameCenterAutoLogin);
-					EditorGUILayout.EndHorizontal();
-					
-					EditorGUI.EndDisabledGroup();
-#endif
-				break;
 			default:
 				break;
 			}
@@ -420,10 +401,6 @@ namespace Soomla.Profile
 			target.Add(Provider.FACEBOOK.ToString(), null);
 			target.Add(Provider.TWITTER.ToString(), null);
 			target.Add(Provider.GOOGLE.ToString(), null);
-
-#if UNITY_IOS
-			target.Add(Provider.GAME_CENTER.ToString(), null);
-#endif
 		}
 
 		private static bool IsSocialPlatformDetected(string platform)
@@ -665,24 +642,6 @@ namespace Soomla.Profile
 				if (Convert.ToBoolean(v) != value)
 				{
 					SoomlaEditorScript.Instance.setSettingsValue("TwitterAutoLogin", value.ToString());
-					SoomlaEditorScript.DirtyEditor ();
-				}
-			}
-		}
-
-		public static bool GameCenterAutoLogin
-		{
-			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GameCenterAutoLogin", out value) ? Convert.ToBoolean(value) : false;
-			}
-			set
-			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GameCenterAutoLogin", out v);
-				if (Convert.ToBoolean(v) != value)
-				{
-					SoomlaEditorScript.Instance.setSettingsValue("GameCenterAutoLogin", value.ToString());
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
