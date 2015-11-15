@@ -26,7 +26,9 @@ namespace Soomla.Profile
 		public static readonly Provider FACEBOOK = new Provider ("facebook");
 		public static readonly Provider GOOGLE = new Provider ("google");
 		public static readonly Provider TWITTER = new Provider ("twitter");
+#if UNITY_IOS
 		public static readonly Provider GAME_CENTER = new Provider ("gameCenter");
+#endif
 
 		public static readonly int NUM_OF_PROVIDERS = 14; // Must be last provider (currently twitter) + 1
 
@@ -58,8 +60,10 @@ namespace Soomla.Profile
 				return 2;
 			case("twitter"):
 				return 5;
+#if UNITY_IOS
 			case("gameCenter"):
 				return 13;
+#endif
 			default:
 				return -1;
 			}
@@ -78,8 +82,10 @@ namespace Soomla.Profile
 				return GOOGLE;
 			case("twitter"):
 				return TWITTER;
+#if UNITY_IOS
 			case ("gameCenter"):
 				return GAME_CENTER;
+#endif
 			default:
 				return null;
 			}
@@ -98,8 +104,10 @@ namespace Soomla.Profile
 				return GOOGLE;
 			case 5:
 				return TWITTER;
+#if UNITY_IOS
 			case 13:
 				return GAME_CENTER;
+#endif
 			default:
 				return null;
 			}
