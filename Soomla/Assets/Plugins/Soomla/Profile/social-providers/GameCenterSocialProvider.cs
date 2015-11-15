@@ -17,6 +17,7 @@ using System.Collections.Generic;
 
 namespace Soomla.Profile
 {
+#if UNITY_IOS
 	public class GameCenterSocialProvider : SocialProvider
 	{
 		
@@ -110,6 +111,7 @@ namespace Soomla.Profile
 			return true;
 		}
 	}
+#endif
 }
 
 

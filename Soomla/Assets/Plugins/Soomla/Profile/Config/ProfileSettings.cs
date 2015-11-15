@@ -110,9 +110,11 @@ namespace Soomla.Profile
 			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/Soomla/libs/google-play-services_lib");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
 
+#if UNITY_IOS
 			Dictionary<string, string> gameCenterPaths = new Dictionary<string, string>();
 			gameCenterPaths.Add("/ios/ios-profile-gamecenter/libSoomlaiOSProfileGameCenter.a", "/iOS/Soomla/libSoomlaiOSProfileGameCenter.a");
 			socialLibPaths.Add(Provider.GAME_CENTER.ToString(), gameCenterPaths);
+#endif
         }
 
 		//Look for google-play-services_lib in the developers Android Sdk.
@@ -377,14 +379,16 @@ namespace Soomla.Profile
 				EditorGUI.EndDisabledGroup();
 				break;
 			case "gameCenter":
-				EditorGUI.BeginDisabledGroup(isDisabled);
-				
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
-				GameCenterAutoLogin = EditorGUILayout.Toggle(autoLoginContent, GameCenterAutoLogin);
-				EditorGUILayout.EndHorizontal();
-				
-				EditorGUI.EndDisabledGroup();
+#if UNITY_IOS
+					EditorGUI.BeginDisabledGroup(isDisabled);
+					
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+					GameCenterAutoLogin = EditorGUILayout.Toggle(autoLoginContent, GameCenterAutoLogin);
+					EditorGUILayout.EndHorizontal();
+					
+					EditorGUI.EndDisabledGroup();
+#endif
 				break;
 			default:
 				break;
@@ -416,7 +420,10 @@ namespace Soomla.Profile
 			target.Add(Provider.FACEBOOK.ToString(), null);
 			target.Add(Provider.TWITTER.ToString(), null);
 			target.Add(Provider.GOOGLE.ToString(), null);
+
+#if UNITY_IOS
 			target.Add(Provider.GAME_CENTER.ToString(), null);
+#endif
 		}
 
 		private static bool IsSocialPlatformDetected(string platform)
