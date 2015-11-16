@@ -444,7 +444,7 @@ namespace Soomla.Profile
 
 		/** Platform-dependent and SN-independent **/
 
-		public static string ITUNESS_APP_ID = "ITUNES APP ID";
+		public static string ITUNESS_APP_ID = "";
 
 		public static string iTunesAppId {
 			get {
