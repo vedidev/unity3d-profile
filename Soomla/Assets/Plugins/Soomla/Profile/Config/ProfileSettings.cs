@@ -379,7 +379,6 @@ namespace Soomla.Profile
 				EditorGUI.EndDisabledGroup();
 				break;
 			case "gameCenter":
-#if UNITY_IOS
 					EditorGUI.BeginDisabledGroup(isDisabled);
 					
 					EditorGUILayout.BeginHorizontal();
@@ -388,7 +387,6 @@ namespace Soomla.Profile
 					EditorGUILayout.EndHorizontal();
 					
 					EditorGUI.EndDisabledGroup();
-#endif
 				break;
 			default:
 				break;
