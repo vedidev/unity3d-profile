@@ -78,6 +78,10 @@ namespace Soomla.Profile
 			unreadyProviders++;
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
+#if SOOMLA_GAMECENTER && (UNITY_IOS || UNITY_EDITOR)
+			unreadyProviders++;
+			providers.Add(Provider.GAME_CENTER, new GameCenterSocialProvider());
+#endif
 
 			// pass params to non-native providers
 			foreach (KeyValuePair<Provider, SocialProvider> entry in providers) {
@@ -986,11 +990,21 @@ namespace Soomla.Profile
 				{"autoLogin", ProfileSettings.TwitterAutoLogin.ToString()}
 			};
 
+#if UNITY_IOS || UNITY_EDITOR
+			Dictionary<string, string> gcParams = new Dictionary<string, string> ()
+			{
+				{"autoLogin", ProfileSettings.GameCenterAutoLogin.ToString()}
+			};
+
+#endif
 			Dictionary<Provider, Dictionary<string, string>> customParams =  new Dictionary<Provider, Dictionary<string, string>> ()
 			{
 				{Provider.FACEBOOK, fbParams},
 				{Provider.GOOGLE, gpParams},
 				{Provider.TWITTER, twParams}
+#if UNITY_IOS || UNITY_EDITOR
+				,{Provider.GAME_CENTER, gcParams}
+#endif
 			};
 
 			return customParams;

@@ -55,6 +55,11 @@ namespace Soomla.Profile
 					else if (targetProvider == Provider.TWITTER) {
 						result += entry.Key + "^" + ProfileSettings.TwitterConsumerKey + ";";
 					}
+#if UNITY_IOS
+					else if (targetProvider == Provider.GAME_CENTER) {
+						result += entry.Key;
+					}
+#endif
 				}
 			}
 
