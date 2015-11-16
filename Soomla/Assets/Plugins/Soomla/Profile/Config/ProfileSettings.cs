@@ -157,6 +157,16 @@ namespace Soomla.Profile
 		}
 
 		public void OnSoomlaGUI() {
+
+		}
+
+		public void OnAndroidGUI() {
+			
+		}
+		
+		public void OnIOSGUI(){
+			EditorGUILayout.HelpBox("Profile Settings", MessageType.None);
+			
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(iTunesKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
 			iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
@@ -165,6 +175,11 @@ namespace Soomla.Profile
 			if (!iTunesAppId.All(Char.IsDigit)) {
 				EditorGUILayout.HelpBox("iTunes App ID should be a number!", MessageType.Error);
 			}
+			EditorGUILayout.Space();
+		}
+		
+		public void OnWP8GUI(){
+			
 		}
 
 		void IntegrationGUI()
