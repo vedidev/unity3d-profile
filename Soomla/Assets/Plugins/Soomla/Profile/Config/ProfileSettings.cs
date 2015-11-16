@@ -162,22 +162,29 @@ namespace Soomla.Profile
 		}
 
 		public void OnSoomlaGUI() {
-			if (EditorUserBuildSettings.activeBuildTarget ==
-#if UNITY_5
-			    BuildTarget.iOS
-#else
-			    BuildTarget.iPhone
-#endif
-			    ) {
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField(iTunesKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
-				iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
-				EditorGUILayout.EndHorizontal();
 
-				if (!iTunesAppId.All(Char.IsDigit)) {
-					EditorGUILayout.HelpBox("iTunes App ID should be a number!", MessageType.Error);
-				}
+		}
+
+		public void OnAndroidGUI() {
+			
+		}
+		
+		public void OnIOSGUI(){
+			EditorGUILayout.HelpBox("Profile Settings", MessageType.None);
+			
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField(iTunesKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+			iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
+			EditorGUILayout.EndHorizontal();
+
+			if (!iTunesAppId.All(Char.IsDigit)) {
+				EditorGUILayout.HelpBox("iTunes App ID should be a number!", MessageType.Error);
 			}
+			EditorGUILayout.Space();
+		}
+		
+		public void OnWP8GUI(){
+			
 		}
 
 		void IntegrationGUI()
@@ -460,7 +467,7 @@ namespace Soomla.Profile
 
 		/** Platform-dependent and SN-independent **/
 
-		public static string ITUNESS_APP_ID = "ITUNES APP ID";
+		public static string ITUNESS_APP_ID = "";
 
 		public static string iTunesAppId {
 			get {
