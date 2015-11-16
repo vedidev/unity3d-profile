@@ -157,21 +157,13 @@ namespace Soomla.Profile
 		}
 
 		public void OnSoomlaGUI() {
-			if (EditorUserBuildSettings.activeBuildTarget ==
-#if UNITY_5
-			    BuildTarget.iOS
-#else
-			    BuildTarget.iPhone
-#endif
-			    ) {
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField(iTunesKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
-				iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
-				EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField(iTunesKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+			iTunesAppId = EditorGUILayout.TextField(iTunesAppId, SoomlaEditorScript.FieldHeight);
+			EditorGUILayout.EndHorizontal();
 
-				if (!iTunesAppId.All(Char.IsDigit)) {
-					EditorGUILayout.HelpBox("iTunes App ID should be a number!", MessageType.Error);
-				}
+			if (!iTunesAppId.All(Char.IsDigit)) {
+				EditorGUILayout.HelpBox("iTunes App ID should be a number!", MessageType.Error);
 			}
 		}
 
