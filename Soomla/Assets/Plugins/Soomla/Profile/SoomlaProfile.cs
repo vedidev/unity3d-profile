@@ -78,7 +78,7 @@ namespace Soomla.Profile
 			unreadyProviders++;
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
-#if SOOMLA_GAMECENTER && (UNITY_IOS || UNITY_EDITOR)
+#if SOOMLA_GAMECENTER
 			unreadyProviders++;
 			providers.Add(Provider.GAME_CENTER, new GameCenterSocialProvider());
 #endif
@@ -990,13 +990,11 @@ namespace Soomla.Profile
 				{"autoLogin", ProfileSettings.TwitterAutoLogin.ToString()}
 			};
 
-#if UNITY_IOS || UNITY_EDITOR
 			Dictionary<string, string> gcParams = new Dictionary<string, string> ()
 			{
 				{"autoLogin", ProfileSettings.GameCenterAutoLogin.ToString()}
 			};
 
-#endif
 			Dictionary<Provider, Dictionary<string, string>> customParams =  new Dictionary<Provider, Dictionary<string, string>> ()
 			{
 				{Provider.FACEBOOK, fbParams},
