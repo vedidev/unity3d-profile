@@ -31,6 +31,9 @@ namespace Soomla.Profile
 	public class SoomlaProfile
 	{
 		static SoomlaProfile _instance = null;
+
+        internal static bool nativeModulesInitialized = false;
+
 		static SoomlaProfile instance {
 			get {
 				if(_instance == null) {
@@ -68,18 +71,27 @@ namespace Soomla.Profile
 
 #if SOOMLA_FACEBOOK
 			unreadyProviders++;
-			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
 #endif
 #if SOOMLA_GOOGLE
 			unreadyProviders++;
-			providers.Add(Provider.GOOGLE, new GPSocialProvider());
 #endif
 #if SOOMLA_TWITTER
 			unreadyProviders++;
-			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
 #if SOOMLA_GAMECENTER
 			unreadyProviders++;
+#endif
+
+#if SOOMLA_FACEBOOK
+			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
+#endif
+#if SOOMLA_GOOGLE
+			providers.Add(Provider.GOOGLE, new GPSocialProvider());
+#endif
+#if SOOMLA_TWITTER
+			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
+#endif
+#if SOOMLA_GAMECENTER
 			providers.Add(Provider.GAME_CENTER, new GameCenterSocialProvider());
 #endif
 
@@ -120,10 +132,6 @@ namespace Soomla.Profile
                     }
                 }
             };
-
-            #if UNITY_EDITOR
-            TryFireProfileInitialized();
-            #endif
         }
 
 		/// <summary>
@@ -882,7 +890,12 @@ namespace Soomla.Profile
 		}
 
 		internal static void TryFireProfileInitialized () {
-			if (AllProvidersInitialized()) {
+			if (AllProvidersInitialized()
+#if !UNITY_EDITOR
+            && nativeModulesInitialized
+#endif
+            )
+            {
 				ProfileEvents.OnSoomlaProfileInitialized();
 			}
 		}

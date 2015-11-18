@@ -83,6 +83,7 @@ namespace Soomla.Profile {
 		{
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onSoomlaProfileInitialized");
 
+            SoomlaProfile.nativeModulesInitialized = true;
 			SoomlaProfile.TryFireProfileInitialized();
 		}
 
