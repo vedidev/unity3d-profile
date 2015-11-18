@@ -32,7 +32,7 @@ namespace Soomla.Profile
 	{
 		static SoomlaProfile _instance = null;
 
-        internal static bool nativeModulesInitialized = false;
+		internal static bool nativeModulesInitialized = false;
 
 		static SoomlaProfile instance {
 			get {
@@ -892,7 +892,7 @@ namespace Soomla.Profile
 		internal static void TryFireProfileInitialized () {
 			if (AllProvidersInitialized()
 #if !UNITY_EDITOR
-            && nativeModulesInitialized
+				&& nativeModulesInitialized
 #endif
             )
             {
