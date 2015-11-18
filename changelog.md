@@ -1,3 +1,12 @@
+### v2.3.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.2.1...v2.3.0)
+
+* New Features
+  * Updated Facebook SDK to v7.2.2
+  * Added Game Center as a social provider
+
+* Changes
+  * Minor improvements and rearrangements to Editor script
+
 ### v2.2.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.2.0...v2.2.1)
 
 * Changes
