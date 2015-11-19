@@ -69,6 +69,9 @@ namespace Soomla.Profile
 
 			instance._initialize(GetCustomParamsJson(customParams)); //add parameters
 
+			/// NOTE: we splitted `unreadyProviders` incrementation with adding to `providers` dictionary
+			/// because other case produces firing of OnSoomlaProfileInitialized several times,
+			/// when only native social providers is using
 #if SOOMLA_FACEBOOK
 			unreadyProviders++;
 #endif
@@ -890,19 +893,16 @@ namespace Soomla.Profile
 		}
 
 		internal static void TryFireProfileInitialized () {
-			if (AllProvidersInitialized()
-#if !UNITY_EDITOR
-				&& nativeModulesInitialized
-#endif
-            )
-            {
+			if (AllProvidersInitialized() && nativeModulesInitialized) {
 				ProfileEvents.OnSoomlaProfileInitialized();
 			}
 		}
 
 		/** PROTECTED & PRIVATE FUNCTIONS **/
 
-		protected virtual void _initialize(string customParamsJson) { }
+		protected virtual void _initialize(string customParamsJson) {
+			nativeModulesInitialized = true;
+        }
 
 		protected virtual void _login(Provider provider, string payload) { }
 
