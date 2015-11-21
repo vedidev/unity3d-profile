@@ -1,17 +1,19 @@
-using UnityEngine;
 using System;
 
 namespace Soomla.Profile
 {
     public class SocialActionFailedEvent : BaseSocialActionEvent
     {
-        public readonly string ErrorDescription;
-
-        public SocialActionFailedEvent(Provider provider,
-                                       SocialActionType socialActionType,
-                                       string errorDescription, string payload) : base(provider, socialActionType, payload)
-        {
-            ErrorDescription = errorDescription;
-        }
+        public readonly String ErrorDescription;
+		public readonly SocialActionType SocialType;
+		public readonly String payload;
+		public readonly Provider provider;
+		public SocialActionFailedEvent(Provider provider, SocialActionType socialType, String errorDescription, String payload) : base(provider)
+		{
+			this.provider = provider;
+			this.SocialType = socialType;
+			this.payload = payload;
+			this.ErrorDescription = errorDescription;
+		}
     }
 }

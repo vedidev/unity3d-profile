@@ -86,7 +86,7 @@ namespace Soomla.Profile
 				}
 			}
 
-			ProfileEvents.OnSoomlaProfileInitialized += () => {
+			ProfileEvents.OnSoomlaProfileInitialized += (ProfileInitializedEvent e) => {
                 // auto login non-native providers
                 foreach (KeyValuePair<Provider, SocialProvider> entry in providers) {
                     if (!entry.Value.IsNativelyImplemented()) {
@@ -98,15 +98,15 @@ namespace Soomla.Profile
                                 if (entry.Value.IsLoggedIn()) {
                                     entry.Value.GetUserProfile((UserProfile userProfile) => {
                                         setLoggedInForProvider(provider, false);
-										ProfileEvents.OnLoginStarted(provider, true, payload);
+										ProfileEvents.OnLoginStarted(new LoginStartedEvent(provider, true, payload));
                                         StoreUserProfile(userProfile);
                                         setLoggedInForProvider(provider, true);
-                                        ProfileEvents.OnLoginFinished(userProfile, true, payload);
+										ProfileEvents.OnLoginFinished(new LoginFinishedEvent(userProfile, true, payload));
                                         if (reward != null) {
                                             reward.Give();
                                         }
                                     }, (string message) => {  
-                                        ProfileEvents.OnLoginFailed(provider, message, true, payload);
+										ProfileEvents.OnLoginFailed(new LoginFailedEvent( provider, message, true, payload) );
                                     });
                                 } else {
 									login(provider, true, payload, reward);
@@ -153,22 +153,22 @@ namespace Soomla.Profile
 			else 
 			{
 				setLoggedInForProvider(provider, false);
-				ProfileEvents.OnLoginStarted(provider, autoLogin, userPayload);
+				ProfileEvents.OnLoginStarted(new LoginStartedEvent(provider, autoLogin, userPayload) );
 				targetProvider.Login(
 					/* success */	() => {
 					targetProvider.GetUserProfile((UserProfile userProfile) => {
 						StoreUserProfile(userProfile);
 						setLoggedInForProvider(provider, true);
-						ProfileEvents.OnLoginFinished(userProfile, autoLogin, userPayload);
+							ProfileEvents.OnLoginFinished(new LoginFinishedEvent( userProfile, autoLogin, userPayload) );
 						if (reward != null) {
 							reward.Give();
 						}
 					}, (string message) => {  
-						ProfileEvents.OnLoginFailed (provider, message, autoLogin, userPayload);
+							ProfileEvents.OnLoginFailed (new LoginFailedEvent(provider, message, autoLogin, userPayload) );
 					});
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (provider, message, autoLogin, userPayload); },
-				/* cancel */	() => {  ProfileEvents.OnLoginCancelled(provider, autoLogin, userPayload); }
+					/* fail */		(string message) => {  ProfileEvents.OnLoginFailed (new LoginFailedEvent( provider, message, autoLogin, userPayload) ); },
+					/* cancel */	() => {  ProfileEvents.OnLoginCancelled(new LoginCancelledEvent(provider, autoLogin, userPayload) ); }
 				);
 			}
 		}
@@ -196,16 +196,16 @@ namespace Soomla.Profile
 
 			else
 			{
-				ProfileEvents.OnLogoutStarted(provider);
+				ProfileEvents.OnLogoutStarted(new LogoutStartedEvent(provider));
 				targetProvider.Logout(
 					/* success */	() => { 
 					UserProfile userProfile = GetStoredUserProfile(provider);
 					if (userProfile != null) {
 						RemoveUserProfile(userProfile);
 					}
-					ProfileEvents.OnLogoutFinished(provider); 
+						ProfileEvents.OnLogoutFinished(new LogoutFinishedEvent(provider) ); 
 				},
-					/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed (provider, message); }
+					/* fail */		(string message) => {  ProfileEvents.OnLogoutFailed(new LogoutFailedEvent (provider, message) ); }
 				);
 			}
 		}
@@ -260,15 +260,15 @@ namespace Soomla.Profile
 			
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
+				ProfileEvents.OnSocialActionStarted( new SocialActionStartedEvent(provider, SocialActionType.UPDATE_STATUS, userPayload) );
 				targetProvider.UpdateStatus(status,
 				                            /* success */	() => {
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
+						ProfileEvents.OnSocialActionFinished(new SocialActionFinishedEvent(provider, SocialActionType.UPDATE_STATUS, userPayload) );
 				},
-				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, userPayload); }
+					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed(new SocialActionFailedEvent (provider, SocialActionType.UPDATE_STATUS, error, userPayload) ); }
 				);
 			}
 		}
@@ -301,16 +301,16 @@ namespace Soomla.Profile
 
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
+				ProfileEvents.OnSocialActionStarted( new SocialActionStartedEvent(provider, SocialActionType.UPDATE_STATUS, userPayload) );
 				ModalDialog.CreateModalWindow("Are you sure you want to update status?",
 				() => targetProvider.UpdateStatus(status,
 				    /* success */	() => {
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
+							ProfileEvents.OnSocialActionFinished( new SocialActionFinishedEvent(provider, SocialActionType.UPDATE_STATUS, userPayload) );
 				},
-					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, userPayload); }
+						/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed(new SocialActionFailedEvent (provider, SocialActionType.UPDATE_STATUS, error, userPayload) ); }
 				) );
 			}
 		}
@@ -338,15 +338,15 @@ namespace Soomla.Profile
 			}			
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STATUS, userPayload);
+				ProfileEvents.OnSocialActionStarted( new SocialActionStartedEvent(provider, SocialActionType.UPDATE_STATUS, userPayload) );
 				targetProvider.UpdateStatusDialog(link, () => {
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STATUS, userPayload);
+					ProfileEvents.OnSocialActionFinished( new SocialActionFinishedEvent(provider, SocialActionType.UPDATE_STATUS, userPayload) );
 				},
 				(string error) => {
-					ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STATUS, error, userPayload);
+						ProfileEvents.OnSocialActionFailed( new SocialActionFailedEvent (provider, SocialActionType.UPDATE_STATUS, error, userPayload) );
 				});
 			}
 		}
@@ -387,16 +387,16 @@ namespace Soomla.Profile
 
 			else
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
+				ProfileEvents.OnSocialActionStarted(new SocialActionStartedEvent(provider, SocialActionType.UPDATE_STORY, userPayload) );
 				targetProvider.UpdateStory(message, name, caption, description, link, pictureUrl,
 				    /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, userPayload);
+						ProfileEvents.OnSocialActionFinished( new SocialActionFinishedEvent(provider, SocialActionType.UPDATE_STORY, userPayload) );
 				},
-					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, userPayload); },
-					/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, userPayload); }
+					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed( new SocialActionFailedEvent (provider, SocialActionType.UPDATE_STORY, error, userPayload) ); },
+					/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled( new SocialActionCancelledEvent(provider, SocialActionType.UPDATE_STORY, userPayload) ); }
 				);
 			}
 		}
@@ -439,17 +439,17 @@ namespace Soomla.Profile
 			
 			else
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
+				ProfileEvents.OnSocialActionStarted( new SocialActionStartedEvent(provider, SocialActionType.UPDATE_STORY, userPayload) );
 				ModalDialog.CreateModalWindow("Are you sure you want to update story?",
 				() => targetProvider.UpdateStory(message, name, caption, description, link, pictureUrl,
 				                           /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, userPayload);
+							ProfileEvents.OnSocialActionFinished(new SocialActionFinishedEvent(provider, SocialActionType.UPDATE_STORY, userPayload) );
 				},
-				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, userPayload); },
-				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, userPayload); }
+						/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed( new SocialActionFailedEvent (provider, SocialActionType.UPDATE_STORY, error, userPayload) ); },
+						/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled( new SocialActionCancelledEvent(provider, SocialActionType.UPDATE_STORY, userPayload) ); }
 				) );
 			}
 		}
@@ -483,19 +483,19 @@ namespace Soomla.Profile
 			
 			else
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPDATE_STORY, userPayload);
+				ProfileEvents.OnSocialActionStarted( new SocialActionStartedEvent(provider, SocialActionType.UPDATE_STORY, userPayload) );
 				targetProvider.UpdateStoryDialog(name, caption, description, link, picture,
 				() => { 
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPDATE_STORY, userPayload);
+						ProfileEvents.OnSocialActionFinished(new SocialActionFinishedEvent(provider, SocialActionType.UPDATE_STORY, userPayload) );
 				},
 				(string error) => {  
-					ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPDATE_STORY, error, userPayload); 
+						ProfileEvents.OnSocialActionFailed( new SocialActionFailedEvent (provider, SocialActionType.UPDATE_STORY, error, userPayload)); 
 				},
 				() => {  
-					ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPDATE_STORY, userPayload); 
+						ProfileEvents.OnSocialActionCancelled(new SocialActionCancelledEvent(provider, SocialActionType.UPDATE_STORY, userPayload)); 
 				});
 			}
 
@@ -548,16 +548,16 @@ namespace Soomla.Profile
 			
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
+				ProfileEvents.OnSocialActionStarted( new SocialActionStartedEvent(provider, SocialActionType.UPLOAD_IMAGE, userPayload) );
 				targetProvider.UploadImage(imageBytes, fileName, message,
 				                           /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
+						ProfileEvents.OnSocialActionFinished( new SocialActionFinishedEvent(provider, SocialActionType.UPLOAD_IMAGE, userPayload) );
 				},
-				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload); },
-				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, userPayload); }
+					/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed( new SocialActionFailedEvent (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload) ); },
+					/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(new SocialActionCancelledEvent(provider, SocialActionType.UPLOAD_IMAGE, userPayload) ); }
 				);
 			}
 		}
@@ -593,17 +593,17 @@ namespace Soomla.Profile
 			
 			else 
 			{
-				ProfileEvents.OnSocialActionStarted(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
+				ProfileEvents.OnSocialActionStarted( new SocialActionStartedEvent(provider, SocialActionType.UPLOAD_IMAGE, userPayload) );
 				ModalDialog.CreateModalWindow("Are you sure you want to upload image?",
 				() => targetProvider.UploadImage(imageBytes, fileName, message,
 				                           /* success */	() => { 
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnSocialActionFinished(provider, SocialActionType.UPLOAD_IMAGE, userPayload);
+							ProfileEvents.OnSocialActionFinished( new SocialActionFinishedEvent(provider, SocialActionType.UPLOAD_IMAGE, userPayload) );
 				},
-				/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload); },
-				/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled(provider, SocialActionType.UPLOAD_IMAGE, userPayload); }
+						/* fail */		(string error) => {  ProfileEvents.OnSocialActionFailed( new SocialActionFailedEvent (provider, SocialActionType.UPLOAD_IMAGE, error, userPayload) ); },
+						/* cancel */	() => {  ProfileEvents.OnSocialActionCancelled( new SocialActionCancelledEvent(provider, SocialActionType.UPLOAD_IMAGE, userPayload) ); }
 				) );
 			}
 		}
@@ -650,12 +650,12 @@ namespace Soomla.Profile
 
 			else 
 			{
-				ProfileEvents.OnGetContactsStarted(provider, fromStart, userPayload);
+				ProfileEvents.OnGetContactsStarted( new GetContactsStartedEvent(provider, fromStart, userPayload ));
 				targetProvider.GetContacts(fromStart,
 					/* success */	(SocialPageData<UserProfile> contactsData) => { 
-					ProfileEvents.OnGetContactsFinished(provider, contactsData, userPayload);
+						ProfileEvents.OnGetContactsFinished( new GetContactsFinishedEvent(provider, contactsData, userPayload) );
 				},
-				/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed(provider, message, fromStart, userPayload); }
+					/* fail */		(string message) => {  ProfileEvents.OnGetContactsFailed( new GetContactsFailedEvent(provider, message, fromStart, userPayload) ); }
 				);
 			}
 		}
@@ -685,18 +685,18 @@ namespace Soomla.Profile
 			}			
 			else 
 			{
-				ProfileEvents.OnGetFeedStarted(provider);
+				ProfileEvents.OnGetFeedStarted( new GetFeedStartedEvent(provider) );
 				targetProvider.GetFeed(fromStart, 
 				/* success */
 				(SocialPageData<String> feeds) => {
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnGetFeedFinished(provider, feeds);
+						ProfileEvents.OnGetFeedFinished(new GetFeedFinishedEvent(provider, feeds));
 				},
 				/* fail */
 				(string message) => {
-					ProfileEvents.OnGetFeedFailed(provider, message);
+						ProfileEvents.OnGetFeedFailed( new GetFeedFailedEvent(provider, message) );
 				});
 			}
 		}
@@ -718,20 +718,20 @@ namespace Soomla.Profile
 			
 			else 
 			{
-				ProfileEvents.OnInviteStarted(provider, userPayload);
+				ProfileEvents.OnInviteStarted( new InviteStartedEvent(provider, userPayload) );
 				targetProvider.Invite(inviteMessage, dialogTitle,
 				                      /* success */ (string requestId, List<string> invitedIds) => {
 
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnInviteFinished(provider, requestId, invitedIds, userPayload);
+						ProfileEvents.OnInviteFinished(new InviteFinishedEvent(provider, requestId, invitedIds, userPayload) );
 				},
 									     /* fail */ (string message) => {  
-					ProfileEvents.OnInviteFailed(provider, message, userPayload);
+						ProfileEvents.OnInviteFailed( new InviteFailedEvent(provider, message, userPayload) );
 				},
 										/* cancel */ () => {  
-					ProfileEvents.OnInviteCancelled(provider, userPayload);
+						ProfileEvents.OnInviteCancelled( new InviteCancelledEvent(provider, userPayload) );
 				});
 			}
 		}
@@ -829,7 +829,7 @@ namespace Soomla.Profile
 		public static void OpenAppRatingPage() {
 			instance._openAppRatingPage ();
 
-			ProfileEvents.OnUserRatingEvent ();
+			ProfileEvents.OnUserRatingEvent (new UserRatingEvent() );
 		}
 
 		/// <summary>
@@ -866,7 +866,7 @@ namespace Soomla.Profile
 
 		internal static void TryFireProfileInitialized () {
 			if (AllProvidersInitialized()) {
-				ProfileEvents.OnSoomlaProfileInitialized();
+				ProfileEvents.OnSoomlaProfileInitialized(new ProfileInitializedEvent() );
 			}
 		}
 
@@ -928,7 +928,7 @@ namespace Soomla.Profile
 			PlayerPrefs.SetString(key, val);
 			
 			if (notify) {
-				ProfileEvents.OnUserProfileUpdated(userProfile);
+				ProfileEvents.OnUserProfileUpdated( new UserProfileUpdatedEvent(userProfile) );
 			}
 			#endif
 		}

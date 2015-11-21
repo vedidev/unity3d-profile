@@ -1,29 +1,29 @@
-using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Soomla.Profile
 {
-    public class LoginFinishedEvent
-    {
-        public readonly UserProfile UserProfile;
+	public class LoginFinishedEvent : SoomlaEvent
+	{
+		public readonly UserProfile UserProfile;
+		public readonly bool AutoLogin;
+		public readonly string Payload;
 
-        public readonly bool AutoLogin;
+		public LoginFinishedEvent (UserProfile userProfile, bool autoLogin, string payload):this(userProfile, autoLogin, payload,null)
+		{
 
-        public readonly string Payload;
+		}
 
-        public LoginFinishedEvent(UserProfile userProfile, bool autoLogin, string payload)
-        {
-            UserProfile = userProfile;
-            AutoLogin = autoLogin;
-            Payload = payload;
-        }
+		public LoginFinishedEvent (UserProfile userProfile, bool autoLogin, string payload, Object sender):base(sender)
+		{
+			UserProfile = userProfile;
+			AutoLogin = autoLogin;
+			Payload = payload;
+		}
 
-        public Provider getProvider()
-        {
-            return UserProfile.getProvider();
-        }
-
-    }
+		public Provider getProvider ()
+		{
+			return UserProfile.Provider;
+		}
+	}
 }

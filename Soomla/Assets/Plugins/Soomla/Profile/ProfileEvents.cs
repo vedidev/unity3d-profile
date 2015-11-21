@@ -567,9 +567,9 @@ namespace Soomla.Profile {
 
 		public delegate void Action();
 
-		public static Action OnSoomlaProfileInitialized = delegate {};
+		public static Action<ProfileInitializedEvent> OnSoomlaProfileInitialized = delegate {};
 
-		public static Action OnUserRatingEvent =delegate {};
+		public static Action<UserRatingEvent> OnUserRatingEvent =delegate {};
 
 		public static Action<UserProfileUpdatedEvent> OnUserProfileUpdated = delegate {};
 
@@ -648,27 +648,27 @@ namespace Soomla.Profile {
 			}
 
 			// Event pushing back to native (when using FB Unity SDK)
-			protected virtual void _pushEventLoginStarted(Provider provider, bool autoLogin, string payload) {}
-			protected virtual void _pushEventLoginFinished(UserProfile userProfileJson, bool autoLogin, string payload){}
-			protected virtual void _pushEventLoginFailed(Provider provider, string message, bool autoLogin, string payload){}
-			protected virtual void _pushEventLoginCancelled(Provider provider, bool autoLogin, string payload){}
-			protected virtual void _pushEventLogoutStarted(Provider provider){}
-			protected virtual void _pushEventLogoutFinished(Provider provider){}
-			protected virtual void _pushEventLogoutFailed(Provider provider, string message){}
-			protected virtual void _pushEventSocialActionStarted(Provider provider, SocialActionType actionType, string payload){}
-			protected virtual void _pushEventSocialActionFinished(Provider provider, SocialActionType actionType, string payload){}
-			protected virtual void _pushEventSocialActionCancelled(Provider provider, SocialActionType actionType, string payload){}
-			protected virtual void _pushEventSocialActionFailed(Provider provider, SocialActionType actionType, string message, string payload){}
-			protected virtual void _pushEventGetContactsStarted(Provider provider, bool fromStart, string payload){}
-			protected virtual void _pushEventGetContactsFinished(Provider provider, SocialPageData<UserProfile> contactsPage, string payload){}
-			protected virtual void _pushEventGetContactsFailed(Provider provider, string message, bool fromStart, string payload){}
-			protected virtual void _pushEventGetFeedFinished(Provider provider, SocialPageData<String> feedPage, string payload) {}
-			protected virtual void _pushEventGetFeedFailed(Provider provider, string message, bool fromStart, string payload) {}
+			protected virtual void _pushEventLoginStarted(LoginStartedEvent e) {}
+			protected virtual void _pushEventLoginFinished(LoginFinishedEvent e){}
+			protected virtual void _pushEventLoginFailed(LoginFailedEvent e){}
+			protected virtual void _pushEventLoginCancelled(LoginCancelledEvent e){}
+			protected virtual void _pushEventLogoutStarted(LogoutStartedEvent e){}
+			protected virtual void _pushEventLogoutFinished(LogoutFinishedEvent e){}
+			protected virtual void _pushEventLogoutFailed(LogoutFailedEvent e){}
+			protected virtual void _pushEventSocialActionStarted(SocialActionStartedEvent e){}
+			protected virtual void _pushEventSocialActionFinished(SocialActionFinishedEvent e){}
+			protected virtual void _pushEventSocialActionCancelled(SocialActionCancelledEvent e){}
+			protected virtual void _pushEventSocialActionFailed(SocialActionFailedEvent e){}
+			protected virtual void _pushEventGetContactsStarted(GetContactsStartedEvent e){}
+			protected virtual void _pushEventGetContactsFinished(GetContactsFinishedEvent e){}
+			protected virtual void _pushEventGetContactsFailed(GetContactsFailedEvent e){}
+			protected virtual void _pushEventGetFeedFinished(GetFeedFinishedEvent e) {}
+			protected virtual void _pushEventGetFeedFailed(GetFeedFailedEvent e) {}
 
-			protected virtual void _pushEventInviteStarted(Provider provider, string payload){}
-			protected virtual void _pushEventInviteFinished(Provider provider, string requestId, List<string> invitedIds, string payload){}
-			protected virtual void _pushEventInviteFailed(Provider provider, string message, string payload){}
-			protected virtual void _pushEventInviteCancelled(Provider provider, string payload){}
+			protected virtual void _pushEventInviteStarted(InviteStartedEvent e){}
+			protected virtual void _pushEventInviteFinished(InviteFinishedEvent e){}
+			protected virtual void _pushEventInviteFailed(InviteFailedEvent e){}
+			protected virtual void _pushEventInviteCancelled(InviteCancelledEvent e){}
 		}
 	}
 }

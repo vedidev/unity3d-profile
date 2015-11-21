@@ -115,27 +115,27 @@ public class ExampleWindow : MonoBehaviour {
 
 
 		// examples of catching fired events
-		ProfileEvents.OnSoomlaProfileInitialized += () => {
+		ProfileEvents.OnSoomlaProfileInitialized += (ProfileInitializedEvent e) => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "SoomlaProfile Initialized !");
 			isInit = true;
         };
 
-		ProfileEvents.OnUserRatingEvent += () => {
+		ProfileEvents.OnUserRatingEvent += (UserRatingEvent e) => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "User opened rating page");
 		};
 		
-		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, bool autoLogin, string payload) => {
-			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "login finished for: " + UserProfile.toJSONObject().print());
+		ProfileEvents.OnLoginFinished += (LoginFinishedEvent e) => {
+			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "login finished for: " + e.UserProfile.toJSONObject().print());
 			SoomlaProfile.GetContacts(targetProvider);
 		};
 		
-		ProfileEvents.OnGetContactsFinished += (Provider provider, SocialPageData<UserProfile> contactsData, string payload) => {
-			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "get contacts for: " + contactsData.PageData.Count + " page: " + contactsData.PageNumber + " More? " + contactsData.HasMore);
-			foreach (var profile in contactsData.PageData) {
+		ProfileEvents.OnGetContactsFinished += (GetContactsFinishedEvent e) => {
+			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "get contacts for: " + e.Contacts.PageData.Count + " page: " + e.Contacts.PageNumber + " More? " + e.Contacts.HasMore);
+			foreach (var profile in e.Contacts.PageData) {
 				Soomla.SoomlaUtils.LogDebug("ExampleWindow", "Contact: " + profile.toJSONObject().print());
 			}
 
-			if (contactsData.HasMore) {
+			if (e.Contacts.HasMore) {
 				SoomlaProfile.GetContacts(targetProvider);
 			}
 		};

@@ -1,14 +1,14 @@
-using UnityEngine;
 using System;
 
 namespace Soomla.Profile
 {
     public class InviteStartedEvent : BaseSocialActionEvent
     {
-        public InviteStartedEvent(Provider provider,
-                                   SocialActionType getFeedType, string payload) : base(provider, getFeedType, payload)
-        {
+		public readonly String payLoad;
 
+        public InviteStartedEvent(Provider provider, String payLoad) : base(provider)
+        {
+			this.payLoad = payLoad;
         }
     }
 }

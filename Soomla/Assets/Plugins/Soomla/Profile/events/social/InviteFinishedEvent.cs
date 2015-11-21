@@ -1,4 +1,3 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -8,14 +7,15 @@ namespace Soomla.Profile
     {
         public readonly string RequestId;
 
-        public readonly List<string> InvitedIds;
+        public readonly List<String> InvitedIds;
 
-        public InviteFinishedEvent(Provider provider,
-                                  SocialActionType getFeedType, string requestId, List<string> invitedIds,
-                                  string payload) : base(provider, getFeedType, payload)
+		public readonly String payLoad;
+		
+        public InviteFinishedEvent(Provider provider, String requestId, List<String> invitedIds, String payLoad) : base(provider)
         {
             RequestId = requestId;
             InvitedIds = invitedIds;
+			this.payLoad = payLoad;
         }
     }
 }

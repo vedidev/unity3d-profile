@@ -1,17 +1,21 @@
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Soomla.Profile
 {
-    public class LogoutStartedEvent
-    {
-        public readonly Provider Provider;
+	public class LogoutStartedEvent:SoomlaEvent
+	{
+		public readonly Provider Provider;
 
-        public LogoutStartedEvent(Provider provider)
-        {
-            Provider = provider;
-        }
-    }
+		public LogoutStartedEvent (Provider provider): this(provider,null)
+		{
+
+		}
+
+		public LogoutStartedEvent (Provider provider, Object sender): base(sender)
+		{
+			Provider = provider;
+		}
+	}
 }

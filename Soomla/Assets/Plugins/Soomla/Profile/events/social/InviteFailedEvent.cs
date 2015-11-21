@@ -1,4 +1,3 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -6,13 +5,13 @@ namespace Soomla.Profile
 {
     public class InviteFailedEvent : BaseSocialActionEvent
     {
-        public readonly string ErrorDescription;
+        public readonly String ErrorDescription;
 
-        public InviteFailedEvent(Provider provider,
-                                  SocialActionType getFeedType,
-                                  string errorDescription, string payload) : base(provider, getFeedType, payload)
+        public readonly String payLoad;
+		
+        public InviteFailedEvent(Provider provider, String errorDescription, String payLoad) : base(provider)
         {
-            ErrorDescription = errorDescription;
+			this.payLoad = payLoad;
         }
     }
 }

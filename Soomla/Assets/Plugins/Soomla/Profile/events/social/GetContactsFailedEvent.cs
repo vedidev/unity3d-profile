@@ -1,4 +1,3 @@
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,16 +6,15 @@ namespace Soomla.Profile
 {
     public class GetContactsFailedEvent : BaseSocialActionEvent
     {
-        public readonly string ErrorDescription;
+        public readonly String ErrorDescription;
+		public readonly bool fromStart;
+		public readonly String payLoad;
 
-        public readonly bool FromStart;
-
-        public GetContactsFailedEvent(Provider provider,
-                                      SocialActionType socialActionType,
-                                      string errorDescription, bool fromStart, string payload): base(provider, socialActionType, payload)
+        public GetContactsFailedEvent(Provider provider, String errorDescription, bool fromStart, String payLoad): base(provider)
         {
             this.ErrorDescription = errorDescription;
-            this.FromStart = fromStart;
+			this.fromStart = fromStart;
+			this.payLoad = payLoad;
         }
     }
 }
