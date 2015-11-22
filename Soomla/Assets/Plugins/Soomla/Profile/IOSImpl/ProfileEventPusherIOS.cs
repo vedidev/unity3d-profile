@@ -80,11 +80,11 @@ namespace Soomla.Profile {
 		private static extern void soomlaProfile_PushEventGetScoresFailed(string provider, string fromJson, string message, bool fromStart, string payload);
 
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventReportScoreStarted(string provider, string fromJson, bool fromStart, string payload);
+		private static extern void soomlaProfile_PushEventReportScoreStarted(string provider, string fromJson, string payload);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventReportScoreFinished(string provider, string fromJson, string scoreJson, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventReportScoreFailed(string provider, string fromJson, string message, bool fromStart, string payload);
+		private static extern void soomlaProfile_PushEventReportScoreFailed(string provider, string fromJson, string message, string payload);
 
 		// event pushing back to native (when using FB Unity SDK)
 		protected override void _pushEventLoginStarted(Provider provider, bool autoLogin, string payload) {
@@ -92,7 +92,7 @@ namespace Soomla.Profile {
 			soomlaProfile_PushEventLoginStarted(provider.ToString(), autoLogin, payload);
 		}
 
-		protected override void _pushEventLoginFinished(UserProfile userProfile, bool autoLogin, string payload) { 
+		protected override void _pushEventLoginFinished(UserProfile userProfile, bool autoLogin, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(userProfile.Provider)) return;
 			soomlaProfile_PushEventLoginFinished(userProfile.toJSONObject().print(), autoLogin, payload);
 		}
@@ -226,9 +226,9 @@ namespace Soomla.Profile {
 			soomlaProfile_PushEventGetScoresFailed(provider.ToString(), from.toJSONObject().ToString(), message, fromStart, payload);
 		}
 
-		protected override void _pushEventReportScoreStarted(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard owner, bool fromStart, string payload) {
+		protected override void _pushEventReportScoreStarted(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard owner, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
-			soomlaProfile_PushEventReportScoreStarted(provider.ToString(), owner.toJSONObject().ToString(), fromStart, payload);
+			soomlaProfile_PushEventReportScoreStarted(provider.ToString(), owner.toJSONObject().ToString(), payload);
 		}
 
 		protected override void _pushEventReportScoreFinished(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard owner, Soomla.Profile.Score score, string payload) {
@@ -236,9 +236,9 @@ namespace Soomla.Profile {
 			soomlaProfile_PushEventReportScoreFinished(provider.ToString(), owner.toJSONObject().ToString(), score.toJSONObject().ToString(), payload);
 		}
 
-		protected override void _pushEventReportScoreFailed(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard owner, string message, bool fromStart, string payload) {
+		protected override void _pushEventReportScoreFailed(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard owner, string message, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
-			soomlaProfile_PushEventReportScoreFailed(provider.ToString(), owner.toJSONObject().ToString(), message, fromStart, payload);
+			soomlaProfile_PushEventReportScoreFailed(provider.ToString(), owner.toJSONObject().ToString(), message, payload);
 		}
 
 #endif

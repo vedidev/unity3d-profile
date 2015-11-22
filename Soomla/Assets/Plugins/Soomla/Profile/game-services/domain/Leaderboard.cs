@@ -35,6 +35,7 @@ namespace Soomla.Profile {
 		public override JSONObject toJSONObject() {
 			JSONObject obj = base.toJSONObject();
 			obj.AddField(PJSONConsts.UP_PROVIDER, this.Provider.ToString());
+			return obj;
 		}
 	}
 }

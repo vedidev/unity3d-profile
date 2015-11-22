@@ -139,7 +139,7 @@ namespace Soomla.Profile
 
 		private static void login(Provider provider, bool autoLogin, string payload="", Reward reward = null) {
 			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
-			SocialProvider targetProvider = (SocialProvider)GetProviderImplementation(provider);
+			AuthProvider targetProvider = (AuthProvider)GetProviderImplementation(provider);
 			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 			{
@@ -186,7 +186,7 @@ namespace Soomla.Profile
 		/// <param name="provider">The provider to log out from.</param>
 		public static void Logout(Provider provider) {
 
-			SocialProvider targetProvider = (SocialProvider)GetProviderImplementation(provider);
+			AuthProvider targetProvider = (AuthProvider)GetProviderImplementation(provider);
 			if (targetProvider == null)
 				return;
 
@@ -236,7 +236,7 @@ namespace Soomla.Profile
 		/// <param name="provider">The provider to check if the user is logged into.</param>
 		public static bool IsLoggedIn(Provider provider) {
 
-			SocialProvider targetProvider = (SocialProvider)GetProviderImplementation(provider);
+			AuthProvider targetProvider = (AuthProvider)GetProviderImplementation(provider);
 			if (targetProvider == null)
 				return false;
 
@@ -879,7 +879,6 @@ namespace Soomla.Profile
 				string rewardId = reward != null ? reward.ID: "";
 				instance._getLeaderboards(provider, fromStart, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
-
 			else
 			{
 				ProfileEvents.OnGetLeaderboardsStarted(provider, fromStart, userPayload);
@@ -906,11 +905,10 @@ namespace Soomla.Profile
 				string rewardId = reward != null ? reward.ID: "";
 				instance._getScores(provider, from, fromStart, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
-
 			else
 			{
 				ProfileEvents.OnGetScoresStarted(provider, from, fromStart, userPayload);
-				targetProvider.GetScore(from, fromStart, (SocialPageData<Score> scores) => {
+				targetProvider.GetScores(from, fromStart, (SocialPageData<Score> scores) => {
 					if (reward != null) {
 						reward.Give();
 					}
@@ -933,7 +931,6 @@ namespace Soomla.Profile
 				string rewardId = reward != null ? reward.ID: "";
 				instance._reportScore(provider, where, score, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
-
 			else
 			{
 				ProfileEvents.OnReportScoreStarted(provider, where, userPayload);

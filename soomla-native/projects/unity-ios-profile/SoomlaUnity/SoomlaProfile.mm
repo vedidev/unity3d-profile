@@ -7,6 +7,8 @@
 #import "UnityProfileCommons.h"
 #import "UnityCommons.h"
 #import "Reward.h"
+#import "Leaderboard.h"
+#import "Score.h"
 #import "SoomlaUtils.h"
 #import "UnityProfileEventDispatcher.h"
 #import "NSData-Base64.h"
@@ -207,6 +209,40 @@ extern "C"{
         NSString* imageFilePath = sImageFilePath ? [NSString stringWithUTF8String:sImageFilePath] : nullptr;
 
         [[SoomlaProfile getInstance] multiShareWithText:text andImageFilePath:imageFilePath];
+    }
+
+    void soomlaProfile_GetLeaderboards(const char *sProvider, bool fromStart, const char *payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+
+        [[SoomlaProfile getInstance] getLeaderboardsWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                                       fromStart:fromStart
+                                                         payload:payloadS
+                                                       andReward:nil];
+    }
+
+    void soomlaProfile_GetScores(const char * sProvider, const char * leaderboard, bool fromStart, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        Leaderboard *leaderboardS = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:leaderboard]]];
+
+        [[SoomlaProfile getInstance] getScoresWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                            forLeaderboard:leaderboardS
+                                                 fromStart:fromStart
+                                                   payload:payloadS
+                                                 andReward:nil];
+    }
+
+    void soomlaProfile_ReportScore(const char * sProvider, const char * where, int score, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        Leaderboard *leaderboardS = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:where]]];
+
+        [[SoomlaProfile getInstance] reportScoreWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
+                                                       score:@(score)
+                                              forLeaderboard:leaderboardS
+                                                     payload:payloadS
+                                                   andReward:nil];
     }
 
 }

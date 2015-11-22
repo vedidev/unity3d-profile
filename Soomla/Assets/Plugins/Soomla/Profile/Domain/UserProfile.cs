@@ -51,7 +51,7 @@ namespace Soomla.Profile {
 		/// <param name="profileId">A unique ID that identifies the current user with the provider.</param>
 		/// <param name="username">The username of the current user in the provider.</param>
 		/// <param name="extra">Additional info provided by SN.</param>
-		protected UserProfile(Provider provider, string profileId, string username, Dictionary<String, JSONObject> extra)
+		protected UserProfile(Provider provider, string profileId, string username, Dictionary<String, JSONObject> extra) : base(profileId)
 		{
 			this.Provider = provider;
 			this.ProfileId = profileId;

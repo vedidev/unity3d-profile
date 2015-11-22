@@ -32,10 +32,10 @@ namespace Soomla.Profile {
 		public Int64 Value;
 
 		public Score(JSONObject jsonSC) : base(jsonSC) {
-			this.Leaderboard = new Leaderboard(jsonSC[PJSONConsts.UP_LEADERBOARD].obj);
-			this.Player = new UserProfile(jsonSC[PJSONConsts.UP_USER_PROFILE].obj);
-			this.Rank = jsonSC[PJSONConsts.UP_SCORE_RANK].n;
-			this.Value = jsonSC[PJSONConsts.UP_SCORE_VALUE].n;
+			this.Leaderboard = new Leaderboard(jsonSC[PJSONConsts.UP_LEADERBOARD]);
+			this.Player = new UserProfile(jsonSC[PJSONConsts.UP_USER_PROFILE]);
+			this.Rank = (long)jsonSC[PJSONConsts.UP_SCORE_RANK].n;
+			this.Value = (long)jsonSC[PJSONConsts.UP_SCORE_VALUE].n;
 		}
 
 		public override JSONObject toJSONObject() {
@@ -44,6 +44,7 @@ namespace Soomla.Profile {
 			obj.AddField(PJSONConsts.UP_USER_PROFILE, this.Player.toJSONObject());
 			obj.AddField(PJSONConsts.UP_SCORE_RANK, this.Rank);
 			obj.AddField(PJSONConsts.UP_SCORE_VALUE, this.Value);
+			return obj;
 		}
 	}
 }
