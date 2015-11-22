@@ -80,7 +80,7 @@ namespace Soomla.Profile
 #endif
 #if SOOMLA_GAMECENTER
 			unreadyProviders++;
-			providers.Add(Provider.GAME_CENTER, new GameCenterSocialProvider());
+			providers.Add(Provider.GAME_CENTER, new GameCenterGSProvider());
 #endif
 
 			// pass params to non-native providers
