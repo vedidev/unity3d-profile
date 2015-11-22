@@ -875,7 +875,7 @@ namespace Soomla.Profile
 			return (unreadyProviders == 0);
 		}
 
-		internal static void ProviderBecameReady(SocialProvider socialProvider) {
+		internal static void ProviderBecameReady(AuthProvider authProvider) {
 			--unreadyProviders;
 
 			TryFireProfileInitialized();

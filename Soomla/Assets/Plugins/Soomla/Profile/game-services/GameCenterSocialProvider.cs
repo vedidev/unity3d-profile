@@ -18,7 +18,7 @@ using System.Collections.Generic;
 namespace Soomla.Profile
 {
 #if UNITY_IOS || UNITY_EDITOR
-	public class GameCenterSocialProvider : SocialProvider
+	public class GameCenterSocialProvider : GameServicesProvider
 	{
 		
 		public GameCenterSocialProvider () {
@@ -85,7 +85,7 @@ namespace Soomla.Profile
 		}
 		
 		/// <summary>
-		/// See docs in <see cref="SocialProvider.IsAutoLogin"/>
+		/// See docs in <see cref="AuthProvider.IsAutoLogin"/>
 		/// </summary>
 		/// <returns>value of autoLogin
 		public override bool IsAutoLogin() {
