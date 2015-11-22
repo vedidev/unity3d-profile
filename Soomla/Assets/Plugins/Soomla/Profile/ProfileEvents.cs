@@ -849,7 +849,7 @@ namespace Soomla.Profile {
 			protected virtual void _pushEventGetScoresFailed(Provider provider, Leaderboard from, string message, bool fromStart, string payload) {}
 
 			protected virtual void _pushEventReportScoreStarted(Provider provider, Leaderboard owner, bool fromStart, string payload) {}
-			protected virtual void _pushEventReportScoreFinished(Provider provider, Leaderboard from, Score score, string payload) {}
+			protected virtual void _pushEventReportScoreFinished(Provider provider, Leaderboard owner, Score score, string payload) {}
 			protected virtual void _pushEventReportScoreFailed(Provider provider, Leaderboard owner, string message, bool fromStart, string payload) {}
 		}
 	}
