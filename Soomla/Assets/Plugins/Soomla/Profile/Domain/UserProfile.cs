@@ -22,9 +22,14 @@ namespace Soomla.Profile {
 	/// <summary>
 	/// This class holds information about the user for a specific <c>Provider</c>.
 	/// </summary>
-	public class UserProfile : SoomlaSerializableObject {
+	public class UserProfile : SoomlaEntity<UserProfile> {
 
 		private const string TAG = "SOOMLA UserProfile";
+
+		/// <summary>
+		/// The provider that this user profile belongs to, such as Facebook, Twitter, etc.
+		/// </summary>
+		public Provider Provider;
 
 		/** User profile information **/
 		public string ProfileId;
@@ -47,8 +52,8 @@ namespace Soomla.Profile {
 		/// <param name="username">The username of the current user in the provider.</param>
 		/// <param name="extra">Additional info provided by SN.</param>
 		protected UserProfile(Provider provider, string profileId, string username, Dictionary<String, JSONObject> extra)
-		: base(provider)
 		{
+			this.Provider = provider;
 			this.ProfileId = profileId;
 			this.Username = username;
 			this.Extra = extra;
@@ -71,6 +76,7 @@ namespace Soomla.Profile {
 		/// </summary>
 		/// <param name="jsonUP">A JSONObject representation of the wanted <c>UserProfile</c>.</param>
 		public UserProfile(JSONObject jsonUP) : base(jsonUP) {
+			this.Provider = Provider.fromString(jsonUP[PJSONConsts.UP_PROVIDER].str);
 			this.Username = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_USERNAME].str);
 			this.ProfileId = JSONObject.DecodeJsString(jsonUP[PJSONConsts.UP_PROFILEID].str);
 
@@ -126,8 +132,9 @@ namespace Soomla.Profile {
 		/// Converts the current <c>UserProfile</c> to a JSONObject.
 		/// </summary>
 		/// <returns>A <c>JSONObject</c> representation of the current <c>UserProfile</c>.</returns>
-		public override JSONObject toJSONObject() {
+		public virtual JSONObject toJSONObject() {
 			JSONObject obj = base.toJSONObject();
+			obj.AddField(PJSONConsts.UP_PROVIDER, this.Provider.ToString());
 			obj.AddField(PJSONConsts.UP_USERNAME, this.Username);
 			obj.AddField(PJSONConsts.UP_PROFILEID, this.ProfileId);
 			obj.AddField(PJSONConsts.UP_FIRSTNAME, this.FirstName);

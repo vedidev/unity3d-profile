@@ -22,19 +22,19 @@ namespace Soomla.Profile {
 	/// <summary>
 	/// This class holds information about the user for a specific <c>Provider</c>.
 	/// </summary>
-	public class Leaderboard : SoomlaSerializableObject {
+	public class Leaderboard : SoomlaEntity<Leaderboard> {
 
 		private const string TAG = "SOOMLA UserProfile";
 
-		public String Identifier;
+		public Provider Provider;
 
 		public Leaderboard(JSONObject jsonLB) : base(jsonLB) {
-			this.Identifier = jsonLB[PJSONConsts.UP_IDENTIFIER].str;
+			this.Provider = Provider.fromString(jsonLB[PJSONConsts.UP_PROVIDER].str);
 		}
 
 		public override JSONObject toJSONObject() {
 			JSONObject obj = base.toJSONObject();
-			obj.AddField(PJSONConsts.UP_IDENTIFIER, Identifier);
+			obj.AddField(PJSONConsts.UP_PROVIDER, this.Provider.ToString());
 		}
 	}
 }
