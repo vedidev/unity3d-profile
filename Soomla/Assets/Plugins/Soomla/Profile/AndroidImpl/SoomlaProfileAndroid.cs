@@ -27,8 +27,6 @@ namespace Soomla.Profile {
 	/// </summary>
 	public class SoomlaProfileAndroid : SoomlaProfile {
 
-		const string TAG = "SOOMLA Unity Android";
-
 #if UNITY_ANDROID
 
 		protected override void _initialize(string customParamsJson) {
