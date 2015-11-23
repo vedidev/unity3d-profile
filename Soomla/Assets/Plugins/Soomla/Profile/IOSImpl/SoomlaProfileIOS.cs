@@ -169,7 +169,6 @@ namespace Soomla.Profile {
 		}
 
 		protected override void _getLeaderboards(Soomla.Profile.Provider provider, bool fromStart, string payload) {
-			Debug.Log("Leaderboards invocation.");
 			soomlaProfile_GetLeaderboards(provider.ToString(), fromStart, payload);
 		}
 
