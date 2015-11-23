@@ -27,6 +27,8 @@ namespace Soomla.Profile {
 	/// </summary>
 	public class SoomlaProfileAndroid : SoomlaProfile {
 
+		const string TAG = "SOOMLA Unity Android";
+
 #if UNITY_ANDROID
 
 		protected override void _initialize(string customParamsJson) {
@@ -204,6 +206,18 @@ namespace Soomla.Profile {
 			}
 
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+		}
+
+		protected override void _getLeaderboards(Soomla.Profile.Provider provider, bool fromStart, string payload) {
+			Soomla.SoomlaUtils.LogDebug(TAG, "Game services isn't supported in Android yet.");
+		}
+
+		protected override void _getScores(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard from, bool fromStart, string payload) {
+			Soomla.SoomlaUtils.LogDebug(TAG, "Game services isn't supported in Android yet.");
+		}
+
+		protected override void _reportScore(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard where, int score, string payload) {
+			Soomla.SoomlaUtils.LogDebug(TAG, "Game services isn't supported in Android yet.");
 		}
 
 #endif
