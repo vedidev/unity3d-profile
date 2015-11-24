@@ -923,6 +923,14 @@ namespace Soomla.Profile
 			return false;
 		}
 
+		/// <summary>
+		/// Fetches Leaderboards for selected provider.
+		/// Supported platforms: GameCenter.
+		///
+		/// NOTE: This operation requires a successful login.
+		/// </summary>
+		/// <param name="provider">The <c>Provider</c> to fetch contacts from.</param>
+		/// <param name="payload">A string to receive when the function returns.</param>
 		public static void GetLeaderboards(Provider provider, string payload = "", Reward reward = null) {
 			GameServicesProvider targetProvider = (GameServicesProvider)GetProviderImplementation(provider);
 			string userPayload = (payload == null) ? "" : payload;
@@ -949,6 +957,15 @@ namespace Soomla.Profile
 			}
 		}
 
+		/// <summary>
+		/// Fetches Scores for selected leaderboard.
+		/// Supported platforms: GameCenter.
+		///
+		/// NOTE: This operation requires a successful login.
+		/// </summary>
+		/// <param name="provider">The <c>Provider</c> to fetch contacts from.</param>
+		/// <param name="from">The <c>Leaderboard</c> scores related to.</param>
+		/// <param name="payload">A string to receive when the function returns.</param>
 		public static void GetScores(Provider provider, Leaderboard from, bool fromStart = false, string payload = "", Reward reward = null) {
 			GameServicesProvider targetProvider = (GameServicesProvider)GetProviderImplementation(provider);
 			string userPayload = (payload == null) ? "" : payload;
@@ -975,6 +992,16 @@ namespace Soomla.Profile
 			}
 		}
 
+		/// <summary>
+		/// Submit score into selected leaderboard
+		/// Supported platforms: GameCenter.
+		///
+		/// NOTE: This operation requires a successful login.
+		/// </summary>
+		/// <param name="provider">The <c>Provider</c> to fetch contacts from.</param>
+		/// <param name="where">The <c>Leaderboard</c> score will be written to.</param>
+		/// <param name="score">Value of score will be written to leaderboard.</param>
+		/// <param name="payload">A string to receive when the function returns.</param>
 		public static void ReportScore(Provider provider, Leaderboard where, int score, string payload = "", Reward reward = null) {
 			GameServicesProvider targetProvider = (GameServicesProvider)GetProviderImplementation(provider);
 			string userPayload = (payload == null) ? "" : payload;

@@ -588,6 +588,12 @@ namespace Soomla.Profile {
 			//ProfileEvents.OnInviteFailed (new InviteFailedEvent(provider, errorMessage, ProfilePayload.GetUserPayload(payloadJSON) ) );
 		}
 
+		/// <summary>
+		/// Handles an <c>onGetLeaderboardsStarted</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onGetLeaderboardsStarted(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetLeaderboardsStarted");
 
@@ -599,6 +605,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnGetLeaderboardsStarted(provider, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onGetLeaderboardsFinished</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onGetLeaderboardsFinished(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetLeaderboardsFinished");
 
@@ -623,6 +635,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnGetLeaderboardsFinished(provider, data, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onGetLeaderboardsFailed</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onGetLeaderboardsFailed(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetLeaderboardsFailed");
 
@@ -636,6 +654,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnGetLeaderboardsFailed(provider, errorMessage, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onGetScoresStarted</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onGetScoresStarted(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetScoresStarted");
 
@@ -649,6 +673,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnGetScoresStarted(provider, owner, fromStart, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onGetScoresFinished</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onGetScoresFinished(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetScoresFinished");
 
@@ -675,6 +705,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnGetScoresFinished(provider, owner, data, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onGetScoresFailed</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onGetScoresFailed(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onGetScoresFailed");
 
@@ -691,6 +727,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnGetScoresFailed(provider, owner, errorMessage, fromStart, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onReportScoreStarted</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onReportScoreStarted(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onReportScoreStarted");
 
@@ -703,6 +745,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnReportScoreStarted(provider, owner, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onReportScoreFinished</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onReportScoreFinished(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onReportScoreFinished");
 
@@ -718,6 +766,12 @@ namespace Soomla.Profile {
 			ProfileEvents.OnReportScoreFinished(provider, owner, score, ProfilePayload.GetUserPayload(payloadJSON));
 		}
 
+		/// <summary>
+		/// Handles an <c>onReportScoreFailed</c> event
+		/// </summary>
+		/// <param name="message">
+		/// Will contain a numeric representation of <c>Provider</c>,
+		/// and payload</param>
 		public void onReportScoreFailed(String message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onReportScoreFailed");
 
