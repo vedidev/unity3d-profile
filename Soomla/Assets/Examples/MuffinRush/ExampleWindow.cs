@@ -324,8 +324,8 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tConnect;
 			GUI.skin.button.active.background = tConnectPress;
 			if(GUI.Button(new Rect(timesW(20.0f),timesH(950f),timesW(598.0f),timesH(141.0f)), "")){
-				SoomlaProfile.GetLeaderboards(Provider.GAME_CENTER);
-				//SoomlaProfile.Login(targetProvider, null, exampleReward);
+				//SoomlaProfile.GetLeaderboards(Provider.GAME_CENTER);
+				SoomlaProfile.Login(targetProvider, null, exampleReward);
 			}
 		}
 

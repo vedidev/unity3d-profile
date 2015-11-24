@@ -630,7 +630,6 @@ extern "C"{
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
-                                                            @"fromStart": [userInfo valueForKey:DICT_ELEMENT_FROM_START],
                                                             @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -642,7 +641,6 @@ extern "C"{
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
         NSArray* leaderboards = [userInfo valueForKey:DICT_ELEMENT_LEADERBOARDS];
-        NSNumber *hasMore = [userInfo valueForKey:DICT_ELEMENT_HAS_MORE];
         
         NSMutableArray* leaderboardsJsonArray = [NSMutableArray array];
         for (int i = 0; i < [leaderboards count]; i++) {
@@ -651,7 +649,6 @@ extern "C"{
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
                                                             @"leaderboards": leaderboardsJsonArray,
-                                                            @"hasMore": hasMore,
                                                             @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         
@@ -663,12 +660,10 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_UP_GET_LEADERBOARDS_FAILED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
-        NSNumber* fromStart = [userInfo valueForKey:DICT_ELEMENT_FROM_START];
         
         NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
                                                             @"provider":provider,
                                                             @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
-                                                            @"fromStart":fromStart,
                                                             @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
                                                             }];
         

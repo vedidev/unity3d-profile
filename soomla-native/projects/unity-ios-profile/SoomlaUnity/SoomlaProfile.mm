@@ -211,12 +211,11 @@ extern "C"{
         [[SoomlaProfile getInstance] multiShareWithText:text andImageFilePath:imageFilePath];
     }
 
-    void soomlaProfile_GetLeaderboards(const char *sProvider, bool fromStart, const char *payload) {
+    void soomlaProfile_GetLeaderboards(const char *sProvider, const char *payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
 
         [[SoomlaProfile getInstance] getLeaderboardsWithProvider:[UserProfileUtils providerStringToEnum:providerIdS]
-                                                       fromStart:fromStart
                                                          payload:payloadS
                                                        andReward:nil];
     }
