@@ -35,6 +35,8 @@ namespace Soomla.Profile
 	{
 		
 		#if UNITY_EDITOR
+
+		private static string ModuleName = "Profile";
 		
 		static ProfileSettings instance = new ProfileSettings();
 
@@ -135,7 +137,7 @@ namespace Soomla.Profile
 				result = string.Join(";", savedStates.ToArray());
 			}
 
-			SoomlaEditorScript.Instance.setSettingsValue("SocialIntegration", result);
+			SoomlaEditorScript.SetConfigValue(ModuleName, "SocialIntegration", result);
 			SoomlaEditorScript.DirtyEditor();
 		}
 
@@ -438,8 +440,7 @@ namespace Soomla.Profile
 
 		private static void ReadSocialIntegrationState(Dictionary<string, bool?> toTarget)
 		{
-			string value = string.Empty;
-			SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("SocialIntegration", out value);
+			string value = SoomlaEditorScript.GetConfigValue(ModuleName, "SocialIntegration");
 
 			if (value != null) {
 				string[] savedIntegrations = value.Split(';');
@@ -471,14 +472,13 @@ namespace Soomla.Profile
 
 		public static string iTunesAppId {
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("iTunesAppId", out value) ? value : ITUNESS_APP_ID;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "iTunesAppId");
+				return value != null ? value : ITUNESS_APP_ID;
 			}
 			set {
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("iTunesAppId", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "iTunesAppId");
 				if (v != value) {
-					SoomlaEditorScript.Instance.setSettingsValue("iTunesAppId", value);
+					SoomlaEditorScript.SetConfigValue(ModuleName, "iTunesAppId", value);
 					SoomlaEditorScript.DirtyEditor();
 				}
 			}
@@ -491,16 +491,15 @@ namespace Soomla.Profile
 		public static string FBAppId
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppId", out value) ? value : FB_APP_ID_DEFAULT;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "FBAppId");
+				return value != null ? value : FB_APP_ID_DEFAULT;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppId", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "FBAppId");
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("FBAppId",value);
+					SoomlaEditorScript.SetConfigValue(ModuleName, "FBAppId", value);
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -511,16 +510,15 @@ namespace Soomla.Profile
 		public static string FBAppNamespace
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppNS", out value) ? value : FB_APP_NS_DEFAULT;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "FBAppNS");
+				return value != null ? value : FB_APP_NS_DEFAULT;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAppNS", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "FBAppNS");
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("FBAppNS",value);
+					SoomlaEditorScript.SetConfigValue(ModuleName, "FBAppNS", value);
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -532,16 +530,15 @@ namespace Soomla.Profile
 		public static string FBPermissions
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBPermissions", out value) ? value : FB_PERMISSIONS_DEFAULT;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "FBPermissions");
+				return value != null ? value : FB_PERMISSIONS_DEFAULT;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBPermissions", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "FBPermissions");
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("FBPermissions",value);
+					SoomlaEditorScript.SetConfigValue(ModuleName, "FBPermissions", value);
 					SoomlaEditorScript.DirtyEditor();
 				}
 			}
@@ -550,16 +547,15 @@ namespace Soomla.Profile
 		public static bool FBAutoLogin
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAutoLogin", out value) ? Convert.ToBoolean(value) : false;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "FBAutoLogin");
+				return value != null ? Convert.ToBoolean(value) : false;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("FBAutoLogin", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "FBAutoLogin");
 				if (Convert.ToBoolean(v) != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("FBAutoLogin", value.ToString());
+					SoomlaEditorScript.SetConfigValue(ModuleName, "FBAutoLogin", value.ToString());
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -578,16 +574,15 @@ namespace Soomla.Profile
 		public static string GPClientId
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GPClientId", out value) ? value : GP_CLIENT_ID_DEFAULT;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "GPClientId");
+				return value != null ? value : GP_CLIENT_ID_DEFAULT;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GPClientId", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "GPClientId");
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("GPClientId",value);
+					SoomlaEditorScript.SetConfigValue(ModuleName, "GPClientId", value);
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -596,16 +591,15 @@ namespace Soomla.Profile
 		public static bool GPAutoLogin
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GoogleAutoLogin", out value) ? Convert.ToBoolean(value) : false;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "GoogleAutoLogin");
+				return value != null ? Convert.ToBoolean(value) : false;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GoogleAutoLogin", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "GoogleAutoLogin");
 				if (Convert.ToBoolean(v) != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("GoogleAutoLogin", value.ToString());
+					SoomlaEditorScript.SetConfigValue(ModuleName, "GoogleAutoLogin", value.ToString());
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -614,21 +608,20 @@ namespace Soomla.Profile
 		/** TWITTER **/
 
 		public static string TWITTER_CONSUMER_KEY_DEFAULT = "YOUR TWITTER CONSUMER KEY";
-		public static string TWITTER_CONSUMER_SECRET_DEFFAULT = "YOUR TWITTER CONSUMER SECRET";
+		public static string TWITTER_CONSUMER_SECRET_DEFAULT = "YOUR TWITTER CONSUMER SECRET";
 
 		public static string TwitterConsumerKey
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerKey", out value) ? value : TWITTER_CONSUMER_KEY_DEFAULT;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "TwitterConsumerKey");
+				return value != null ? value : TWITTER_CONSUMER_KEY_DEFAULT;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerKey", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "TwitterConsumerKey");
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("TwitterConsumerKey",value);
+					SoomlaEditorScript.SetConfigValue(ModuleName, "TwitterConsumerKey", value);
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -637,16 +630,15 @@ namespace Soomla.Profile
 		public static string TwitterConsumerSecret
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerSecret", out value) ? value : TWITTER_CONSUMER_SECRET_DEFFAULT;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "TwitterConsumerSecret");
+				return value != null ? value : TWITTER_CONSUMER_SECRET_DEFAULT;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterConsumerSecret", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "TwitterConsumerSecret");
 				if (v != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("TwitterConsumerSecret",value);
+					SoomlaEditorScript.SetConfigValue(ModuleName, "TwitterConsumerSecret", value);
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -655,16 +647,15 @@ namespace Soomla.Profile
 		public static bool TwitterAutoLogin
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterAutoLogin", out value) ? Convert.ToBoolean(value) : false;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "TwitterAutoLogin");
+				return value != null ? Convert.ToBoolean(value) : false;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TwitterAutoLogin", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "TwitterAutoLogin");
 				if (Convert.ToBoolean(v) != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("TwitterAutoLogin", value.ToString());
+					SoomlaEditorScript.SetConfigValue(ModuleName, "TwitterAutoLogin", value.ToString());
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -673,16 +664,15 @@ namespace Soomla.Profile
 		public static bool GameCenterAutoLogin
 		{
 			get {
-				string value;
-				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GameCenterAutoLogin", out value) ? Convert.ToBoolean(value) : false;
+				string value = SoomlaEditorScript.GetConfigValue(ModuleName, "GameCenterAutoLogin");
+				return value != null ? Convert.ToBoolean(value) : false;
 			}
 			set
 			{
-				string v;
-				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("GameCenterAutoLogin", out v);
+				string v = SoomlaEditorScript.GetConfigValue(ModuleName, "GameCenterAutoLogin");
 				if (Convert.ToBoolean(v) != value)
 				{
-					SoomlaEditorScript.Instance.setSettingsValue("GameCenterAutoLogin", value.ToString());
+					SoomlaEditorScript.SetConfigValue(ModuleName, "GameCenterAutoLogin", value.ToString());
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
