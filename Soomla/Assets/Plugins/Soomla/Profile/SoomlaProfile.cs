@@ -95,7 +95,7 @@ namespace Soomla.Profile
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
 #if SOOMLA_GAMECENTER
-			providers.Add(Provider.GAME_CENTER, new GameCenterSocialProvider());
+			providers.Add(Provider.GAME_CENTER, new GameCenterGSProvider());
 #endif
 
 			// pass params to non-native providers
