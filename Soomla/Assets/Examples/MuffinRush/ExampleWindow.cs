@@ -34,7 +34,7 @@ public class ExampleWindow : MonoBehaviour {
 	private static bool isVisible = false;
 	private bool isInit = false;
 
-	private Provider targetProvider = Provider.FACEBOOK;
+	private Provider targetProvider = Provider.GAME_CENTER;
 	private Reward exampleReward = new BadgeReward("example_reward", "Example Social Reward");
 
 
@@ -123,10 +123,19 @@ public class ExampleWindow : MonoBehaviour {
 		ProfileEvents.OnUserRatingEvent += () => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "User opened rating page");
 		};
-		
+
+		ProfileEvents.OnGetScoresFinished += (Provider p, Leaderboard lb, SocialPageData<Score> sc, string pl) => {
+			foreach (Score score in sc.PageData) {
+				SoomlaUtils.LogDebug("123", score.Player.ProfileId);
+			}
+		};
+		ProfileEvents.OnGetLeaderboardsFinished += (Provider p, SocialPageData<Leaderboard> lb, string pl) => {
+			SoomlaUtils.LogDebug("123", "leaderboard 1: " + lb.PageData[0].ID);
+			SoomlaProfile.GetScores(Provider.GAME_CENTER, lb.PageData[0]);
+		};
 		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, bool autoLogin, string payload) => {
-			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "login finished for: " + UserProfile.toJSONObject().print());
-			SoomlaProfile.GetContacts(targetProvider);
+			SoomlaUtils.LogDebug("123", "logged in");
+			SoomlaProfile.GetLeaderboards(Provider.GAME_CENTER);
 		};
 		
 		ProfileEvents.OnGetContactsFinished += (Provider provider, SocialPageData<UserProfile> contactsData, string payload) => {
@@ -144,7 +153,7 @@ public class ExampleWindow : MonoBehaviour {
 //		SoomlaProfile.OpenAppRatingPage();
 
 		#if UNITY_IPHONE
-		Handheld.SetActivityIndicatorStyle(iOSActivityIndicatorStyle.Gray);
+		Handheld.SetActivityIndicatorStyle(UnityEngine.iOS.ActivityIndicatorStyle.Gray);
 		#elif UNITY_ANDROID
 		Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.Small);
 		#endif
@@ -315,7 +324,8 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tConnect;
 			GUI.skin.button.active.background = tConnectPress;
 			if(GUI.Button(new Rect(timesW(20.0f),timesH(950f),timesW(598.0f),timesH(141.0f)), "")){
-				SoomlaProfile.Login(targetProvider, null, exampleReward);
+				SoomlaProfile.GetLeaderboards(Provider.GAME_CENTER);
+				//SoomlaProfile.Login(targetProvider, null, exampleReward);
 			}
 		}
 

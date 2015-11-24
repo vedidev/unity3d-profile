@@ -66,11 +66,11 @@ namespace Soomla.Profile {
 		private static extern void soomlaProfile_PushEventInviteFailed(string provider, string actionType, string message, string payload);
 
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventGetLeaderboardsStarted(string provider, bool fromStart, string payload);
+		private static extern void soomlaProfile_PushEventGetLeaderboardsStarted(string provider, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventGetLeaderboardsFinished(string provider, string leaderboardsJson, string payload, bool hasNext);
+		private static extern void soomlaProfile_PushEventGetLeaderboardsFinished(string provider, string leaderboardsJson, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventGetLeaderboardsFailed(string provider, string message, bool fromStart, string payload);
+		private static extern void soomlaProfile_PushEventGetLeaderboardsFailed(string provider, string message, string payload);
 
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventGetScoresStarted(string provider, string fromJson, bool fromStart, string payload);
@@ -186,9 +186,9 @@ namespace Soomla.Profile {
 			soomlaProfile_PushEventInviteFailed(provider.ToString(), SocialActionType.INVITE.ToString(), message, payload);
 		}
 
-		protected override void _pushEventGetLeaderboardsStarted(Soomla.Profile.Provider provider, bool fromStart, string payload) {
+		protected override void _pushEventGetLeaderboardsStarted(Soomla.Profile.Provider provider, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
-			soomlaProfile_PushEventGetLeaderboardsStarted(provider.ToString(), fromStart, payload);
+			soomlaProfile_PushEventGetLeaderboardsStarted(provider.ToString(), payload);
 		}
 
 		protected override void _pushEventGetLeaderboardsFinished(Soomla.Profile.Provider provider, Soomla.Profile.SocialPageData<Soomla.Profile.Leaderboard> leaderboards, string payload) {
@@ -198,12 +198,12 @@ namespace Soomla.Profile {
 				leaderboardList.Add(lb.toJSONObject());
 			}
 			JSONObject jsonLbs = new JSONObject(leaderboardList.ToArray());
-			soomlaProfile_PushEventGetLeaderboardsFinished(provider.ToString(), jsonLbs.ToString(), payload, leaderboards.HasMore);
+			soomlaProfile_PushEventGetLeaderboardsFinished(provider.ToString(), jsonLbs.ToString(), payload);
 		}
 
-		protected override void _pushEventGetLeaderboardsFailed(Soomla.Profile.Provider provider, string message, bool fromStart, string payload) {
+		protected override void _pushEventGetLeaderboardsFailed(Soomla.Profile.Provider provider, string message, string payload) {
 			if (SoomlaProfile.IsProviderNativelyImplemented(provider)) return;
-			soomlaProfile_PushEventGetLeaderboardsFailed(provider.ToString(), message, fromStart, payload);
+			soomlaProfile_PushEventGetLeaderboardsFailed(provider.ToString(), message, payload);
 		}
 
 		protected override void _pushEventGetScoresStarted(Soomla.Profile.Provider provider, Soomla.Profile.Leaderboard from, bool fromStart, string payload) {

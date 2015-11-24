@@ -867,7 +867,7 @@ namespace Soomla.Profile
 			return false;
 		}
 
-		public static void GetLeaderboards(Provider provider, bool fromStart = false, string payload = "", Reward reward = null) {
+		public static void GetLeaderboards(Provider provider, string payload = "", Reward reward = null) {
 			GameServicesProvider targetProvider = (GameServicesProvider)GetProviderImplementation(provider);
 			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
@@ -877,18 +877,18 @@ namespace Soomla.Profile
 			{
 				//fallback to native
 				string rewardId = reward != null ? reward.ID: "";
-				instance._getLeaderboards(provider, fromStart, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
+				instance._getLeaderboards(provider, ProfilePayload.ToJSONObj(userPayload, rewardId).ToString());
 			}
 			else
 			{
-				ProfileEvents.OnGetLeaderboardsStarted(provider, fromStart, userPayload);
-				targetProvider.GetLeaderboards(fromStart, (SocialPageData<Leaderboard> leaderboards) => {
+				ProfileEvents.OnGetLeaderboardsStarted(provider, userPayload);
+				targetProvider.GetLeaderboards((SocialPageData<Leaderboard> leaderboards) => {
 					if (reward != null) {
 						reward.Give();
 					}
 					ProfileEvents.OnGetLeaderboardsFinished(provider, leaderboards, payload);
 				}, (string message) => {
-					ProfileEvents.OnGetLeaderboardsFailed(provider, message, fromStart, payload);
+					ProfileEvents.OnGetLeaderboardsFailed(provider, message, payload);
 				});
 			}
 		}
@@ -1003,7 +1003,7 @@ namespace Soomla.Profile
 
 		protected virtual void _multiShare(string text, string imageFilePath) { }
 
-		protected virtual void _getLeaderboards(Provider provider, bool fromStart, string payload) { }
+		protected virtual void _getLeaderboards(Provider provider, string payload) { }
 
 		protected virtual void _getScores(Provider provider, Leaderboard from, bool fromStart, string payload) { }
 

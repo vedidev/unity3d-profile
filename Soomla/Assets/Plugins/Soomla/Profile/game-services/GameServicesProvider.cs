@@ -34,7 +34,7 @@ namespace Soomla.Profile
 		/// </summary>
 		public abstract void GetContacts(bool fromStart, SocialPageDataSuccess<UserProfile> success, FailureHandler fail);
 
-		public abstract void GetLeaderboards(bool fromStart, SocialPageDataSuccess<Leaderboard> success, FailureHandler fail);
+		public abstract void GetLeaderboards(SocialPageDataSuccess<Leaderboard> success, FailureHandler fail);
 
 		public abstract void GetScores(Leaderboard owner, bool fromStart, SocialPageDataSuccess<Score> success, FailureHandler fail);
 

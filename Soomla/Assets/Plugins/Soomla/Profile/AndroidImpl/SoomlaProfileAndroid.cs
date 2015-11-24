@@ -206,7 +206,7 @@ namespace Soomla.Profile {
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
-		protected override void _getLeaderboards(Soomla.Profile.Provider provider, bool fromStart, string payload) {
+		protected override void _getLeaderboards(Soomla.Profile.Provider provider, string payload) {
 			Soomla.SoomlaUtils.LogDebug(TAG, "Game services isn't supported in Android yet.");
 		}
 
