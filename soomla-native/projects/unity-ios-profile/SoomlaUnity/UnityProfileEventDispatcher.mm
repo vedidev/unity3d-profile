@@ -188,7 +188,105 @@ extern "C"{
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         [ProfileEventHandling postInviteFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
     }
-
+    
+    void soomlaProfile_PushEventGetLeaderboardsStarted(const char * sProvider, bool fromStart, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postGetLeaderboardsStarted:provider fromStart:fromStart withPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventGetLeaderboardsFinished(const char * sProvider, const char * leaderboardsJson, const char * payload, bool hasNext) {
+        
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        
+        NSMutableArray *leaderboards = [NSMutableArray array];
+        NSMutableArray *leaderboardsDictArray = [SoomlaUtils jsonStringToArray:[NSString stringWithUTF8String:leaderboardsJson]];
+        if (leaderboardsDictArray) {
+            for (NSDictionary *leaderboardsDict in leaderboardsDictArray) {
+                Leaderboard *leaderboard = [[Leaderboard alloc] initWithDictionary:leaderboardsDict];
+                if (leaderboard) {
+                    [leaderboards addObject:leaderboard];
+                }
+            }
+        }
+        
+        [ProfileEventHandling postGetLeaderboardsFinished:provider withLeaderboardsList:leaderboards hasMore:hasNext andPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventGetLeaderboardsFailed(const char * sProvider, const char * sMessage, bool fromStart, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString *message = [NSString stringWithUTF8String:sMessage];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postGetLeaderboardsFailed:provider fromStart:fromStart withMessage:message andPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventGetScoresStarted(const char * sProvider, const char * fromJson, bool fromStart, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postGetScoresStarted:provider forLeaderboard:from fromStart:fromStart withPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventGetScoresFinished(const char * sProvider, const char * fromJson, const char * scoresJson, const char * payload, bool hasNext) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
+        
+        NSMutableArray *scores = [NSMutableArray array];
+        NSMutableArray *scoresDictArray = [SoomlaUtils jsonStringToArray:[NSString stringWithUTF8String:scoresJson]];
+        if (scoresDictArray) {
+            for (NSDictionary *scoresDict in scoresDictArray) {
+                Score *score = [[Score alloc] initWithDictionary:scoresDict];
+                if (score) {
+                    [scores addObject:score];
+                }
+            }
+        }
+        
+        [ProfileEventHandling postGetScoresFinished:provider forLeaderboard:from withScoresList:scores hasMore:hasNext andPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventGetScoresFailed(const char * sProvider, const char * fromJson, const char * sMessage, bool fromStart, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString *message = [NSString stringWithUTF8String:sMessage];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
+        [ProfileEventHandling postGetScoresFailed:provider forLeaderboard:from fromStart:fromStart withMessage:message andPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventReportScoreStarted(const char * sProvider, const char * fromJson, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        [ProfileEventHandling postReportScoreStarted:provider forLeaderboard:from withPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventReportScoreFinished(const char * sProvider, const char * fromJson, const char * scoreJson, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
+        Score *score = [[Score alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:scoreJson]]];
+        
+        [ProfileEventHandling postReportScoreFinished:provider score:score forLeaderboard:from andPayload:payloadS];
+    }
+    
+    void soomlaProfile_PushEventReportScoreFailed(const char * sProvider, const char * fromJson, const char * sMessage, const char * payload) {
+        NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
+        Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
+        NSString *message = [NSString stringWithUTF8String:sMessage];
+        NSString* payloadS = [NSString stringWithUTF8String:payload];
+        Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
+        [ProfileEventHandling postReportScoreFailed:provider forLeaderboard:from withMessage:message andPayload:payloadS];
+    }
 }
 
 @implementation UnityProfileEventDispatcher
@@ -525,6 +623,148 @@ extern "C"{
         
         [UnityProfileEventDispatcher sendMessage:jsonStr
                                      toRecepient:@"onInviteCancelled"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_GET_LEADERBOARDS_STARTED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onGetLeaderboardsStarted"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_GET_LEADERBOARDS_FINISHED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        NSArray* leaderboards = [userInfo valueForKey:DICT_ELEMENT_LEADERBOARDS];
+        
+        NSMutableArray* leaderboardsJsonArray = [NSMutableArray array];
+        for (int i = 0; i < [leaderboards count]; i++) {
+            [leaderboardsJsonArray addObject:[(Leaderboard *)[leaderboards objectAtIndex:i] toDictionary]];
+        }
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"leaderboards": leaderboardsJsonArray,
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onGetLeaderboardsFinished"
+                                      withFilter:provider];
+
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_GET_LEADERBOARDS_FAILED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                                                            @"provider":provider,
+                                                            @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
+                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onGetLeaderboardsFailed"
+                                      withFilter:provider];
+
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_GET_SCORES_STARTED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"leaderboard": [(Leaderboard *)[userInfo valueForKey:DICT_ELEMENT_LEADERBOARD] toDictionary],
+                                                            @"fromStart": [userInfo valueForKey:DICT_ELEMENT_FROM_START],
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onGetScoresStarted"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_GET_SCORES_FINISHED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSArray* scores = [userInfo valueForKey:DICT_ELEMENT_SCORES];
+        
+        NSMutableArray* scoresJsonArray = [NSMutableArray array];
+        for (int i = 0; i < [scores count]; i++) {
+            [scoresJsonArray addObject:[(Score *)[scores objectAtIndex:i] toDictionary]];
+        }
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"leaderboard": [(Leaderboard *)[userInfo valueForKey:DICT_ELEMENT_LEADERBOARD] toDictionary],
+                                                            @"scores": scoresJsonArray,
+                                                            @"hasMore": [userInfo valueForKey:DICT_ELEMENT_HAS_MORE],
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onGetScoresFinished"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_GET_SCORES_FAILED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        NSNumber* fromStart = [userInfo valueForKey:DICT_ELEMENT_FROM_START];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                                                            @"provider":provider,
+                                                            @"leaderboard": [(Leaderboard *)[userInfo valueForKey:DICT_ELEMENT_LEADERBOARD] toDictionary],
+                                                            @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
+                                                            @"fromStart":fromStart,
+                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onGetScoresFailed"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_REPORT_SCORE_STARTED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"leaderboard": [(Leaderboard *)[userInfo valueForKey:DICT_ELEMENT_LEADERBOARD] toDictionary],
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onReportScoreStarted"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_REPORT_SCORE_FINISHED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{@"provider":provider,
+                                                            @"leaderboard": [(Leaderboard *)[userInfo valueForKey:DICT_ELEMENT_LEADERBOARD] toDictionary],
+                                                            @"score": [(Score *)[userInfo valueForKey:DICT_ELEMENT_SCORE] toDictionary],
+                                                            @"payload": [userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onReportScoreFinished"
+                                      withFilter:provider];
+    }
+    else if ([notification.name isEqualToString:EVENT_UP_REPORT_SCORE_FAILED]) {
+        NSDictionary* userInfo = [notification userInfo];
+        NSNumber* provider = [userInfo valueForKey:DICT_ELEMENT_PROVIDER];
+        
+        NSString *jsonStr = [SoomlaUtils dictToJsonString:@{
+                                                            @"provider":provider,
+                                                            @"leaderboard": [(Leaderboard *)[userInfo valueForKey:DICT_ELEMENT_LEADERBOARD] toDictionary],
+                                                            @"message":[userInfo valueForKey:DICT_ELEMENT_MESSAGE],
+                                                            @"payload":[userInfo valueForKey:DICT_ELEMENT_PAYLOAD]
+                                                            }];
+        
+        [UnityProfileEventDispatcher sendMessage:jsonStr
+                                     toRecepient:@"onReportScoreFailed"
                                       withFilter:provider];
     }
 }
