@@ -124,14 +124,14 @@ public class ExampleWindow : MonoBehaviour {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "User opened rating page");
 		};
 
-		ProfileEvents.OnGetScoresFinished += (GetScoresFinishedEvent ev) => {
-			foreach (Score score in ev.Scores.PageData) {
+		ProfileEvents.OnGetScoresFinished += (Provider p, Leaderboard lb, SocialPageData<Score> sc, string pl) => {
+			foreach (Score score in sc.PageData) {
 				SoomlaUtils.LogDebug("123", score.Player.ProfileId);
 			}
 		};
-		ProfileEvents.OnGetLeaderboardsFinished += (GetLeaderboardsFinishedEvent ev) => {
-			SoomlaUtils.LogDebug("123", "leaderboard 1: " + ev.Leaderboards.PageData[0].ID);
-			SoomlaProfile.GetScores(Provider.GAME_CENTER, ev.Leaderboards.PageData[0]);
+		ProfileEvents.OnGetLeaderboardsFinished += (Provider p, SocialPageData<Leaderboard> lb, string pl) => {
+			SoomlaUtils.LogDebug("123", "leaderboard 1: " + lb.PageData[0].ID);
+			SoomlaProfile.GetScores(Provider.GAME_CENTER, lb.PageData[0]);
 		};
 		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, bool autoLogin, string payload) => {
 			SoomlaUtils.LogDebug("123", "logged in");
