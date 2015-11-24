@@ -33,10 +33,9 @@ namespace Soomla.Profile
 	/// </summary>
 	public class ProfileSettings : ISoomlaSettings
 	{
+		private static string ModuleName = "Profile";
 		
 		#if UNITY_EDITOR
-
-		private static string ModuleName = "Profile";
 		
 		static ProfileSettings instance = new ProfileSettings();
 
