@@ -51,7 +51,7 @@ namespace Soomla.Profile
 		/// in this class use this <c>providers</c> <c>Dictionary</c> to call the relevant functions 
 		/// in each <c>SocialProvider</c> (i.e. Facebook) class.
 		/// </summary>
-		static Dictionary<Provider, SocialProvider> providers = new Dictionary<Provider, SocialProvider>();
+		static Dictionary<Provider, AuthProvider> providers = new Dictionary<Provider, AuthProvider>();
 
 		static private int unreadyProviders = 0;
 
@@ -945,14 +945,14 @@ namespace Soomla.Profile
 			}
 			else
 			{
-				ProfileEvents.OnGetLeaderboardsStarted(provider, userPayload);
+				ProfileEvents.OnGetLeaderboardsStarted(new GetLeaderboardsStartedEvent(provider, payload));
 				targetProvider.GetLeaderboards((SocialPageData<Leaderboard> leaderboards) => {
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnGetLeaderboardsFinished(provider, leaderboards, payload);
+					ProfileEvents.OnGetLeaderboardsFinished(new GetLeaderboardsFinishedEvent(provider, leaderboards, payload));
 				}, (string message) => {
-					ProfileEvents.OnGetLeaderboardsFailed(provider, message, payload);
+					ProfileEvents.OnGetLeaderboardsFailed(new GetLeaderboardsFailedEvent(provider, message, payload));
 				});
 			}
 		}
@@ -980,14 +980,14 @@ namespace Soomla.Profile
 			}
 			else
 			{
-				ProfileEvents.OnGetScoresStarted(provider, from, fromStart, userPayload);
+				ProfileEvents.OnGetScoresStarted(new GetScoresStartedEvent(provider, from, fromStart, payload));
 				targetProvider.GetScores(from, fromStart, (SocialPageData<Score> scores) => {
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnGetScoresFinished(provider, from, scores, payload);
+					ProfileEvents.OnGetScoresFinished(new GetScoresFinishedEvent(provider, from, scores, payload));
 				}, (string message) => {
-					ProfileEvents.OnGetScoresFailed(provider, from, message, fromStart, payload);
+					ProfileEvents.OnGetScoresFailed(new GetScoresFailedEvent(provider, from, fromStart, message, payload));
 				});
 			}
 		}
@@ -1016,14 +1016,14 @@ namespace Soomla.Profile
 			}
 			else
 			{
-				ProfileEvents.OnReportScoreStarted(provider, where, userPayload);
+				ProfileEvents.OnReportScoreStarted(new ReportScoreStartedEvent(provider, where, payload));
 				targetProvider.ReportScore(where, score, (Score newScore) => {
 					if (reward != null) {
 						reward.Give();
 					}
-					ProfileEvents.OnReportScoreFinished(provider, where, newScore, payload);
+					ProfileEvents.OnReportScoreFinished(new ReportScoreFinishedEvent(provider, where, newScore, payload));
 				}, (string message) => {
-					ProfileEvents.OnReportScoreFailed(provider, where, message, payload);
+					ProfileEvents.OnReportScoreFailed(new ReportScoreFailedEvent(provider, where, message, payload));
 				});
 			}
 		}
