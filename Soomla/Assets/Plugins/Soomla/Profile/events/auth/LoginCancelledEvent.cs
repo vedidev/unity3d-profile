@@ -8,18 +8,16 @@ namespace Soomla.Profile
 	{
 		public readonly Provider Provider;
 		public readonly bool AutoLogin;
-		public readonly string Payload;
 
 		public LoginCancelledEvent (Provider provider, bool autoLogin, string payload): this (provider, autoLogin, payload, null)
 		{
 
 		}
 
-		public LoginCancelledEvent (Provider provider, bool autoLogin, string payload, Object sender) : base(sender)
+		public LoginCancelledEvent (Provider provider, bool autoLogin, string payload, Object sender) : base(sender, payload)
 		{
 			Provider = provider;
 			AutoLogin = autoLogin;
-			Payload = payload;
 		}
 	}
 }

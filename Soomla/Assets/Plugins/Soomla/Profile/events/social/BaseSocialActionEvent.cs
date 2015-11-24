@@ -2,18 +2,12 @@ using System;
 
 namespace Soomla.Profile
 {
-    public abstract class BaseSocialActionEvent
+	public abstract class BaseSocialActionEvent : SoomlaEvent
     {
 		public readonly Provider Provider;
-		public readonly string Payload;
 
-		protected BaseSocialActionEvent(Provider provider) : this(provider, "") {
-
-		}
-
-		protected BaseSocialActionEvent(Provider provider, string payload) {
+		protected BaseSocialActionEvent(Provider provider, string payload = "", Object sender = null) : base(sender, payload) {
 			this.Provider = provider;
-			this.Payload = payload;
-        }
+		}
     }
 }

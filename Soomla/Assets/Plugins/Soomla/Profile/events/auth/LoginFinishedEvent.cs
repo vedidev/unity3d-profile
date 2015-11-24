@@ -7,18 +7,16 @@ namespace Soomla.Profile
 	{
 		public readonly UserProfile UserProfile;
 		public readonly bool AutoLogin;
-		public readonly string Payload;
 
 		public LoginFinishedEvent (UserProfile userProfile, bool autoLogin, string payload):this(userProfile, autoLogin, payload,null)
 		{
 
 		}
 
-		public LoginFinishedEvent (UserProfile userProfile, bool autoLogin, string payload, Object sender):base(sender)
+		public LoginFinishedEvent (UserProfile userProfile, bool autoLogin, string payload, Object sender):base(sender, payload)
 		{
 			UserProfile = userProfile;
 			AutoLogin = autoLogin;
-			Payload = payload;
 		}
 
 		public Provider getProvider ()

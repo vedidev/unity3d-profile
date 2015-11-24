@@ -4,9 +4,14 @@ using System.Collections.Generic;
 
 namespace Soomla.Profile
 {
-	public class UserRatingEvent
+	public class UserRatingEvent : SoomlaEvent
 	{
-		public UserRatingEvent ()
+		public UserRatingEvent () : this(null)
+		{
+
+		}
+
+		public UserRatingEvent (Object sender) : base(sender)
 		{
 
 		}
