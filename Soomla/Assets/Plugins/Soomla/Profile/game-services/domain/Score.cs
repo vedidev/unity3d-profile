@@ -22,7 +22,7 @@ namespace Soomla.Profile {
 	/// <summary>
 	/// This class holds information about the user for a specific <c>Provider</c>.
 	/// </summary>
-	public class Score : SoomlaEntity<Score> {
+	public class Score  {
 
 		private const string TAG = "SOOMLA UserProfile";
 
@@ -31,7 +31,7 @@ namespace Soomla.Profile {
 		public Int64 Rank;
 		public Int64 Value;
 
-		public Score(JSONObject jsonSC) : base(jsonSC) {
+		public Score(JSONObject jsonSC) {
 			this.Leaderboard = new Leaderboard(jsonSC[PJSONConsts.UP_LEADERBOARD]);
 			this.Player = new UserProfile(jsonSC[PJSONConsts.UP_USER_PROFILE]);
 			this.Rank = (long)jsonSC[PJSONConsts.UP_SCORE_RANK].n;
@@ -39,7 +39,7 @@ namespace Soomla.Profile {
 		}
 
 		public override JSONObject toJSONObject() {
-			JSONObject obj = base.toJSONObject();
+			JSONObject obj = new JSONObject();
 			obj.AddField(PJSONConsts.UP_LEADERBOARD, this.Leaderboard.toJSONObject());
 			obj.AddField(PJSONConsts.UP_USER_PROFILE, this.Player.toJSONObject());
 			obj.AddField(PJSONConsts.UP_SCORE_RANK, this.Rank);
