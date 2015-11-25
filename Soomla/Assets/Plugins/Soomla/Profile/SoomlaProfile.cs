@@ -153,7 +153,7 @@ namespace Soomla.Profile
 
 		private static void login(Provider provider, bool autoLogin, string payload="", Reward reward = null) {
 			SoomlaUtils.LogDebug (TAG, "Trying to login with provider " + provider.ToString ());
-			AuthProvider targetProvider = (AuthProvider)GetProviderImplementation(provider);
+			AuthProvider targetProvider = GetProviderImplementation(provider);
 			string userPayload = (payload == null) ? "" : payload;
 			if (targetProvider == null)
 			{
@@ -206,7 +206,7 @@ namespace Soomla.Profile
 		/// <param name="provider">The provider to log out from.</param>
 		public static void Logout(Provider provider) {
 
-			AuthProvider targetProvider = (AuthProvider)GetProviderImplementation(provider);
+			AuthProvider targetProvider = GetProviderImplementation(provider);
 			if (targetProvider == null)
 				return;
 
@@ -258,7 +258,7 @@ namespace Soomla.Profile
 		/// <param name="provider">The provider to check if the user is logged into.</param>
 		public static bool IsLoggedIn(Provider provider) {
 
-			AuthProvider targetProvider = (AuthProvider)GetProviderImplementation(provider);
+			AuthProvider targetProvider = GetProviderImplementation(provider);
 			if (targetProvider == null)
 				return false;
 

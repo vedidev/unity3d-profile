@@ -34,7 +34,7 @@ public class ExampleWindow : MonoBehaviour {
 	private static bool isVisible = false;
 	private bool isInit = false;
 
-	private Provider targetProvider = Provider.GAME_CENTER;
+	private Provider targetProvider = Provider.FACEBOOK;
 	private Reward exampleReward = new BadgeReward("example_reward", "Example Social Reward");
 
 
