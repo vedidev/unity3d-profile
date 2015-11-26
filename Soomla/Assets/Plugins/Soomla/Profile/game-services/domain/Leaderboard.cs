@@ -34,7 +34,7 @@ namespace Soomla.Profile {
 			this.Provider = Provider.fromString(jsonLB[PJSONConsts.UP_PROVIDER].str);
 		}
 
-		public override JSONObject toJSONObject() {
+		public JSONObject toJSONObject() {
 			JSONObject obj = new JSONObject();
 			obj.AddField(JSONConsts.SOOM_ENTITY_ID, this.ID);
 			obj.AddField(PJSONConsts.UP_PROVIDER, this.Provider.ToString());
