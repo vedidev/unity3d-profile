@@ -12,7 +12,9 @@ namespace Soomla.Profile
 			bool myEventSystem = false;
 			if (EventSystem.current == null) {
 				GameObject eventSystem = new GameObject ("EventSystem");
+#if UNITY_4 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 				eventSystem.AddComponent<TouchInputModule> ();
+#endif
 				eventSystem.AddComponent<StandaloneInputModule> ();
 				myEventSystem = true;
 			}

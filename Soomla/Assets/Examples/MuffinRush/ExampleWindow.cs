@@ -123,10 +123,19 @@ public class ExampleWindow : MonoBehaviour {
 		ProfileEvents.OnUserRatingEvent += () => {
 			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "User opened rating page");
 		};
-		
+
+		ProfileEvents.OnGetScoresFinished += (GetScoresFinishedEvent ev) => {
+			foreach (Score score in ev.Scores.PageData) {
+				SoomlaUtils.LogDebug("ExampleWindow", score.Player.ProfileId);
+			}
+		};
+		ProfileEvents.OnGetLeaderboardsFinished += (GetLeaderboardsFinishedEvent ev) => {
+			SoomlaUtils.LogDebug("ExampleWindow", "leaderboard 1: " + ev.Leaderboards.PageData[0].ID);
+			SoomlaProfile.GetScores(Provider.GAME_CENTER, ev.Leaderboards.PageData[0]);
+		};
 		ProfileEvents.OnLoginFinished += (UserProfile UserProfile, bool autoLogin, string payload) => {
-			Soomla.SoomlaUtils.LogDebug("ExampleWindow", "login finished for: " + UserProfile.toJSONObject().print());
-			SoomlaProfile.GetContacts(targetProvider);
+			SoomlaUtils.LogDebug("ExampleWindow", "logged in");
+			SoomlaProfile.GetLeaderboards(Provider.GAME_CENTER);
 		};
 		
 		ProfileEvents.OnGetContactsFinished += (Provider provider, SocialPageData<UserProfile> contactsData, string payload) => {
@@ -144,7 +153,7 @@ public class ExampleWindow : MonoBehaviour {
 //		SoomlaProfile.OpenAppRatingPage();
 
 		#if UNITY_IPHONE
-		Handheld.SetActivityIndicatorStyle(iOSActivityIndicatorStyle.Gray);
+		Handheld.SetActivityIndicatorStyle(UnityEngine.iOS.ActivityIndicatorStyle.Gray);
 		#elif UNITY_ANDROID
 		Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.Small);
 		#endif
@@ -315,6 +324,7 @@ public class ExampleWindow : MonoBehaviour {
 			GUI.skin.button.hover.background = tConnect;
 			GUI.skin.button.active.background = tConnectPress;
 			if(GUI.Button(new Rect(timesW(20.0f),timesH(950f),timesW(598.0f),timesH(141.0f)), "")){
+				//SoomlaProfile.GetLeaderboards(Provider.GAME_CENTER);
 				SoomlaProfile.Login(targetProvider, null, exampleReward);
 			}
 		}
