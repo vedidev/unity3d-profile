@@ -38,7 +38,7 @@ namespace Soomla.Profile {
 			this.Value = (long)jsonSC[PJSONConsts.UP_SCORE_VALUE].n;
 		}
 
-		public override JSONObject toJSONObject() {
+		public JSONObject toJSONObject() {
 			JSONObject obj = new JSONObject();
 			obj.AddField(PJSONConsts.UP_LEADERBOARD, this.Leaderboard.toJSONObject());
 			obj.AddField(PJSONConsts.UP_USER_PROFILE, this.Player.toJSONObject());
