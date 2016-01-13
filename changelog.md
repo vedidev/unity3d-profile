@@ -1,3 +1,8 @@
+### v2.5.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.5.1...v2.5.2)
+
+* Changes
+  * Removed binaries from repo
+
 ### v2.5.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.5.0...v2.5.1)
 
 * Changes
