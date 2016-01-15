@@ -625,7 +625,7 @@ namespace Soomla.Profile
 		{
 			get {
 				if (gPClientId == null) {
-					string value = SoomlaEditorScript.GetConfigValue (ProfileSettingsPrefix, "GPClientId");
+					gPClientId = SoomlaEditorScript.GetConfigValue (ProfileSettingsPrefix, "GPClientId");
 					if (gPClientId == null) {
 						gPClientId = GP_CLIENT_ID_DEFAULT;
 					}
