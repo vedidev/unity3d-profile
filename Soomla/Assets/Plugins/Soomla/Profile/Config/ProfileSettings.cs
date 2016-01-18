@@ -517,6 +517,7 @@ namespace Soomla.Profile
 				if (itunesAppId != value) {
 					itunesAppId = value;
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "iTunesAppId", value);
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -541,6 +542,7 @@ namespace Soomla.Profile
 				if (fBAppId != value) {
 					fBAppId = value;
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "FBAppId", value);
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -563,6 +565,7 @@ namespace Soomla.Profile
 				if (fBAppNamespace != value) {
 					fBAppNamespace = value;
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "FBAppNS", value);
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -586,6 +589,7 @@ namespace Soomla.Profile
 				if (fBPermissions != value){
 					fBPermissions = value;
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "FBPermissions", value);
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -606,6 +610,7 @@ namespace Soomla.Profile
 				if (fBAutoLogin != value.ToString()) {
 					fBAutoLogin = value.ToString();
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "FBAutoLogin", value.ToString());
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -636,6 +641,7 @@ namespace Soomla.Profile
 				if (gPClientId != value){
 					gPClientId = value;
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "GPClientId", value);
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -656,6 +662,7 @@ namespace Soomla.Profile
 				if (gPAutoLogin != value.ToString()) {
 					gPAutoLogin = value.ToString();
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "GoogleAutoLogin", value.ToString());
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -676,6 +683,7 @@ namespace Soomla.Profile
 				if (gPEnableGS != value.ToString()) {
 					gPEnableGS = value.ToString();
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "GoogleEnableGPGS", value.ToString());
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -702,6 +710,7 @@ namespace Soomla.Profile
 				if (twitterConsumerKey != value) {
 					twitterConsumerKey = value;
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "TwitterConsumerKey", value);
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -723,9 +732,11 @@ namespace Soomla.Profile
 				if (twitterConsumerSecret != value) {
 					twitterConsumerSecret = value;
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "TwitterConsumerSecret", value);
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
+		
 		private static string twitterAutoLogin;
 		public static bool TwitterAutoLogin
 		{
@@ -742,6 +753,7 @@ namespace Soomla.Profile
 				if (twitterAutoLogin != value.ToString()) {
 					twitterAutoLogin = value.ToString();
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "TwitterAutoLogin", value.ToString());
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
@@ -759,9 +771,10 @@ namespace Soomla.Profile
 				return Convert.ToBoolean(gameCenterAutoLogin);
 			}
 			set {
-			if (gameCenterAutoLogin != value.ToString()) {
-				gameCenterAutoLogin = value.ToString();
+				if (gameCenterAutoLogin != value.ToString()) {
+					gameCenterAutoLogin = value.ToString();
 					SoomlaEditorScript.SetConfigValue(ProfileSettingsPrefix, "GameCenterAutoLogin", value.ToString());
+					SoomlaEditorScript.DirtyEditor();
 				}
 			}
 		}
