@@ -81,7 +81,7 @@ namespace Soomla.Profile
 #if SOOMLA_TWITTER
 			unreadyProviders++;
 #endif
-#if SOOMLA_GAMECENTER
+#if SOOMLA_GAMECENTER && UNITY_IOS
 			unreadyProviders++;
 #endif
 
@@ -94,7 +94,7 @@ namespace Soomla.Profile
 #if SOOMLA_TWITTER
 			providers.Add(Provider.TWITTER, new TwitterSocialProvider());
 #endif
-#if SOOMLA_GAMECENTER
+#if SOOMLA_GAMECENTER && UNITY_IOS
 			providers.Add(Provider.GAME_CENTER, new GameCenterGSProvider());
 #endif
 
