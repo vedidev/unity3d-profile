@@ -510,7 +510,7 @@ public class ProfileEventHandler {
             eventJSON.put("fromStart", getScoresFailedEvent.FromStart);
             eventJSON.put("message", getScoresFailedEvent.ErrorDescription);
             eventJSON.put("payload", getScoresFailedEvent.Payload);
-            UnitySendFilteredMessage(eventJSON.toString(), "onGetLeaderboardsFailed", provider.getValue());
+            UnitySendFilteredMessage(eventJSON.toString(), "onGetScoresFailed", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
         }
@@ -524,7 +524,7 @@ public class ProfileEventHandler {
             eventJSON.put("provider", provider.getValue());
             eventJSON.put("leaderboard", submitScoreStartedEvent.Leaderboard.toJSONObject());
             eventJSON.put("payload", submitScoreStartedEvent.Payload);
-            UnitySendFilteredMessage(eventJSON.toString(), "onGetScoresStarted", provider.getValue());
+            UnitySendFilteredMessage(eventJSON.toString(), "onSubmitScoreStarted", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
         }
@@ -540,7 +540,7 @@ public class ProfileEventHandler {
             eventJSON.put("leaderboard", submitScoreFinishedEvent.Leaderboard.toJSONObject());
             eventJSON.put("scores", submitScoreFinishedEvent.Score.toJSONObject());
             eventJSON.put("payload", submitScoreFinishedEvent.Payload);
-            UnitySendFilteredMessage(eventJSON.toString(), "onGetScoresFinished", provider.getValue());
+            UnitySendFilteredMessage(eventJSON.toString(), "onSubmitScoreFinished", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
         }
@@ -555,7 +555,7 @@ public class ProfileEventHandler {
             eventJSON.put("leaderboard", submitScoreFailedEvent.Leaderboard.toJSONObject());
             eventJSON.put("message", submitScoreFailedEvent.ErrorDescription);
             eventJSON.put("payload", submitScoreFailedEvent.Payload);
-            UnitySendFilteredMessage(eventJSON.toString(), "onGetLeaderboardsFailed", provider.getValue());
+            UnitySendFilteredMessage(eventJSON.toString(), "onSubmitScoreFailed", provider.getValue());
         } catch (JSONException e) {
             throw new IllegalStateException(e);
         }
