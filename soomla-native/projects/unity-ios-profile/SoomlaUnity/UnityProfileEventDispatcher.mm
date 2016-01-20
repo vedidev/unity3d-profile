@@ -189,14 +189,14 @@ extern "C"{
         [ProfileEventHandling postInviteFailed:provider withType:socialActionType withMessage:message withPayload:payloadS];
     }
     
-    void soomlaProfile_PushEventGetLeaderboardsStarted(const char * sProvider, bool fromStart, const char * payload) {
+    void soomlaProfile_PushEventGetLeaderboardsStarted(const char * sProvider, const char * payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postGetLeaderboardsStarted:provider fromStart:fromStart withPayload:payloadS];
+        [ProfileEventHandling postGetLeaderboardsStarted:provider withPayload:payloadS];
     }
     
-    void soomlaProfile_PushEventGetLeaderboardsFinished(const char * sProvider, const char * leaderboardsJson, const char * payload, bool hasNext) {
+    void soomlaProfile_PushEventGetLeaderboardsFinished(const char * sProvider, const char * leaderboardsJson, const char * payload) {
         
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
@@ -213,15 +213,15 @@ extern "C"{
             }
         }
         
-        [ProfileEventHandling postGetLeaderboardsFinished:provider withLeaderboardsList:leaderboards hasMore:hasNext andPayload:payloadS];
+        [ProfileEventHandling postGetLeaderboardsFinished:provider withLeaderboardsList:leaderboards andPayload:payloadS];
     }
     
-    void soomlaProfile_PushEventGetLeaderboardsFailed(const char * sProvider, const char * sMessage, bool fromStart, const char * payload) {
+    void soomlaProfile_PushEventGetLeaderboardsFailed(const char * sProvider, const char * sMessage, const char * payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString *message = [NSString stringWithUTF8String:sMessage];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postGetLeaderboardsFailed:provider fromStart:fromStart withMessage:message andPayload:payloadS];
+        [ProfileEventHandling postGetLeaderboardsFailed:provider withMessage:message andPayload:payloadS];
     }
     
     void soomlaProfile_PushEventGetScoresStarted(const char * sProvider, const char * fromJson, bool fromStart, const char * payload) {
@@ -261,31 +261,31 @@ extern "C"{
         [ProfileEventHandling postGetScoresFailed:provider forLeaderboard:from fromStart:fromStart withMessage:message andPayload:payloadS];
     }
     
-    void soomlaProfile_PushEventReportScoreStarted(const char * sProvider, const char * fromJson, const char * payload) {
+    void soomlaProfile_PushEventSubmitScoreStarted(const char * sProvider, const char * fromJson, const char * payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
-        [ProfileEventHandling postReportScoreStarted:provider forLeaderboard:from withPayload:payloadS];
+        [ProfileEventHandling postSubmitScoreStarted:provider toLeaderboard:from withPayload:payloadS];
     }
     
-    void soomlaProfile_PushEventReportScoreFinished(const char * sProvider, const char * fromJson, const char * scoreJson, const char * payload) {
+    void soomlaProfile_PushEventSubmitScoreFinished(const char * sProvider, const char * fromJson, const char * scoreJson, const char * payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
         Score *score = [[Score alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:scoreJson]]];
         
-        [ProfileEventHandling postReportScoreFinished:provider score:score forLeaderboard:from andPayload:payloadS];
+        [ProfileEventHandling postSubmitScoreFinished:provider score:score toLeaderboard:from andPayload:payloadS];
     }
     
-    void soomlaProfile_PushEventReportScoreFailed(const char * sProvider, const char * fromJson, const char * sMessage, const char * payload) {
+    void soomlaProfile_PushEventSubmitScoreFailed(const char * sProvider, const char * fromJson, const char * sMessage, const char * payload) {
         NSString* providerIdS = [NSString stringWithUTF8String:sProvider];
         Provider provider = [UserProfileUtils providerStringToEnum:providerIdS];
         NSString *message = [NSString stringWithUTF8String:sMessage];
         NSString* payloadS = [NSString stringWithUTF8String:payload];
         Leaderboard *from = [[Leaderboard alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:[NSString stringWithUTF8String:fromJson]]];
-        [ProfileEventHandling postReportScoreFailed:provider forLeaderboard:from withMessage:message andPayload:payloadS];
+        [ProfileEventHandling postSubmitScoreFailed:provider toLeaderboard:from withMessage:message andPayload:payloadS];
     }
 
 

@@ -80,11 +80,11 @@ namespace Soomla.Profile {
 		private static extern void soomlaProfile_PushEventGetScoresFailed(string provider, string fromJson, string message, bool fromStart, string payload);
 
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventReportScoreStarted(string provider, string fromJson, string payload);
+		private static extern void soomlaProfile_PushEventSubmitScoreStarted(string provider, string fromJson, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventReportScoreFinished(string provider, string fromJson, string scoreJson, string payload);
+		private static extern void soomlaProfile_PushEventSubmitScoreFinished(string provider, string fromJson, string scoreJson, string payload);
 		[DllImport ("__Internal")]
-		private static extern void soomlaProfile_PushEventReportScoreFailed(string provider, string fromJson, string message, string payload);
+		private static extern void soomlaProfile_PushEventSubmitScoreFailed(string provider, string fromJson, string message, string payload);
 		[DllImport ("__Internal")]
 		private static extern void soomlaProfile_PushEventShowLeaderboards(string provider, string payload);
 
