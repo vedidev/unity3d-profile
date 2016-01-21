@@ -22,11 +22,12 @@ namespace Soomla.Profile
 	public sealed class Provider
 	{
 		private readonly string name;
+		public readonly string DisplayName;
 
-		public static readonly Provider FACEBOOK = new Provider ("facebook");
-		public static readonly Provider GOOGLE = new Provider ("google");
-		public static readonly Provider TWITTER = new Provider ("twitter");
-		public static readonly Provider GAME_CENTER = new Provider ("gameCenter");
+		public static readonly Provider FACEBOOK = new Provider ("facebook", "Facebook");
+		public static readonly Provider GOOGLE = new Provider ("google", "Google+");
+		public static readonly Provider TWITTER = new Provider ("twitter", "Twitter");
+		public static readonly Provider GAME_CENTER = new Provider ("gameCenter", "Game Center");
 
 		public static readonly int NUM_OF_PROVIDERS = 14; // Must be last provider (currently twitter) + 1
 
@@ -34,8 +35,10 @@ namespace Soomla.Profile
 		/// Constructor.
 		/// </summary>
 		/// <param name="name">Name of the social provider.</param>
-		private Provider(string name){
+		/// <param name="displayName">Name of the social provider will be displayed at Settings Editor.</param>
+		private Provider(string name, string displayName){
 			this.name = name;
+			this.DisplayName = displayName;
 		}
 
 		//// <summary>
