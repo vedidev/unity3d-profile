@@ -211,7 +211,7 @@ namespace Soomla.Profile
 				bool doIntegrate = false;
 				bool toggleResult = false;
 				if (socialPlatformState != null) {
-					toggleResult = EditorGUILayout.Toggle(socialPlatform, socialPlatformState.Value);
+					toggleResult = EditorGUILayout.Toggle(Provider.fromString(socialPlatform).DisplayName, socialPlatformState.Value);
 					if (toggleResult != socialPlatformState.Value) {
 						socialIntegrationState[socialPlatform] = toggleResult;
 						doIntegrate = toggleResult;
