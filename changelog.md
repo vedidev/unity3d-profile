@@ -1,3 +1,8 @@
+### v2.5.3 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.5.2...v2.5.3)
+
+* Fixes
+  * Fixed editor cpu usage
+
 ### v2.5.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.5.1...v2.5.2)
 
 * Changes
