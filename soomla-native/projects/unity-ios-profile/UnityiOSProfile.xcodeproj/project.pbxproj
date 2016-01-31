@@ -235,6 +235,7 @@
 					"${UNITY_HEADERS43}/**",
 					"${UNITY_HEADERS53}/**",
 					"../../../submodules/soomla-unity3d-core/soomla-native/projects/unity-soomla-ios-core/SoomlaUnity",
+					"../../../submodules/soomla-unity3d-core/submodules/soomla-ios-core/libs/keeva/headers/**",
 				);
 				LIBRARY_SEARCH_PATHS = ../../../Soomla/Assets/Plugins/iOS;
 				OTHER_LDFLAGS = "-ObjC";
@@ -267,6 +268,7 @@
 					"${UNITY_HEADERS43}/**",
 					"${UNITY_HEADERS53}/**",
 					"../../../submodules/soomla-unity3d-core/soomla-native/projects/unity-soomla-ios-core/SoomlaUnity",
+					"../../../submodules/soomla-unity3d-core/submodules/soomla-ios-core/libs/keeva/headers/**",
 				);
 				LIBRARY_SEARCH_PATHS = ../../../Soomla/Assets/Plugins/iOS;
 				ONLY_ACTIVE_ARCH = NO;
