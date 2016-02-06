@@ -53,7 +53,6 @@ namespace Soomla.Profile
 			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/twitter4j-core-4.0.2.jar");
 			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSoomlaiOSProfileGoogle.a");
 			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/AndroidProfileGoogle.jar");
-			additionalDependFiles.Add("Assets/Plugins/Android/Soomla/libs/google-play-services_lib");
 			additionalDependFiles.Add("Assets/Plugins/iOS/Soomla/libSoomlaiOSProfileGameCenter.a");
 			SoomlaEditorScript.addFileList("Profile", "Assets/Soomla/profile_file_list", additionalDependFiles.ToArray());
 		}
@@ -112,7 +111,7 @@ namespace Soomla.Profile
 			Dictionary<string, string> googlePaths = new Dictionary<string, string>();
 			googlePaths.Add("/ios/ios-profile-google/libSoomlaiOSProfileGoogle.a", "/iOS/Soomla/libSoomlaiOSProfileGoogle.a");
 			googlePaths.Add("/android/android-profile-google/AndroidProfileGoogle.jar", "/Android/Soomla/libs/AndroidProfileGoogle.jar");
-			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/Soomla/libs/google-play-services_lib");
+			googlePaths.Add("/android/android-profile-google/google-play-services_lib/", "/Android/google-play-services_lib");
 			socialLibPaths.Add(Provider.GOOGLE.ToString(), googlePaths);
 
 			Dictionary<string, string> gameCenterPaths = new Dictionary<string, string>();
