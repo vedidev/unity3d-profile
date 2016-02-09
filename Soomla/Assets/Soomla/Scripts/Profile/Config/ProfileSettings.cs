@@ -117,7 +117,7 @@ namespace Soomla.Profile
 			Dictionary<string, string> gameCenterPaths = new Dictionary<string, string>();
 			gameCenterPaths.Add("/ios/ios-profile-gamecenter/libSoomlaiOSProfileGameCenter.a", "/iOS/Soomla/libSoomlaiOSProfileGameCenter.a");
 			socialLibPaths.Add(Provider.GAME_CENTER.ToString(), gameCenterPaths);
-        }
+		}
 
 		//Look for google-play-services_lib in the developers Android Sdk.
 		//If not found, fallback to compilations path
@@ -153,6 +153,7 @@ namespace Soomla.Profile
 			// keep copying every GUI frame
 			ReadSocialIntegrationState(socialIntegrationState);
 			AutomaticallyIntegratedDetected(socialIntegrationState);
+			UpdateIntegrations(socialIntegrationState);
 		}
 
 		public void OnModuleGUI() {
@@ -170,7 +171,7 @@ namespace Soomla.Profile
 		}
 
 		public void OnAndroidGUI() {
-			
+
 		}
 
 		public void OnIOSGUI(){
@@ -253,7 +254,7 @@ namespace Soomla.Profile
 				TryAddRemoveSocialPlatformFlag(buildTarget, socialPlatform, !doIntegrate);
 			}
 
-			ApplyIntegretionLibraries(socialPlatform, !doIntegrate);
+			ApplyIntegrationLibraries(socialPlatform, !doIntegrate);
 		}
 
 		void AutomaticallyIntegratedDetected (Dictionary<string, bool?> state)
@@ -269,10 +270,19 @@ namespace Soomla.Profile
 			}
 		}
 
+		private void UpdateIntegrations(Dictionary<string, bool?> socialIntegrationState) {
+			Dictionary<string, bool?>.KeyCollection keys = socialIntegrationState.Keys;
+			for (int i = 0; i < keys.Count; i++) {
+				string socialPlatform = keys.ElementAt(i);
+				bool? socialPlatformState = socialIntegrationState[socialPlatform];
+				ApplyIntegrationLibraries(socialPlatform, !(socialPlatformState != null && socialPlatformState == true));
+			}
+		}
+
 		private string compilationsRootPath = Application.dataPath + "/WebPlayerTemplates/SoomlaConfig";
 		private string pluginsRootPath = Application.dataPath + "/Plugins";
 
-		void ApplyIntegretionLibraries (string socialPlatform, bool remove)
+		void ApplyIntegrationLibraries (string socialPlatform, bool remove)
 		{
 			try {
 				Dictionary<string, string> paths = null;
@@ -289,8 +299,10 @@ namespace Soomla.Profile
 						}
 					} else {
 						foreach (var pathEntry in paths) {
-							FileUtil.CopyFileOrDirectory(compilationsRootPath + pathEntry.Key,
-							                             pluginsRootPath + pathEntry.Value);
+							if (!System.IO.File.Exists(pluginsRootPath + pathEntry.Value)) {
+								FileUtil.CopyFileOrDirectory(compilationsRootPath + pathEntry.Key,
+															 pluginsRootPath + pathEntry.Value);
+							}
 						}
 					}
 				}
