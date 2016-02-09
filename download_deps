@@ -6,7 +6,7 @@ cd $DIR
 UNITY_PROFILE_CACHE=~/.soomla/cache/android-profile
 mkdir -p $UNITY_PROFILE_CACHE
 
-FACEBOOK_SDK_NAME=facebooksdk-7.2.2.zip
+FACEBOOK_SDK_NAME=facebooksdk-7.2.2-new.zip
 if [ ! -d Soomla/Assets/Facebook ];
 then
     if [ ! -f $UNITY_PROFILE_CACHE/$FACEBOOK_SDK_NAME ];
