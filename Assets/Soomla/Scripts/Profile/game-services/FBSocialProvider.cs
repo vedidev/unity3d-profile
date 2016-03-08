@@ -73,7 +73,7 @@ namespace Soomla.Profile
 		/// See docs in <see cref="SoomlaProfile.SubmitScore"/>
 		/// </summary>
 		public void SubmitScore(Leaderboard targetLeaderboard, int value, SingleObjectSuccess<Score> success, FailureHandler fail) {
-			checkPermission("publish_actions", () => {
+			checkPublishPermission(() => {
 
 				var formData = new Dictionary<string, string>
 				{
