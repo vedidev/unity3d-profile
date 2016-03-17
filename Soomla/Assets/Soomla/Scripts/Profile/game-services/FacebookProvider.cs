@@ -26,7 +26,7 @@ namespace Soomla.Profile
 	/// This class represents the social provider Facebook. The functions implemented below are 
 	/// Facebook-specific. 
 	/// </summary>
-	public partial class FBSocialProvider : IGameServicesProvider
+	public partial class FacebookProvider : IGameServicesProvider
 	{
 		/// <summary>
 		/// See docs in <see cref="SoomlaProfile.GetLeaderboards"/>

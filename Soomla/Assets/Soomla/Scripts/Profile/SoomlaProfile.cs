@@ -86,7 +86,7 @@ namespace Soomla.Profile
 #endif
 
 #if SOOMLA_FACEBOOK
-			providers.Add(Provider.FACEBOOK, new FBSocialProvider());
+			providers.Add(Provider.FACEBOOK, new FacebookProvider());
 #endif
 #if SOOMLA_GOOGLE
 			providers.Add(Provider.GOOGLE, new GoogleProvider());
