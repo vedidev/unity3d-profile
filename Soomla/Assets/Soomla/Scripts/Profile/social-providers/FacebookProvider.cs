@@ -31,7 +31,7 @@ namespace Soomla.Profile
 	/// </summary>
 	public partial class FacebookProvider : IAuthProvider, ISocialProvider
 	{
-		private static string TAG = "SOOMLA FBSocialProvider";
+		private static string TAG = "SOOMLA FacebookProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
 		private static int DEFAULT_FEED_PAGE_SIZE = 25;
 		private static string DEFAULT_LOGIN_PERMISSIONS = "email,user_birthday,user_photos,user_friends,user_posts";
