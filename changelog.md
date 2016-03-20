@@ -1,3 +1,16 @@
+### v2.6.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.6.0...v2.6.1)
+
+* Fixes
+  * Minor bugfixes
+
+### v2.6.0 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.5.3...v2.6.0)
+
+* Changes
+  * Moved Soomla script folders from Assets/Plugins/Soomla to Assets/Soomla/Scripts
+
+* Fixes
+  * Fixed - Unity bridge for profile has wrong selectors called for leaderboards events
+
 ### v2.5.3 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.5.2...v2.5.3)
 
 * Fixes
