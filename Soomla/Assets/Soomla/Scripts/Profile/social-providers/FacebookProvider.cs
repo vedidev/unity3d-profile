@@ -1,3 +1,4 @@
+
 /// Copyright (C) 2012-2014 Soomla Inc.
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +29,9 @@ namespace Soomla.Profile
 	/// This class represents the social provider Facebook. The functions implemented below are 
 	/// Facebook-specific. 
 	/// </summary>
-	public class FBSocialProvider : IAuthProvider, ISocialProvider
+	public partial class FacebookProvider : IAuthProvider, ISocialProvider
 	{
-		private static string TAG = "SOOMLA FBSocialProvider";
+		private static string TAG = "SOOMLA FacebookProvider";
 		private static int DEFAULT_CONTACTS_PAGE_SIZE = 25;
 		private static int DEFAULT_FEED_PAGE_SIZE = 25;
 		private static string DEFAULT_LOGIN_PERMISSIONS = "email,user_birthday,user_photos,user_friends,user_posts";
@@ -45,7 +46,7 @@ namespace Soomla.Profile
 		/// <summary>
 		/// Constructor. Initializes the Facebook SDK.
 		/// </summary>
-		public FBSocialProvider ()
+		public FacebookProvider ()
 		{
 			FB.Init(OnInitComplete, OnHideUnity);
 		}
@@ -84,7 +85,7 @@ namespace Soomla.Profile
 
 		public void GetUserProfile(GetUserProfileSuccess success, GetUserProfileFailed fail) {
 			this.fetchPermissions(() => {
-				FB.API("/me?fields=id,name,email,first_name,last_name,picture,languages,gender,location",
+				FB.API("/me?fields=id,name,email,first_name,last_name,picture,languages,gender,location,birthday",
 				       HttpMethod.GET, (IGraphResult meResult) => {
 					if (meResult.Error != null) {
 						SoomlaUtils.LogDebug (TAG, "ProfileCallback[result.Error]: " + meResult.Error);
@@ -503,7 +504,7 @@ namespace Soomla.Profile
 		private void ProfileCallback(IGraphResult result) {
 		}
 
-		private static UserProfile UserProfileFromFBJsonString(string fbUserJsonStr, FBSocialProvider provider) {
+		private static UserProfile UserProfileFromFBJsonString(string fbUserJsonStr, FacebookProvider provider) {
 			return UserProfileFromFBJson(new JSONObject (fbUserJsonStr), provider);
 		}
 
@@ -511,7 +512,7 @@ namespace Soomla.Profile
 			return UserProfileFromFBJson(fbJsonObject, null);
 		}
 
-		private static UserProfile UserProfileFromFBJson(JSONObject fbJsonObject, FBSocialProvider provider) {
+		private static UserProfile UserProfileFromFBJson(JSONObject fbJsonObject, FacebookProvider provider) {
 			JSONObject soomlaJsonObject = new JSONObject ();
 			soomlaJsonObject.AddField(PJSONConsts.UP_PROVIDER, Provider.FACEBOOK.ToString ());
 			soomlaJsonObject.AddField(PJSONConsts.UP_PROFILEID, fbJsonObject["id"].str);
@@ -534,6 +535,9 @@ namespace Soomla.Profile
 			}
 			if (fbJsonObject["location"] != null && fbJsonObject["location"]["name"] != null) {
 				soomlaJsonObject.AddField(PJSONConsts.UP_LOCATION, fbJsonObject["location"]["name"].str);
+			}
+			if (fbJsonObject["birthday"] != null) {
+				soomlaJsonObject.AddField(PJSONConsts.UP_BIRTHDAY, fbJsonObject["birthday"].str);
 			}
 
 			if (provider != null) { //let us to know if method called during own profile receiving
