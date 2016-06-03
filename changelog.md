@@ -1,3 +1,8 @@
+### v2.6.3 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.6.2...v2.6.3)
+
+* Changes
+  * Align package version with Unity Asset Store
+
 ### v2.6.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.6.1...v2.6.2)
 
 * Changes
