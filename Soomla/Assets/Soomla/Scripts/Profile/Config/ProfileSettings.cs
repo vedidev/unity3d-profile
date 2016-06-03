@@ -39,7 +39,7 @@ namespace Soomla.Profile
 		
 		static ProfileSettings instance = new ProfileSettings();
 
-		static string currentModuleVersion = "2.6.1";
+		static string currentModuleVersion = "2.6.2";
 
 		static ProfileSettings()
 		{

@@ -1,3 +1,8 @@
+### v2.6.2 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.6.1...v2.6.2)
+
+* Changes
+  * Fetch user's birthday from Facebook profile
+
 ### v2.6.1 [view commit logs](https://github.com/soomla/unity3d-profile/compare/v2.6.0...v2.6.1)
 
 * Fixes
