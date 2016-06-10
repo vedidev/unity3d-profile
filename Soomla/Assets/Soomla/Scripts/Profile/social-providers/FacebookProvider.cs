@@ -97,6 +97,10 @@ namespace Soomla.Profile
 						string fbUserJson = meResult.RawResult;
 						UserProfile userProfile = UserProfileFromFBJsonString(fbUserJson, this);
 
+						foreach (string permission in loginPermissions)
+							if (permission.Contains("picture"))
+								userProfile.AvatarLink = "http://graph.facebook.com/"+userProfile.ProfileId+"/"+permission;
+
 						SoomlaProfile.StoreUserProfile (userProfile, true);
 						success(userProfile);
 					}

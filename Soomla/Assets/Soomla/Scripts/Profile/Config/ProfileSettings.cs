@@ -582,7 +582,7 @@ namespace Soomla.Profile
 		}
 
 		public static string FB_PERMISSIONS_DEFAULT = "email,user_birthday,user_photos,user_friends,user_posts";
-		private static string FB_PERMISSIONS_STRING_REGEXP = "([a-z]+(_[a-z]+)*)+(,([a-z]+(_[a-z]+)*)+)*";
+		private static string FB_PERMISSIONS_STRING_REGEXP = "^[^<>.!@#%/]+$";
 
 		private static string fBPermissions;
 		public static string FBPermissions
